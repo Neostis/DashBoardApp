@@ -1,0 +1,7 @@
+{
+  "name": "DashBoardApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
