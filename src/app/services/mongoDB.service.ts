@@ -5,8 +5,7 @@ import { MongoClient, Db, Collection, FindCursor, Document } from 'mongodb';
   providedIn: 'root',
 })
 export class MongoDBService {
-  private url =
-    'mongodb://myUserAdmin:5678@localhost:27017/DashBoardDB?authSource=admin';
+  private url = 'mongodb+srv://admin:admin@cluster0.5wtjno2.mongodb.net/';
   private dbName = 'DashBoardDB';
   private client: MongoClient;
 
