@@ -1,0 +1,43 @@
+<div id="container">
+  <div class="file-list-item"
+  >
+    @for (file of filesTest; track file) {
+    <div>
+      <img
+        [src]="getFileIcon(file.type)"
+        alt="{{ file.type }} Icon"
+        width="32"
+        height="32"
+      />
+      <div>{{ file.name }}</div>
+      <div>{{ getTimeAgo(file.lastModified) }}</div>
+    </div>
+    } @empty {
+    <span>Empty list of users</span>
+    }
+  </div>
+  <p>
+    <!-- Display the icon -->
+    <!-- Hidden file input -->
+    <input
+      type="file"
+      id="fileInput"
+      #fileInput
+      style="display: none"
+      (change)="onFileSelected(fileInput.files)"
+    />
+
+    <!-- Button to trigger file input -->
+    <button (click)="fileInput.click()">Choose File</button>
+  </p>
+
+  <!-- file-upload.component.html -->
+  <div
+    class="drop-area"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    <h1>Drag & drop files here</h1>
+  </div>
+</div>

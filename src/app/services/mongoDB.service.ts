@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core';
-import { MongoClient, Db, Collection, FindCursor, Document } from 'mongodb';
+import {
+  MongoClient,
+  Db,
+  Collection,
+  FindCursor,
+  Document,
+  GridFSBucket,
+  GridFSBucketWriteStream,
+} from 'mongodb';
+import * as fs from 'fs';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +43,31 @@ export class MongoDBService {
   async findDocuments(collection: Collection, query: any): Promise<Document[]> {
     const cursor: FindCursor<Document> = collection.find(query);
     return cursor.toArray();
+  }
+
+  async storeFile(filePath: string, fileName: string): Promise<void> {
+    const db = await this.connectToMongoDB();
+    const bucket = new GridFSBucket(db);
+
+    const stream = fs.createReadStream(filePath);
+    const uploadStream: GridFSBucketWriteStream =
+      bucket.openUploadStream(fileName);
+
+    await stream.pipe(uploadStream);
+
+    await this.closeConnection();
+  }
+
+  async retrieveFile(fileName: string, destinationPath: string): Promise<void> {
+    const db = await this.connectToMongoDB();
+    const bucket = new GridFSBucket(db);
+
+    const downloadStream = bucket.openDownloadStreamByName(fileName);
+    const writeStream = fs.createWriteStream(destinationPath);
+
+    await downloadStream.pipe(writeStream);
+
+    await this.closeConnection();
   }
 
   async closeConnection(): Promise<void> {
