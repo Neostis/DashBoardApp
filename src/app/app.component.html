@@ -8,22 +8,81 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle>
-          <ion-item lines="none" [routerLink]="'/home'">
-            <ion-label>Home</ion-label>
+          <ion-item
+            lines="none"
+            [routerLink]="'/home'"
+            (click)="setRoute('home')"
+          >
+            HOME
+          </ion-item>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle>
+          <ion-item
+            lines="none"
+            [routerLink]="'/dashboard'"
+            (click)="setRoute('dashboard')"
+          >
+          Dashboard
+          </ion-item>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle>
+          <ion-item
+            lines="none"
+            [routerLink]="'/timeline'"
+            (click)="setRoute('timeline')"
+          >
+            TIMELINE
           </ion-item>
         </ion-menu-toggle>
 
         <ion-menu-toggle>
-          <ion-item lines="none" [routerLink]="'/dashboard'">
-            <ion-label>Dashboard</ion-label>
+          <ion-item
+            lines="none"
+            [routerLink]="'/team'"
+            (click)="setRoute('team')"
+          >
+            TEAM
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item
+            lines="none"
+            [routerLink]="'/tasks'"
+            (click)="setRoute('tasks')"
+          >
+            TASKS
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item
+            lines="none"
+            [routerLink]="'/payments'"
+            (click)="setRoute('payments')"
+          >
+            PAYMENTS
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
     </ion-content>
   </ion-menu>
+
   <div class="ion-page" id="main-content">
     <ion-header>
       <ion-toolbar>
+        <!-- @if (route === "dashboard") {
+        <ion-title class="title">
+          <div style="color: rgb(0, 0, 0); font-weight: bold; font-size: 20px">
+            View Project
+          </div>
+          <div style="color: rgb(138, 137, 137); font-size: 15px">
+            Home - Projects
+          </div>
+        </ion-title>
+        } -->
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
