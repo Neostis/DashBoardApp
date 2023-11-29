@@ -16,7 +16,8 @@ import * as fs from 'fs';
 export class MongoDBService {
   private url = 'mongodb+srv://admin:admin@cluster0.5wtjno2.mongodb.net/';
   private dbName = 'DashBoardDB';
-  private client: MongoClient;
+  private client: MongoClient = new MongoClient(this.url);
+  // this.client = new MongoClient(this.url);
 
   constructor() {
     this.client = new MongoClient(this.url);

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomepageComponent } from './homepage/homepage.component';
-
+import { FilesContainerComponent } from './files/files.component';
 export const routes: Routes = [
   {
     path: 'dashboard',
@@ -10,6 +10,10 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomepageComponent,
+  },
+  {
+    path: 'files',
+    component: FilesContainerComponent,
   },
   {
     path: 'tabs',

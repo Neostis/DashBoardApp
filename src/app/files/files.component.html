@@ -1,43 +1,45 @@
-<div id="container">
-  <div class="file-list-item"
-  >
-    @for (file of filesTest; track file) {
-    <div>
-      <img
-        [src]="getFileIcon(file.type)"
-        alt="{{ file.type }} Icon"
-        width="32"
-        height="32"
-      />
-      <div>{{ file.name }}</div>
-      <div>{{ getTimeAgo(file.lastModified) }}</div>
-    </div>
+<ion-content>
+  <ion-toolbar>
+
+    <ion-item class="search-bar-button-container" lines="none">
+      <ion-title class="bold-text">
+        Project Files
+        @if (filteredFiles.length > 0) {
+          <span class="file-count">+{{ filteredFiles.length }}</span>
+        } @else {
+          <!-- <span class="file-count">{{ filteredFiles.length }}</span> -->
+        }
+        
+      </ion-title>
+      <ion-searchbar [debounce]="100" (ionInput)="handleInput($event)" placeholder="Search"
+        class="small-search-bar"></ion-searchbar>
+      <ion-button color="primary" size="Default">
+        File Manager
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+
+  <div class="file-list-item">
+    @for (file of filteredFiles; track file) {
+    <ion-card color="light">
+      <ion-card-header class="center-content">
+        <ion-img class="file-icon-img" [src]="getFileIcon(file.type)" alt="{{ file.type }} Icon"></ion-img>
+        <ion-card-title>{{ file.name }}</ion-card-title>
+        <ion-card-subtitle>{{ getTimeAgo(file.lastModified) }}</ion-card-subtitle>
+      </ion-card-header>
+
+    </ion-card>
     } @empty {
-    <span>Empty list of users</span>
+    <!-- <span>Empty list of users</span> -->
     }
-  </div>
-  <p>
-    <!-- Display the icon -->
-    <!-- Hidden file input -->
-    <input
-      type="file"
-      id="fileInput"
-      #fileInput
-      style="display: none"
-      (change)="onFileSelected(fileInput.files)"
-    />
 
-    <!-- Button to trigger file input -->
-    <button (click)="fileInput.click()">Choose File</button>
-  </p>
+    <ion-card-header class="drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      <ion-img class="upload-img" src="assets/icon/filesIcon/upload.png"></ion-img>
+      <ion-card-title>File upload</ion-card-title>
+      <ion-card-subtitle>Drag & drop files here</ion-card-subtitle>
+    </ion-card-header>
 
-  <!-- file-upload.component.html -->
-  <div
-    class="drop-area"
-    (dragover)="onDragOver($event)"
-    (dragleave)="onDragLeave($event)"
-    (drop)="onDrop($event)"
-  >
-    <h1>Drag & drop files here</h1>
   </div>
-</div>
+
+</ion-content>
