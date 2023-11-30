@@ -17,6 +17,10 @@ export const routes: Routes = [
     component: HomepageComponent,
   },
   {
+    path: 'timeline',
+    component: TimelineComponent,
+  },
+  {
     path: 'files',
     component: FilesContainerComponent,
   },

@@ -1,0 +1,15 @@
+ion-badge {
+  --background: rgb(240, 240, 240);
+  --color: black;
+  width: fit-content;
+}
+
+ion-card {
+  width: 400px;
+  height: 200px;
+}
+
+ion-thumbnail {
+  border-radius: 50%;
+  overflow: hidden;
+}
