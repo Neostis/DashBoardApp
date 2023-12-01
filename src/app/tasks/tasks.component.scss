@@ -5,11 +5,57 @@ ion-badge {
 }
 
 ion-card {
-  width: 400px;
-  height: 200px;
+  margin-left: 0px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  ion-card-header {
+    align-self: flex-start;
+  }
 }
 
 ion-thumbnail {
+  margin-top: 20px;
   border-radius: 50%;
   overflow: hidden;
+}
+
+ion-col {
+  min-width: 300px;
+  flex: auto;
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-grid {
+  margin-top: 60px;
+  border-radius: 8px; /* Curved border with 8px radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Simulating card shadow */
+  padding-left: 30px;
+  padding-right: 30px;
+  display: flex;
+  justify-content: center;
+  width: 80%;
+}
+
+ion-row {
+  width: 100%;
+}
+
+.col-head {
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+
+.first-col {
+  border-bottom: 3px solid #ffc400; /* Red color for "Yet To Start" */
+}
+
+.second-col {
+  border-bottom: 3px solid #0044ff; /* Green color for "In Progress" */
+}
+
+.third-col {
+  border-bottom: 3px solid rgb(16, 179, 2); /* Blue color for "Completed" */
 }
