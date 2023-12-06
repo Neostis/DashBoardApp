@@ -4,29 +4,43 @@
     <ion-card-content>
       <ion-grid>
         <ion-row>
-          <ion-col>
-            <div>FIRST PART</div>
+          <ion-col class="first-col">
+            <div>Current Status</div>
           </ion-col>
           <ion-col>
-            <div>SECOND PART</div>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <div>FIRST PART</div>
-          </ion-col>
-          <ion-col>
-            <div>SECOND PART</div>
+            <div class="progress-bar">
+              <div class="progress"></div>
+            </div>
           </ion-col>
         </ion-row>
 
         <ion-row>
-          <ion-col>
-            <div>FIRST PART</div>
+          <ion-col class="first-col">
+            <div>Usage Character</div>
           </ion-col>
           <ion-col>
-            <div>SECOND PART</div>
+            <ion-radio-group value="end">
+              <ion-radio value="end" labelPlacement="end"
+                >Precise Usage</ion-radio
+              >
+              <br />
+              <ion-radio value="end" labelPlacement="end"
+                >Normal Usage</ion-radio
+              >
+              <br />
+              <ion-radio value="end" labelPlacement="end"
+                >Extreme Usage</ion-radio
+              >
+            </ion-radio-group>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="first-col">
+            <div>Budget Notes</div>
+          </ion-col>
+          <ion-col>
+            <ion-input fill="outline" placeholder="Enter text"></ion-input>
           </ion-col>
         </ion-row>
       </ion-grid>
