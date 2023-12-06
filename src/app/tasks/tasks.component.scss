@@ -29,14 +29,14 @@ ion-col {
 }
 
 ion-grid {
-  margin-top: 60px;
+  margin-block: 60px;
+  margin-inline: 200px;
   border-radius: 8px; /* Curved border with 8px radius */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Simulating card shadow */
-  padding-left: 30px;
-  padding-right: 30px;
+  // padding-left: 30px;
+  // padding-right: 30px;
   display: flex;
   justify-content: center;
-  width: 80%;
 }
 
 ion-row {
