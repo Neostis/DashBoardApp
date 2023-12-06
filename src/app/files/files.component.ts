@@ -1,10 +1,10 @@
-/* The FilesContainerComponent class is an Angular component that handles file selection, displays file
-information, and allows for file removal. */
-import { Component, HostListener } from '@angular/core';
+import { FilesModel } from './files.model';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MongoDBService } from '../services/mongoDB.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-files-container',
@@ -12,54 +12,55 @@ import { IonicModule } from '@ionic/angular';
   styleUrls: ['./files.component.scss'],
   // styleUrl: './files.component.scss',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  providers: [MongoDBService],
 })
-export class FilesContainerComponent {
+export class FilesContainerComponent implements OnInit {
   // @Input() name?: string;
-  // constructor(private mongoDBService: MongoDBService) {}
+  constructor(private mongoDBService: MongoDBService) {}
+
+  ngOnInit(): void {
+    this.loadFiles();
+  }
 
   file: File | null = null;
 
-  filesTest = [
-    { name: 'a', type: '3ds', lastModified: this.getRandomDate() },
-    { name: 'b', type: 'pdf', lastModified: this.getRandomDate() },
-    { name: 'c', type: 'ai', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-    { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  ];
+  fileList: any[] = [];
 
-  public filteredFiles = [...this.filesTest];
+  protected filteredFiles: any;
+
+  loadFiles(): void {
+    this.mongoDBService.getFiles().subscribe({
+      next: (response) => {
+        // console.log('Files retrieved successfully:', response);
+
+        // Assuming your response has a 'data' property with the files
+        this.fileList = response;
+
+        // Sort fileList by metadata.lastModified (assuming it's in Unix timestamp) in descending order
+        this.fileList.sort(
+          (a, b) => b.metadata.lastModified - a.metadata.lastModified
+        );
+
+        this.filteredFiles = [...this.fileList];
+      },
+      error: (error) => {
+        console.error('Error retrieving files:', error);
+        // Handle error
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
+  }
 
   handleInput(event: any) {
     const query = event.target.value.toLowerCase();
-    this.filteredFiles = this.filesTest.filter(
-      (d) => d.name.toLowerCase().indexOf(query) > -1
+
+    this.filteredFiles = this.fileList.filter(
+      (d) => d.filename.toLowerCase().indexOf(query) > -1
     );
   }
-
-  getRandomDate(): Date {
-    const startDate = new Date(2023, 0, 1); // January 1, 2022
-    const endDate = new Date(); // Current date
-
-    const randomTimestamp =
-      startDate.getTime() +
-      Math.random() * (endDate.getTime() - startDate.getTime());
-    return new Date(randomTimestamp);
-  }
-
-  // onFileSelected(files: FileList | null): void {
-  //   if (files && files.length > 0) {
-  //     // Do something with the selected file(s)
-  //     // console.log(files[0].name);
-  //   }
-  // }
 
   /**
    * The getFileIcon function takes a file type as input and returns the corresponding image path for
@@ -127,17 +128,20 @@ export class FilesContainerComponent {
    * difference in seconds between the current date and the `lastModified` date. Based on the time
    * difference, the function returns a string in the format of "x seconds/minutes/hours/days/weeks
    */
-  getTimeAgo(lastModified: Date | null): string {
+  getTimeAgo(lastModified: string | null): string {
     if (!lastModified) {
       return ''; // or any default value you prefer
     }
 
     const currentDate = new Date();
+    const lastModifiedDate = new Date(lastModified);
     const differenceInSeconds = Math.floor(
-      (currentDate.getTime() - lastModified.getTime()) / 1000
+      (currentDate.getTime() - lastModifiedDate.getTime()) / 1000
     );
 
-    if (differenceInSeconds < 60) {
+    if (differenceInSeconds < 5) {
+      return 'just now';
+    } else if (differenceInSeconds < 60) {
       return `${differenceInSeconds} second${
         differenceInSeconds === 1 ? '' : 's'
       } ago`;
@@ -160,6 +164,10 @@ export class FilesContainerComponent {
       const years = Math.floor(differenceInSeconds / 29030400);
       return `${years} year${years === 1 ? '' : 's'} ago`;
     }
+  }
+
+  getOriginalName(filename: string): string {
+    return filename.replace(/\.[^.]+$/, '');
   }
 
   @HostListener('dragover', ['$event']) onDragOver(event: any): void {
@@ -194,12 +202,67 @@ export class FilesContainerComponent {
     // Only add the first file from the list
     if (files.length > 0) {
       this.file = files[0];
-      //test
-      console.log('Dropped file:', this.file);
+      console.log(this.file);
+
+      if (this.file) {
+        this.mongoDBService.uploadFile(this.file).subscribe({
+          next: (response) => {
+            alert('File uploaded successfully');
+            // Add any further logic or handle success here
+          },
+          error: (error) => {
+            alert('Error uploading file');
+            // Handle error
+          },
+          complete: () => {
+            // Handle completion if needed
+          },
+        });
+      }
     }
   }
 
   removeFile(): void {
     this.file = null;
   }
+
+  openFileInNewTab(file: any): void {
+    this.mongoDBService.getFileContent(file._id).subscribe(
+      (fileContent) => {
+        const blob = new Blob([fileContent], { type: file.contentType });
+        const url = URL.createObjectURL(blob);
+
+        // Open a new tab with the file content
+        window.open(url, '_blank');
+      },
+      (error) => {
+        console.error('Error getting file content:', error);
+        // Handle error
+      }
+    );
+  }
+  // filesTest = [
+  //   { name: 'a', type: '3ds', lastModified: this.getRandomDate() },
+  //   { name: 'b', type: 'pdf', lastModified: this.getRandomDate() },
+  //   { name: 'c', type: 'ai', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
+  // ];
+  // //test
+  // getRandomDate(): Date {
+  //   const startDate = new Date(2023, 0, 1); // January 1, 2022
+  //   const endDate = new Date(); // Current date
+
+  //   const randomTimestamp =
+  //     startDate.getTime() +
+  //     Math.random() * (endDate.getTime() - startDate.getTime());
+  //   return new Date(randomTimestamp);
+  // }
 }

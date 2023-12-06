@@ -4,12 +4,14 @@
     <ion-item class="search-bar-button-container" lines="none">
       <ion-title class="bold-text">
         Project Files
-        @if (filteredFiles.length > 0) {
-          <span class="file-count">+{{ filteredFiles.length }}</span>
-        } @else {
-          <!-- <span class="file-count">{{ filteredFiles.length }}</span> -->
+        @if (filteredFiles != undefined && filteredFiles.length > 0) {
+        <span class="file-count">+{{ filteredFiles.length }}</span>
+
         }
-        
+        @else {
+        <!-- <span class="file-count">{{ filteredFiles.length }}</span> -->
+        }
+
       </ion-title>
       <ion-searchbar [debounce]="100" (ionInput)="handleInput($event)" placeholder="Search"
         class="small-search-bar"></ion-searchbar>
@@ -21,11 +23,11 @@
 
   <div class="file-list-item">
     @for (file of filteredFiles; track file) {
-    <ion-card color="light">
+    <ion-card color="light" (click)="openFileInNewTab(file)">
       <ion-card-header class="center-content">
-        <ion-img class="file-icon-img" [src]="getFileIcon(file.type)" alt="{{ file.type }} Icon"></ion-img>
-        <ion-card-title>{{ file.name }}</ion-card-title>
-        <ion-card-subtitle>{{ getTimeAgo(file.lastModified) }}</ion-card-subtitle>
+        <ion-img class="file-icon-img" [src]="getFileIcon(file.metadata.type)" alt="{{ file.type }} Icon"></ion-img>
+        <ion-card-title>{{ getOriginalName(file.metadata.title) }}</ion-card-title>
+        <ion-card-subtitle>{{ getTimeAgo(file.metadata.lastModified) }}</ion-card-subtitle>
       </ion-card-header>
 
     </ion-card>
