@@ -20,38 +20,6 @@
               </ion-thumbnail>
             </ion-card-content>
           </ion-card>
-          <ion-card class="ion-padding">
-            <ion-card-header>
-              <ion-badge>Badge</ion-badge>
-            </ion-card-header>
-            <ion-card-title style="padding-inline: 16px">
-              Title
-            </ion-card-title>
-            <ion-card-content>
-              <div>Content</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
-            </ion-card-content>
-          </ion-card>
-          <ion-card class="ion-padding">
-            <ion-card-header>
-              <ion-badge>Badge</ion-badge>
-            </ion-card-header>
-            <ion-card-title style="padding-inline: 16px">
-              Title
-            </ion-card-title>
-            <ion-card-content>
-              <div>Content</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
-            </ion-card-content>
-          </ion-card>
 
           @for (data of newData; track data){
           <ion-card>
@@ -112,25 +80,10 @@
                   src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
                 />
               </ion-thumbnail>
-            </ion-card-content> </ion-card
-          ><ion-card class="ion-padding">
-            <ion-card-header>
-              <ion-badge>Badge</ion-badge>
-            </ion-card-header>
-            <ion-card-title style="padding-inline: 16px">
-              Title
-            </ion-card-title>
-            <ion-card-content>
-              <div>Content</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-button expand="full" (click)="addNewCard()"
+        <ion-button class="ion-padding" expand="full" (click)="addNewCard()"
           >Add New Card</ion-button
         >
       </ion-row>

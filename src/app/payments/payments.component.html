@@ -4,7 +4,7 @@
     <ion-card-content>
       <ion-grid>
         <ion-row>
-          <ion-col class="first-col">
+          <ion-col class="first-col" size="4">
             <div>Current Status</div>
           </ion-col>
           <ion-col>
@@ -15,7 +15,7 @@
         </ion-row>
 
         <ion-row>
-          <ion-col class="first-col">
+          <ion-col class="first-col" size="4">
             <div>Usage Character</div>
           </ion-col>
           <ion-col>
@@ -36,11 +36,37 @@
         </ion-row>
 
         <ion-row>
-          <ion-col class="first-col">
+          <ion-col class="first-col" size="4">
             <div>Budget Notes</div>
           </ion-col>
           <ion-col>
             <ion-input fill="outline" placeholder="Enter text"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="first-col" size="4">
+            <div>Manage Budget</div>
+          </ion-col>
+          <ion-col> </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="first-col" size="4">
+            <div>Overuse Notifications</div>
+          </ion-col>
+          <ion-col class="check-box">
+            <ion-checkbox labelPlacement="end">Email</ion-checkbox>
+            <ion-checkbox labelPlacement="end">Phone</ion-checkbox>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="first-col" size="4">
+            <div>Allow Changes</div>
+          </ion-col>
+          <ion-col>
+            <ion-toggle>Allowed</ion-toggle>
           </ion-col>
         </ion-row>
       </ion-grid>
