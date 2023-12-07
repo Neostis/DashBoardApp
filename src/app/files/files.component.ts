@@ -1,10 +1,13 @@
-import { FilesModel } from './files.model';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MongoDBService } from '../services/mongoDB.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
+import { ToastOptions } from '../interface/toast-options.interface';
+import { ToastService } from '../services/toast.service'; // Import your ToastService
+import { SharedService } from '../services/shared.service';
 
 @Component({
   selector: 'app-files-container',
@@ -12,28 +15,44 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./files.component.scss'],
   // styleUrl: './files.component.scss',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    RouterLink,
+  ],
   providers: [MongoDBService],
 })
 export class FilesContainerComponent implements OnInit {
-  // @Input() name?: string;
-  constructor(private mongoDBService: MongoDBService) {}
+  constructor(
+    private mongoDBService: MongoDBService,
+    private toastService: ToastService,
+    private sharedService: SharedService
+  ) {}
+  route: string = '';
+  file: File | null = null;
+  fileList: any[] = this.sharedService.FilesDatabase;
+  protected filteredFiles: any;
 
   ngOnInit(): void {
-    this.loadFiles();
+    if (this.filteredFiles == undefined) {
+      this.loadFiles();
+    }
   }
 
-  file: File | null = null;
+  setRoute(value: string) {
+    localStorage.setItem('currentRoute', value.toLowerCase());
+    this.route = value.toLowerCase();
+  }
 
-  fileList: any[] = [];
-
-  protected filteredFiles: any;
+  updateGlobalVariable(): void {
+    this.sharedService.updateGlobalVariable(this.fileList);
+  }
 
   loadFiles(): void {
     this.mongoDBService.getFiles().subscribe({
       next: (response) => {
-        // console.log('Files retrieved successfully:', response);
-
         // Assuming your response has a 'data' property with the files
         this.fileList = response;
 
@@ -43,6 +62,7 @@ export class FilesContainerComponent implements OnInit {
         );
 
         this.filteredFiles = [...this.fileList];
+        this.updateGlobalVariable();
       },
       error: (error) => {
         console.error('Error retrieving files:', error);
@@ -207,12 +227,25 @@ export class FilesContainerComponent implements OnInit {
       if (this.file) {
         this.mongoDBService.uploadFile(this.file).subscribe({
           next: (response) => {
-            alert('File uploaded successfully');
-            // Add any further logic or handle success here
+            // Call the presentToast function
+            const toastOptions: ToastOptions = {
+              message: `File uploaded successfully`,
+              duration: 1500,
+              position: 'top',
+            };
+            this.toastService.presentToast(toastOptions);
+
+            this.loadFiles();
+            this.updateGlobalVariable();
           },
           error: (error) => {
-            alert('Error uploading file');
             // Handle error
+            const toastOptions: ToastOptions = {
+              message: `Error uploading file`,
+              duration: 1500,
+              position: 'top',
+            };
+            this.toastService.presentToast(toastOptions);
           },
           complete: () => {
             // Handle completion if needed
@@ -241,6 +274,7 @@ export class FilesContainerComponent implements OnInit {
       }
     );
   }
+
   // filesTest = [
   //   { name: 'a', type: '3ds', lastModified: this.getRandomDate() },
   //   { name: 'b', type: 'pdf', lastModified: this.getRandomDate() },

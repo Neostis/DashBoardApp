@@ -15,7 +15,7 @@
       </ion-title>
       <ion-searchbar [debounce]="100" (ionInput)="handleInput($event)" placeholder="Search"
         class="small-search-bar"></ion-searchbar>
-      <ion-button color="primary" size="Default">
+      <ion-button color="primary" size="Default" [routerLink]="'/filesManager'" (click)="setRoute('filesManager')">
         File Manager
       </ion-button>
     </ion-item>

@@ -1,0 +1,56 @@
+ion-row {
+  &.header-row,
+  &.data-row,
+  &.empty-row {
+    ion-col {
+      text-align: left;
+      padding: 8px; // Add padding for better visual appearance
+    }
+  }
+
+  &.header-row {
+    display: flex;
+    justify-content: center;
+
+    ion-col {
+      background-color: #3498db; // Header background color
+      color: #ffffff; // Header text color
+    }
+  }
+
+  &.data-row {
+    ion-col {
+      background-color: #c2ddef; // Data row background color
+    }
+  }
+
+  &.empty-row {
+    ion-col {
+      text-align: center;
+      background-color: #e74c3c; // Empty row background color
+      color: #ffffff; // Empty row text color
+    }
+  }
+}
+
+.search-bar-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .small-search-bar {
+    flex: 1;
+    max-width: 250px;
+  }
+
+  ion-button {
+    margin-left: 5px;
+  }
+
+  @media (max-width: 600px) {
+    // Adjust styles for screens smaller than 600px wide
+    .small-search-bar {
+      max-width: 100%; // Take up full width on smaller screens
+    }
+  }
+}
