@@ -1,6 +1,10 @@
 ion-card {
-  margin-inline: 400px;
-  margin-top: 100px;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 100%;
+  width: 1000px;
+  transform: translate(-50%, -50%);
 }
 
 ion-card-header {
@@ -12,6 +16,10 @@ ion-card-header {
 ion-radio {
   color: black;
   font-size: 18px;
+}
+
+ion-checkbox {
+  margin-right: 10px;
 }
 
 .first-col {
