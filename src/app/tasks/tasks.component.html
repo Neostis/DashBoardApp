@@ -1,121 +1,139 @@
 <ion-content>
-  <ion-grid class="ion-padding">
-    <ion-row>
-      <ion-col class="ion-padding column">
-        <div class="col-head first-col">Yet To start</div>
-        <ion-card class="ion-padding">
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content>
-        </ion-card>
-        <ion-card class="ion-padding">
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content>
-        </ion-card>
-        <ion-card class="ion-padding">
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content>
-        </ion-card>
+  <div class="content">
+    <ion-grid class="ion-padding">
+      <ion-row>
+        <ion-col class="ion-padding column">
+          <div class="col-head first-col">Yet To start</div>
+          <ion-card class="ion-padding">
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="ion-padding">
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="ion-padding">
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content>
+          </ion-card>
 
-        @for (data of newData; track data){
-        <ion-card>
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <!-- <ion-card-title style="padding-inline: 16px">
-            {{ data.title }}
-          </ion-card-title> -->
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content>
-        </ion-card>
-        }@empty { }
-      </ion-col>
+          @for (data of newData; track data){
+          <ion-card>
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <!-- <ion-card-title style="padding-inline: 16px">
+              {{ data.title }}
+            </ion-card-title> -->
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content>
+          </ion-card>
+          }@empty { }
+        </ion-col>
 
-      <ion-col class="ion-padding">
-        <div class="col-head second-col">In Progress</div>
-        <ion-card class="ion-padding">
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+        <ion-col class="ion-padding">
+          <div class="col-head second-col">In Progress</div>
+          <ion-card class="ion-padding">
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
 
-      <ion-col class="ion-padding">
-        <div class="col-head third-col">Completed</div>
-        <ion-card class="ion-padding">
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content> </ion-card
-        ><ion-card class="ion-padding">
-          <ion-card-header>
-            <ion-badge>Badge</ion-badge>
-          </ion-card-header>
-          <ion-card-title style="padding-inline: 16px"> Title </ion-card-title>
-          <ion-card-content>
-            <div>Content</div>
-            <ion-thumbnail>
-              <img
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-              />
-            </ion-thumbnail>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-button expand="full" (click)="addNewCard()">Add New Card</ion-button>
-    </ion-row>
-  </ion-grid>
+        <ion-col class="ion-padding">
+          <div class="col-head third-col">Completed</div>
+          <ion-card class="ion-padding">
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content> </ion-card
+          ><ion-card class="ion-padding">
+            <ion-card-header>
+              <ion-badge>Badge</ion-badge>
+            </ion-card-header>
+            <ion-card-title style="padding-inline: 16px">
+              Title
+            </ion-card-title>
+            <ion-card-content>
+              <div>Content</div>
+              <ion-thumbnail>
+                <img
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                />
+              </ion-thumbnail>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-button expand="full" (click)="addNewCard()"
+          >Add New Card</ion-button
+        >
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
