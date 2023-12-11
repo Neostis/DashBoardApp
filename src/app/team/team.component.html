@@ -1,6 +1,40 @@
 <ion-content>
   <div class="content">
-    <ion-searchbar show-clear-button="focus"></ion-searchbar>
+    <div class="search">
+      <ion-searchbar show-clear-button="focus"></ion-searchbar>
+      <ion-button id="open-modal">Add Member</ion-button>
+    </div>
+
+    <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="cancel()">Cancel</ion-button>
+            </ion-buttons>
+            <ion-title>Welcome</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="confirm()" [strong]="true"
+                >Confirm</ion-button
+              >
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <form [formGroup]="form">
+            <ion-item>
+              <ion-input
+                label="Enter your name"
+                labelPlacement="stacked"
+                type="text"
+                placeholder="Your name"
+                formControlName="input1"
+              ></ion-input>
+            </ion-item>
+          </form>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
 
     <ion-card>
       <ion-grid>
@@ -23,9 +57,15 @@
                   <ion-label>Item</ion-label>
                 </ion-item>
 
-                <ion-item lines="none">
+                <ion-item>
                   <ion-label>Item</ion-label>
                 </ion-item>
+
+                @for (data of newData; track data){
+                <ion-item>
+                  <ion-label>{{ data.label }}</ion-label>
+                </ion-item>
+                }@empty { }
               </ion-list>
             </ion-card-content>
           </ion-col>
