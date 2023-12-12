@@ -2,6 +2,11 @@
   <div class="content">
     <ion-grid class="ion-padding">
       <ion-row>
+        <ion-button class="ion-padding" id="open-modal">
+          Add New Card
+        </ion-button>
+      </ion-row>
+      <ion-row>
         <ion-col class="ion-padding column">
           <div class="col-head first-col">Yet To start</div>
           <ion-card class="ion-padding">
@@ -22,18 +27,17 @@
           </ion-card>
 
           @for (data of newData; track data){
-          <ion-card>
+          <ion-card class="ion-padding">
             <ion-card-header>
-              <ion-badge>Badge</ion-badge>
+              @for (tag of data.tags; track tag){
+              <ion-badge>{{ tag }}</ion-badge>
+              }
             </ion-card-header>
-            <!-- <ion-card-title style="padding-inline: 16px">
-              {{ data.title }}
-            </ion-card-title> -->
             <ion-card-title style="padding-inline: 16px">
-              Title
+              {{ data.title }}
             </ion-card-title>
             <ion-card-content>
-              <div>Content</div>
+              <div>{{ data.content }}</div>
               <ion-thumbnail>
                 <img
                   src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
@@ -83,9 +87,110 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-button class="ion-padding" expand="full" (click)="addNewCard()"
-          >Add New Card</ion-button
-        >
+
+        <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-buttons slot="start">
+                  <ion-button (click)="cancel()">Cancel</ion-button>
+                </ion-buttons>
+                <ion-title>Add new task</ion-title>
+                <ion-buttons slot="end">
+                  <ion-button (click)="confirm()" [strong]="true"
+                    >Confirm</ion-button
+                  >
+                </ion-buttons>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+              <form [formGroup]="form">
+                <ion-grid>
+                  <ion-row>
+                    <ion-input
+                      label="Task Title"
+                      label-placement="floating"
+                      fill="outline"
+                      placeholder="Enter text"
+                      formControlName="input1"
+                    ></ion-input>
+                  </ion-row>
+                  <br />
+                  <ion-row class="second-row">
+                    <ion-col class="start">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Select a Team Member</mat-label>
+                        <mat-select formControlName="input2">
+                          <mat-option value="option1">Option 1</mat-option>
+                          <mat-option value="option2">Option 2</mat-option>
+                          <mat-option value="option3">Option 3</mat-option>
+                          <mat-option value="option4">Option 4</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col class="end">
+                      <ion-label>Select Date and Time</ion-label>
+                      <ion-datetime-button
+                        datetime="datetime"
+                      ></ion-datetime-button>
+
+                      <ion-modal [keepContentsMounted]="true">
+                        <ng-template>
+                          <ion-datetime
+                            id="datetime"
+                            (ionChange)="onSelectDateTime($event)"
+                            locale="en-GB"
+                            hourCycle="h12"
+                          ></ion-datetime>
+                        </ng-template>
+                      </ion-modal>
+                      <!-- <mat-form-field appearance="outline" class="date-picker">
+                        <mat-label>Input disabled</mat-label>
+                        <input matInput [matDatepicker]="dp3" disabled />
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle
+                          matIconSuffix
+                          [for]="dp3"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                      </mat-form-field> -->
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="third-row">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Task Detail</mat-label>
+                      <textarea matInput formControlName="input3"></textarea>
+                    </mat-form-field>
+                  </ion-row>
+
+                  <ion-row class="fourth-row">
+                    <ion-col>
+                      <mat-form-field appearance="outline">
+                        <mat-label>Tags</mat-label>
+                        <input
+                          matInput
+                          #tagInput
+                          (keyup.enter)="
+                            addTag(tagInput.value); tagInput.value = ''
+                          "
+                        />
+                      </mat-form-field>
+
+                      <mat-chip-listbox>
+                        @for (tag of tags; track tag){
+                        <mat-chip [removable]="true" (removed)="removeTag(tag)">
+                          {{ tag }}
+                          <mat-icon matChipRemove>x</mat-icon>
+                        </mat-chip>
+                        }
+                      </mat-chip-listbox>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </form>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
       </ion-row>
     </ion-grid>
   </div>

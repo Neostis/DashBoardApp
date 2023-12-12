@@ -1,7 +1,10 @@
 <ion-content>
   <div class="content">
     <div class="search">
-      <ion-searchbar show-clear-button="focus"></ion-searchbar>
+      <ion-searchbar
+        show-clear-button="focus"
+        class="main-search"
+      ></ion-searchbar>
       <ion-button id="open-modal">Add Member</ion-button>
     </div>
 
@@ -12,7 +15,7 @@
             <ion-buttons slot="start">
               <ion-button (click)="cancel()">Cancel</ion-button>
             </ion-buttons>
-            <ion-title>Welcome</ion-title>
+            <ion-title>Select team member to add</ion-title>
             <ion-buttons slot="end">
               <ion-button (click)="confirm()" [strong]="true"
                 >Confirm</ion-button
@@ -21,7 +24,8 @@
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-          <form [formGroup]="form">
+          <ion-searchbar show-clear-button="focus"></ion-searchbar>
+          <!-- <form [formGroup]="form">
             <ion-item>
               <ion-input
                 label="Enter your name"
@@ -31,7 +35,7 @@
                 formControlName="input1"
               ></ion-input>
             </ion-item>
-          </form>
+          </form> -->
         </ion-content>
       </ng-template>
     </ion-modal>

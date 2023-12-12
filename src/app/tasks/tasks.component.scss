@@ -11,6 +11,11 @@ ion-card {
   width: 100%;
   ion-card-header {
     align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    ion-badge {
+      margin-right: 10px;
+    }
   }
 }
 
@@ -20,48 +25,92 @@ ion-thumbnail {
   overflow: hidden;
 }
 
-ion-col {
-  min-width: 300px;
-  flex: auto;
-  width: 33%;
-  display: flex;
-  flex-direction: column;
-}
-
-ion-grid {
-  margin-block: 60px;
-  margin-inline: 200px;
-  border-radius: 8px; /* Curved border with 8px radius */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Simulating card shadow */
-  // padding-left: 30px;
-  // padding-right: 30px;
-  display: flex;
-  justify-content: center;
-}
-
-ion-row {
-  width: 100%;
-}
-
 .content {
   top: 50%;
   left: 50%;
   width: 100%;
+  ion-col {
+    min-width: 300px;
+    flex: auto;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  ion-grid {
+    margin-block: 60px;
+    margin-inline: 200px;
+    border-radius: 8px; /* Curved border with 8px radius */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Simulating card shadow */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  ion-row {
+    width: 100%;
+  }
+
+  .col-head {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .first-col {
+    border-bottom: 3px solid #ffc400; /* Red color for "Yet To Start" */
+  }
+
+  .second-col {
+    border-bottom: 3px solid #0044ff; /* Green color for "In Progress" */
+  }
+
+  .third-col {
+    border-bottom: 3px solid rgb(16, 179, 2); /* Blue color for "Completed" */
+  }
 }
 
-.col-head {
-  margin-top: 10px;
-  padding-bottom: 10px;
+ion-modal {
+  --height: 50%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-.first-col {
-  border-bottom: 3px solid #ffc400; /* Red color for "Yet To Start" */
+ion-modal::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
 }
 
-.second-col {
-  border-bottom: 3px solid #0044ff; /* Green color for "In Progress" */
+ion-modal ion-toolbar {
+  --background: rgb(14 116 144);
+  --color: white;
 }
 
-.third-col {
-  border-bottom: 3px solid rgb(16, 179, 2); /* Blue color for "Completed" */
+ion-button {
+  width: fit-content;
+  height: fit-content;
+}
+
+.second-row {
+  .start {
+    padding: 0;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  .end {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.third-row {
+  mat-form-field {
+    width: 100%;
+  }
 }
