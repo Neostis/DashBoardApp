@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedService } from '../services/shared.service';
+import { AlertController } from '@ionic/angular';
+import { ToastOptions } from '../interface/toast-options.interface';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-filesManager-container',
@@ -19,16 +22,22 @@ export class FilesManagerContainerComponent implements OnInit {
   // @Input() name?: string;
   constructor(
     private sharedService: SharedService,
-    private mongoDBService: MongoDBService
+    private mongoDBService: MongoDBService,
+    private alertController: AlertController,
+    private toastService: ToastService
   ) {}
-  fileList: any[] = this.sharedService.FilesDatabase;
-  protected filteredFiles: any
+  file: File | null = null;
+  fileList: any[] = this.sharedService.useGlobalVariable()
+  protected filteredFiles: any;
 
   ngOnInit(): void {
-    
-    if (this.sharedService.useGlobalVariable() == undefined) {
+    // if (this.sharedService.useGlobalVariable() == undefined) {
       this.loadFiles();
-    }
+    // }
+  }
+
+  private updateGlobalVariable(): void {
+    this.sharedService.updateGlobalVariable(this.fileList);
   }
 
   loadFiles(): void {
@@ -41,10 +50,9 @@ export class FilesManagerContainerComponent implements OnInit {
         this.fileList.sort(
           (a, b) => b.metadata.lastModified - a.metadata.lastModified
         );
-        this.sharedService.updateGlobalVariable(this.fileList);
-        this.filteredFiles = this.fileList
+        this.filteredFiles = this.fileList;
+        this.updateGlobalVariable();
         console.log(this.fileList);
-
       },
       error: (error) => {
         console.error('Error retrieving files:', error);
@@ -62,19 +70,18 @@ export class FilesManagerContainerComponent implements OnInit {
 
   formatBytes(bytes: number, decimals = 2): string {
     if (bytes === 0) return '0 Bytes';
-  
+
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-  
+
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
     const formattedBytes = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
     const unit = sizes[i];
-  
+
     return `${formattedBytes} ${unit}`;
   }
-  
 
   handleInput(event: any) {
     const query = event.target.value.toLowerCase();
@@ -84,12 +91,93 @@ export class FilesManagerContainerComponent implements OnInit {
     );
   }
 
-  deleteItem(item: any): void {
-    // Handle item deletion logic here
-    const index = this.fileList.indexOf(item);
-    if (index !== -1) {
-      this.fileList.splice(index, 1);
-    }
+  async deleteItem(file: any) {
+    console.log(file);
+
+    const alert = await this.alertController.create({
+      header: 'Confirm Delete',
+      message: `Are you sure you want to delete ${file.filename}?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Delete cancelled');
+          },
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.confirmDelete(file);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
+  async confirmDelete(file: any) {
+    const fileId = file._id;
+    this.mongoDBService.deleteFile(fileId).subscribe({
+      next: () => {
+        const toastOptions: ToastOptions = {
+          message: `File deleted successfully`,
+          duration: 1500,
+          position: 'top',
+        };
+        this.toastService.presentToast(toastOptions);
+        this.loadFiles();
+        this.updateGlobalVariable();
+      },
+      error: (error) => {
+        const toastOptions: ToastOptions = {
+          message: `Error deleting file`,
+          duration: 1500,
+          position: 'top',
+        };
+        this.toastService.presentToast(toastOptions);
+      },
+    });
+  }
+
+  handleFileUpload(event: any): void {
+    const uploadFile:FileList  = event.target.files;
+    this.file = null;    
+    
+    if (uploadFile.length > 0) {
+      this.file = uploadFile[0];
+      
+      if (this.file) {
+        this.mongoDBService.uploadFile(this.file).subscribe({
+          next: (response) => {
+            // Call the presentToast function
+            const toastOptions: ToastOptions = {
+              message: `File uploaded successfully`,
+              duration: 1500,
+              position: 'top',
+            };
+            this.toastService.presentToast(toastOptions);
+
+            this.loadFiles();
+            this.updateGlobalVariable();
+          },
+          error: (error) => {
+            // Handle error
+            const toastOptions: ToastOptions = {
+              message: `Error uploading file`,
+              duration: 1500,
+              position: 'top',
+            };
+            this.toastService.presentToast(toastOptions);
+          },
+          complete: () => {
+            // Handle completion if needed
+          },
+        });
+      }
+
+    }
+  }
 }

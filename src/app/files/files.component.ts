@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { ToastOptions } from '../interface/toast-options.interface';
-import { ToastService } from '../services/toast.service'; // Import your ToastService
+import { ToastService } from '../services/toast.service';
 import { SharedService } from '../services/shared.service';
 
 @Component({
@@ -32,13 +32,13 @@ export class FilesContainerComponent implements OnInit {
   ) {}
   route: string = '';
   file: File | null = null;
-  fileList: any[] = this.sharedService.FilesDatabase;
+  fileList: any[] = this.sharedService.useGlobalVariable();
   protected filteredFiles: any;
 
   ngOnInit(): void {
-    if (this.filteredFiles == undefined) {
+    // if (this.filteredFiles == undefined) {
       this.loadFiles();
-    }
+    // }
   }
 
   setRoute(value: string) {
@@ -46,7 +46,7 @@ export class FilesContainerComponent implements OnInit {
     this.route = value.toLowerCase();
   }
 
-  updateGlobalVariable(): void {
+  private updateGlobalVariable(): void {
     this.sharedService.updateGlobalVariable(this.fileList);
   }
 
@@ -215,13 +215,13 @@ export class FilesContainerComponent implements OnInit {
    * that contains a collection of `File` objects. It represents the files selected by the user in a file
    * input field.
    */
-  handleFiles(files: FileList): void {
+  handleFiles(uploadFile: FileList): void {
     // Clear existing file
     this.file = null;
 
     // Only add the first file from the list
-    if (files.length > 0) {
-      this.file = files[0];
+    if (uploadFile.length > 0) {
+      this.file = uploadFile[0];
       console.log(this.file);
 
       if (this.file) {

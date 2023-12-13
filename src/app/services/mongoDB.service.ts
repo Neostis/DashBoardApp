@@ -23,12 +23,16 @@ export class MongoDBService {
 
   // Get content of a single file
   getFileContent(fileId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/get-file/${fileId}`, { responseType: 'arraybuffer' }).pipe(
-      catchError((error) => {
-        console.error('Error getting file content:', error);
-        return throwError(error);
+    return this.http
+      .get(`${this.baseUrl}/get-file/${fileId}`, {
+        responseType: 'arraybuffer',
       })
-    );
+      .pipe(
+        catchError((error) => {
+          console.error('Error getting file content:', error);
+          return throwError(error);
+        })
+      );
   }
   // Example endpoint for uploading a file
   uploadFile(file: File): Observable<any> {
@@ -41,6 +45,17 @@ export class MongoDBService {
         return throwError(error);
       })
     );
+  }
+
+/**
+ * The `deleteFile` function sends a DELETE request to the server to delete a file with the specified
+ * `fileId`.
+ * @param {string} fileId - A string representing the unique identifier of the file that needs to be
+ * deleted.
+ * @returns The deleteFile function returns an Observable<any>.
+ */
+  deleteFile(fileId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/delete-file/${fileId}`);
   }
 
   // Add more methods for other endpoints as needed

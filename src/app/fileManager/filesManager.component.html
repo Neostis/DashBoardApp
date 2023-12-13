@@ -2,41 +2,38 @@
   <ion-toolbar>
     <ion-item class="search-bar-button-container" lines="none">
       <ion-title class="bold-text"> </ion-title>
-      <ion-searchbar
-        [debounce]="100"
-        (ionInput)="handleInput($event)"
-        placeholder="Search"
-        class="small-search-bar"
-      ></ion-searchbar>
-      <ion-button color="primary" size="Default"> Upload File </ion-button>
+      <ion-searchbar [debounce]="100" (ionInput)="handleInput($event)" placeholder="Search"
+        class="small-search-bar"></ion-searchbar>
+      <label for="fileInput" class="button-upload">Upload File</label>
+      <input type="file" id="fileInput" style="display: none;" (change)="handleFileUpload($event)" />
     </ion-item>
   </ion-toolbar>
 
-    <ion-grid>
-      <ion-row  class="header-row">
-        <ion-col class="header-col">Name</ion-col>
-        <ion-col class="header-col">Size</ion-col>
-        <ion-col class="header-col">Last Modified</ion-col>
-        <ion-col class="header-col"></ion-col>
-      </ion-row>
+  <ion-grid>
+    <ion-row class="header-row">
+      <ion-col class="header-col">Name</ion-col>
+      <ion-col class="header-col">Size</ion-col>
+      <ion-col class="header-col">Last Modified</ion-col>
+      <ion-col class="header-col"></ion-col>
+    </ion-row>
 
-      @for (file of filteredFiles; track file) {
+    @for (file of filteredFiles; track file) {
 
-      <ion-row class="data-row">
-        <ion-col>{{ getOriginalName(file.metadata.title) }}</ion-col>
-        <ion-col>{{ formatBytes(file.length) }}</ion-col>
-        <ion-col>{{ file.metadata.lastModified | date : "medium" }}</ion-col>
-        <ion-col>
-          <ion-button (click)="deleteItem(file)">Delete</ion-button>
-        </ion-col>
-      </ion-row>
+    <ion-row class="data-row">
+      <ion-col class="ion-col-data">{{ getOriginalName(file.metadata.title) }}</ion-col>
+      <ion-col>{{ formatBytes(file.length) }}</ion-col>
+      <ion-col>{{ file.metadata.lastModified | date : "medium" }}</ion-col>
+      <ion-col>
+        <ion-button (click)="deleteItem(file)">Delete</ion-button>
+      </ion-col>
+    </ion-row>
 
-      } @empty {
-        <ion-label>
-          <br>
-          <span>Empty list of files</span>
-        </ion-label>
-      }
-    </ion-grid>
-  
+    } @empty {
+    <ion-label>
+      <br>
+      <span>Empty list of files</span>
+    </ion-label>
+    }
+  </ion-grid>
+
 </ion-content>

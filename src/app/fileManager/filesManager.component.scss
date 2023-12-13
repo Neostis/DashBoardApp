@@ -6,6 +6,11 @@ ion-row {
       text-align: left;
       padding: 8px; // Add padding for better visual appearance
     }
+    ion-col.header-col {
+      font-weight: bold;
+      font-size: 16px; /* Adjust the font size as needed */
+      user-select: none; // Disable text selection
+    }
   }
 
   &.header-row {
@@ -13,14 +18,15 @@ ion-row {
     justify-content: center;
 
     ion-col {
-      background-color: #3498db; // Header background color
-      color: #ffffff; // Header text color
+      background-color: #d3dfe7; // Header background color
+      color: #02131e; // Header text color
     }
   }
 
   &.data-row {
     ion-col {
-      background-color: #c2ddef; // Data row background color
+      user-select: none; // Disable text selection
+      background-color: #d3dfe7; // Data row background color
     }
   }
 
@@ -32,6 +38,19 @@ ion-row {
     }
   }
 }
+
+ion-row.data-row {
+  ion-col.ion-col-data {
+    background-color: #d3dfe7; // Data row background color
+    user-select: none; // Disable text selection
+
+    &:hover {
+      // background-color: #34495e; /* Dark blue color on hover, adjust as needed */
+      color: #67b5ff; /* Text color on hover, adjust as needed */
+    }
+  }
+}
+
 
 .search-bar-button-container {
   display: flex;
@@ -54,3 +73,18 @@ ion-row {
     }
   }
 }
+
+.button-upload {
+  // Your styling for the button goes here
+  // For example:
+  background-color: #007bff; // Your primary color
+  color: #fff; // Text color
+  padding: 10px; // Adjust padding as needed
+  cursor: pointer; // Show pointer on hover
+  border-radius: 4px; // Add rounded edges
+}
+
+.button-upload:hover {
+  background-color: #0056b3; // Darker color on hover
+}
+
