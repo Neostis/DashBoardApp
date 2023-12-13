@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -6,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.scss'],
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, MatFormFieldModule, MatInputModule],
 })
 export class PaymentsComponent {
   constructor() {}

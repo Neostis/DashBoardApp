@@ -44,3 +44,17 @@ ion-checkbox {
     transition: width 0.3s ease; /* Smooth width transition */
   }
 }
+
+mat-form-field {
+  width: 100%;
+}
+
+.last-row {
+  ion-button {
+    height: fit-content;
+    width: fit-content;
+  }
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}

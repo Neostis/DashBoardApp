@@ -48,7 +48,11 @@
           <ion-col class="first-col" size="4">
             <div>Manage Budget</div>
           </ion-col>
-          <ion-col> </ion-col>
+          <ion-col>
+            <mat-form-field>
+              <textarea matInput></textarea>
+            </mat-form-field>
+          </ion-col>
         </ion-row>
 
         <ion-row>
@@ -68,6 +72,13 @@
           <ion-col>
             <ion-toggle>Allowed</ion-toggle>
           </ion-col>
+        </ion-row>
+
+        <ion-row class="last-row">
+          <ion-button color="light" style="margin-right: 10px"
+            >Discard</ion-button
+          >
+          <ion-button>Save Changes</ion-button>
         </ion-row>
       </ion-grid>
     </ion-card-content>
