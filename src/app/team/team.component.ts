@@ -1,51 +1,60 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
-import { OverlayEventDetail } from '@ionic/core/components';
+import { MongoDBService } from '../services/mongoDB.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
   standalone: true,
-  imports: [IonicModule, ReactiveFormsModule],
+  imports: [IonicModule, FormsModule, HttpClientModule],
+  providers: [MongoDBService],
 })
 export class TeamComponent {
-  form!: FormGroup;
   newData: any[] = [];
+  isModalOpen = false;
+  searchInput!: string;
+  members: any[] = [];
 
-  constructor(private formBuilder: FormBuilder) {
-    this.form = this.formBuilder.group({
-      input1: '',
-      // input2: '',
-      // ... other inputs
-    });
-  }
+  constructor(private mongoDBService: MongoDBService) {}
 
   @ViewChild(IonModal) modal!: IonModal;
 
-  message =
-    'This modal example uses triggers to automatically open a modal when the button is clicked.';
-
   cancel() {
-    this.form.reset();
     this.modal.dismiss();
   }
 
   confirm() {
     const newItem = {
-      label: this.form.get('input1')?.value,
+      label: this.searchInput,
     };
 
     this.newData.push(newItem);
-    this.form.reset();
+    this.searchInput = '';
     this.modal.dismiss();
   }
 
   onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.message = `Hello, ${ev.detail.data}!`;
-    }
+    this.isModalOpen = false;
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
+
+  testGetMember(): void {
+    this.mongoDBService.getAllMember().subscribe({
+      next: (res) => {
+        this.members = res;
+      },
+      error: (err) => {
+        console.error('Error fetching members:', err);
+      },
+      complete: () => {
+        console.log(this.members);
+      },
+    });
   }
 }

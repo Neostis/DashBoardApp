@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -47,13 +47,24 @@ export class MongoDBService {
     );
   }
 
-/**
- * The `deleteFile` function sends a DELETE request to the server to delete a file with the specified
- * `fileId`.
- * @param {string} fileId - A string representing the unique identifier of the file that needs to be
- * deleted.
- * @returns The deleteFile function returns an Observable<any>.
- */
+  getAllMember(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/getAllMember`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('An error occurred:', error);
+        return throwError(
+          () => 'Something went wrong; please try again later.'
+        );
+      })
+    );
+  }
+
+  /**
+   * The `deleteFile` function sends a DELETE request to the server to delete a file with the specified
+   * `fileId`.
+   * @param {string} fileId - A string representing the unique identifier of the file that needs to be
+   * deleted.
+   * @returns The deleteFile function returns an Observable<any>.
+   */
   deleteFile(fileId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-file/${fileId}`);
   }

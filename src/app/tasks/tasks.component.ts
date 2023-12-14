@@ -33,6 +33,7 @@ export class TasksComponent {
   newData: any[] = [];
   tags: string[] = [];
   selectedDateTime!: string;
+  isModalOpen = false;
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) {
     this.form = this.formBuilder.group({
@@ -43,9 +44,6 @@ export class TasksComponent {
   }
 
   @ViewChild(IonModal) modal!: IonModal;
-
-  message =
-    'This modal example uses triggers to automatically open a modal when the button is clicked.';
 
   cancel() {
     this.form.reset();
@@ -67,10 +65,15 @@ export class TasksComponent {
   }
 
   onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.message = `Hello, ${ev.detail.data}!`;
-    }
+    // const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    // if (ev.detail.role === 'confirm') {
+    //   this.message = `Hello, ${ev.detail.data}!`;
+    // }
+    this.isModalOpen = false;
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 
   onSelectDateTime(event: CustomEvent) {

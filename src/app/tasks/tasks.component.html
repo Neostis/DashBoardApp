@@ -2,7 +2,7 @@
   <div class="content">
     <ion-grid class="ion-padding">
       <ion-row>
-        <ion-button class="ion-padding" id="open-modal">
+        <ion-button class="ion-padding" (click)="setOpen(true)">
           Add New Card
         </ion-button>
       </ion-row>
@@ -88,7 +88,7 @@
           </ion-card>
         </ion-col>
 
-        <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+        <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
           <ng-template>
             <ion-header>
               <ion-toolbar>
