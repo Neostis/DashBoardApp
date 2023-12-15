@@ -33,15 +33,15 @@ export class FilesContainerComponent implements OnInit {
     private sharedService: SharedService
   ) {}
   route: string = '';
-  file: File | null = null;
-  fileList: FilesModel[] = this.sharedService.useFilesVariable();
-  protected filteredFiles: FilesModel[] = this.sharedService.useFilesVariable();
-  projectList: ProjectModel[] = []
+  private file: File | null = null;
+  private fileList: FilesModel[] = this.sharedService.useFilesVariable();
+  filteredFiles: FilesModel[] = this.sharedService.useFilesVariable();
+  private projectList: ProjectModel[] = [];
 
   ngOnInit(): void {
     // if (this.filteredFiles == undefined) {
-      this.loadFiles();
-      this.loadProject();
+    this.loadFiles();
+    this.loadProject();
     // }
   }
 
@@ -51,24 +51,22 @@ export class FilesContainerComponent implements OnInit {
   }
 
   //set Test Project
-  loadProject(): void{
+  private loadProject(): void {
     this.mongoDBService.getProjects().subscribe({
       next: (response) => {
         // Assuming your response has a 'data' property with the files
         this.projectList = response;
-        
-      this.sharedService.updateProjectVariable(this.projectList[0]);
 
+        this.sharedService.updateProjectVariable(this.projectList[0]);
       },
       error: (error) => {
         console.error('Error retrieving files:', error);
       },
-      complete: () => {
-      },
+      complete: () => {},
     });
   }
-  
-  loadFiles(): void {
+
+  private loadFiles(): void {
     this.mongoDBService.getFiles().subscribe({
       next: (response) => {
         // Assuming your response has a 'data' property with the files
@@ -233,7 +231,7 @@ export class FilesContainerComponent implements OnInit {
    * that contains a collection of `File` objects. It represents the files selected by the user in a file
    * input field.
    */
-  handleFiles(uploadFile: FileList): void {
+  private handleFiles(uploadFile: FileList): void {
     // Clear existing file
     this.file = null;
 
@@ -243,32 +241,34 @@ export class FilesContainerComponent implements OnInit {
       console.log(this.file);
 
       if (this.file) {
-        this.mongoDBService.uploadFile(this.file, this.sharedService.useProjectVariable()._id).subscribe({
-          next: (response) => {
-            // Call the presentToast function
-            const toastOptions: ToastOptions = {
-              message: `File uploaded successfully`,
-              duration: 1500,
-              position: 'top',
-            };
-            this.toastService.presentToast(toastOptions);
+        this.mongoDBService
+          .uploadFile(this.file, this.sharedService.useProjectVariable()._id)
+          .subscribe({
+            next: (response) => {
+              // Call the presentToast function
+              const toastOptions: ToastOptions = {
+                message: `File uploaded successfully`,
+                duration: 1500,
+                position: 'top',
+              };
+              this.toastService.presentToast(toastOptions);
 
-            this.loadFiles();
-            this.sharedService.updateFilesVariable(this.fileList);
-          },
-          error: (error) => {
-            // Handle error
-            const toastOptions: ToastOptions = {
-              message: `Error uploading file`,
-              duration: 1500,
-              position: 'top',
-            };
-            this.toastService.presentToast(toastOptions);
-          },
-          complete: () => {
-            // Handle completion if needed
-          },
-        });
+              this.loadFiles();
+              this.sharedService.updateFilesVariable(this.fileList);
+            },
+            error: (error) => {
+              // Handle error
+              const toastOptions: ToastOptions = {
+                message: `Error uploading file`,
+                duration: 1500,
+                position: 'top',
+              };
+              this.toastService.presentToast(toastOptions);
+            },
+            complete: () => {
+              // Handle completion if needed
+            },
+          });
       }
     }
   }
@@ -290,10 +290,10 @@ export class FilesContainerComponent implements OnInit {
   }
 
   getProjectName(): string {
-    return this.sharedService.useProjectVariable().title
+    return this.sharedService.useProjectVariable()?.title || '?';
   }
 
   getProjectID(): string {
-    return  this.sharedService.useProjectVariable()._id
+    return this.sharedService.useProjectVariable()?._id || '?';
   }
 }
