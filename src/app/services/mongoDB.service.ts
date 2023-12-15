@@ -69,6 +69,19 @@ export class MongoDBService {
       })
     );
   }
+  
+  searchMember(searchTerm?: string): Observable<any[]> {
+    return this.http
+      .get<any[]>(`${this.baseUrl}/members/search?name=${searchTerm}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('An error occurred:', error);
+          return throwError(
+            () => 'Something went wrong; please try again later.'
+          );
+        })
+      );
+  }
 
   /**
    * The `deleteFile` function sends a DELETE request to the server to delete a file with the specified
