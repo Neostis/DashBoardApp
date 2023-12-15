@@ -37,3 +37,36 @@ ion-modal ion-toolbar {
   --background: rgb(14 116 144);
   --color: white;
 }
+
+ion-checkbox {
+  margin-right: 10px;
+}
+
+ion-item {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+mat-form-field {
+  margin-top: 20px;
+}
+
+.custom-ion-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline-start: 8px;
+}
+
+.search-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between checkbox and text */
+}
+
+.custom-select {
+  margin-left: auto; /* Push the select to the right */
+  flex-shrink: 0; /* Prevent shrinking */
+  width: 30%; /* Adjust the width as needed */
+}
