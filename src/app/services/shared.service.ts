@@ -1,18 +1,30 @@
 import { Injectable } from '@angular/core';
+import { ProjectModel } from '../model/project.model';
+import { FilesModel } from '../model/files.model';
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class SharedService {
-  FilesDatabase: any;
+  private FilesDatabase!: FilesModel;
+  private ProjectDatabase!: ProjectModel;
 
   constructor() {}
 
-  updateGlobalVariable(newValue: any): void {
+  updateFilesVariable(newValue: any): void {
     this.FilesDatabase = newValue;
   }
 
-  useGlobalVariable(): any {
+  useFilesVariable(): any {
     return this.FilesDatabase
+  }
+
+  updateProjectVariable(newValue: ProjectModel): void {
+    this.ProjectDatabase = newValue;
+  }
+
+  useProjectVariable(): ProjectModel {
+    return this.ProjectDatabase
   }
 }

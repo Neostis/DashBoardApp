@@ -16,7 +16,7 @@ export class MongoDBService {
     return this.http.get<any[]>(`${this.baseUrl}/get-files`).pipe(
       catchError((error) => {
         console.error('Error getting files:', error);
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
@@ -30,33 +30,43 @@ export class MongoDBService {
       .pipe(
         catchError((error) => {
           console.error('Error getting file content:', error);
-          return throwError(error);
+          return throwError(() => error);
         })
       );
   }
-  // Example endpoint for uploading a file
-  uploadFile(file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
 
-    return this.http.post(`${this.baseUrl}/upload-files`, formData).pipe(
+  getProjects(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/get-projects`).pipe(
       catchError((error) => {
-        console.error('Error uploading file:', error);
-        return throwError(error);
+        console.error('Error getting projects:', error);
+        return throwError(() => error);
       })
     );
   }
 
-/**
- * The `deleteFile` function sends a DELETE request to the server to delete a file with the specified
- * `fileId`.
- * @param {string} fileId - A string representing the unique identifier of the file that needs to be
- * deleted.
- * @returns The deleteFile function returns an Observable<any>.
- */
+  // Example endpoint for uploading a file
+  uploadFile(file: File, projectID: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http
+      .post(`${this.baseUrl}/upload-files/${projectID}`, formData)
+      .pipe(
+        catchError((error) => {
+          console.error('Error uploading file:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  /**
+   * The `deleteFile` function sends a DELETE request to the server to delete a file with the specified
+   * `fileId`.
+   * @param {string} fileId - A string representing the unique identifier of the file that needs to be
+   * deleted.
+   * @returns The deleteFile function returns an Observable<any>.
+   */
   deleteFile(fileId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-file/${fileId}`);
   }
-
-  // Add more methods for other endpoints as needed
 }

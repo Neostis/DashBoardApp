@@ -19,7 +19,6 @@ import { ToastService } from '../services/toast.service';
   providers: [MongoDBService],
 })
 export class FilesManagerContainerComponent implements OnInit {
-  // @Input() name?: string;
   constructor(
     private sharedService: SharedService,
     private mongoDBService: MongoDBService,
@@ -27,17 +26,17 @@ export class FilesManagerContainerComponent implements OnInit {
     private toastService: ToastService
   ) {}
   file: File | null = null;
-  fileList: any[] = this.sharedService.useGlobalVariable()
+  fileList: any[] = this.sharedService.useFilesVariable()
   protected filteredFiles: any;
 
   ngOnInit(): void {
-    // if (this.sharedService.useGlobalVariable() == undefined) {
+    // if (this.sharedService.useFilesVariable() == undefined) {
       this.loadFiles();
     // }
   }
 
-  private updateGlobalVariable(): void {
-    this.sharedService.updateGlobalVariable(this.fileList);
+  private updateFilesVariable(): void {
+    this.sharedService.updateFilesVariable(this.fileList);
   }
 
   loadFiles(): void {
@@ -51,7 +50,7 @@ export class FilesManagerContainerComponent implements OnInit {
           (a, b) => b.metadata.lastModified - a.metadata.lastModified
         );
         this.filteredFiles = this.fileList;
-        this.updateGlobalVariable();
+        this.updateFilesVariable();
         console.log(this.fileList);
       },
       error: (error) => {
@@ -129,7 +128,7 @@ export class FilesManagerContainerComponent implements OnInit {
         };
         this.toastService.presentToast(toastOptions);
         this.loadFiles();
-        this.updateGlobalVariable();
+        this.updateFilesVariable();
       },
       error: (error) => {
         const toastOptions: ToastOptions = {
@@ -145,13 +144,15 @@ export class FilesManagerContainerComponent implements OnInit {
   handleFileUpload(event: any): void {
     const uploadFile:FileList  = event.target.files;
     this.file = null;    
+    console.log();
     
     if (uploadFile.length > 0) {
       this.file = uploadFile[0];
       
-      if (this.file) {
-        this.mongoDBService.uploadFile(this.file).subscribe({
+      if (this.file) {        
+        this.mongoDBService.uploadFile(this.file, this.sharedService.useProjectVariable()._id).subscribe({
           next: (response) => {
+            
             // Call the presentToast function
             const toastOptions: ToastOptions = {
               message: `File uploaded successfully`,
@@ -161,9 +162,10 @@ export class FilesManagerContainerComponent implements OnInit {
             this.toastService.presentToast(toastOptions);
 
             this.loadFiles();
-            this.updateGlobalVariable();
+            this.updateFilesVariable();
           },
           error: (error) => {
+            
             // Handle error
             const toastOptions: ToastOptions = {
               message: `Error uploading file`,

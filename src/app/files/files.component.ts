@@ -1,3 +1,4 @@
+import { ProjectModel } from './../model/project.model';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MongoDBService } from '../services/mongoDB.service';
 import { CommonModule } from '@angular/common';
@@ -8,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { ToastOptions } from '../interface/toast-options.interface';
 import { ToastService } from '../services/toast.service';
 import { SharedService } from '../services/shared.service';
+import { FilesModel } from '../model/files.model';
 
 @Component({
   selector: 'app-files-container',
@@ -32,12 +34,14 @@ export class FilesContainerComponent implements OnInit {
   ) {}
   route: string = '';
   file: File | null = null;
-  fileList: any[] = this.sharedService.useGlobalVariable();
-  protected filteredFiles: any;
+  fileList: FilesModel[] = this.sharedService.useFilesVariable();
+  protected filteredFiles: FilesModel[] = this.sharedService.useFilesVariable();
+  projectList: ProjectModel[] = []
 
   ngOnInit(): void {
     // if (this.filteredFiles == undefined) {
       this.loadFiles();
+      this.loadProject();
     // }
   }
 
@@ -46,10 +50,23 @@ export class FilesContainerComponent implements OnInit {
     this.route = value.toLowerCase();
   }
 
-  private updateGlobalVariable(): void {
-    this.sharedService.updateGlobalVariable(this.fileList);
-  }
+  //set Test Project
+  loadProject(): void{
+    this.mongoDBService.getProjects().subscribe({
+      next: (response) => {
+        // Assuming your response has a 'data' property with the files
+        this.projectList = response;
 
+      this.sharedService.updateProjectVariable(this.projectList[0]);
+      },
+      error: (error) => {
+        console.error('Error retrieving files:', error);
+      },
+      complete: () => {
+      },
+    });
+  }
+  
   loadFiles(): void {
     this.mongoDBService.getFiles().subscribe({
       next: (response) => {
@@ -62,7 +79,7 @@ export class FilesContainerComponent implements OnInit {
         );
 
         this.filteredFiles = [...this.fileList];
-        this.updateGlobalVariable();
+        this.sharedService.updateFilesVariable(this.fileList);
       },
       error: (error) => {
         console.error('Error retrieving files:', error);
@@ -148,7 +165,7 @@ export class FilesContainerComponent implements OnInit {
    * difference in seconds between the current date and the `lastModified` date. Based on the time
    * difference, the function returns a string in the format of "x seconds/minutes/hours/days/weeks
    */
-  getTimeAgo(lastModified: string | null): string {
+  getTimeAgo(lastModified: number | null): string {
     if (!lastModified) {
       return ''; // or any default value you prefer
     }
@@ -225,7 +242,7 @@ export class FilesContainerComponent implements OnInit {
       console.log(this.file);
 
       if (this.file) {
-        this.mongoDBService.uploadFile(this.file).subscribe({
+        this.mongoDBService.uploadFile(this.file, this.sharedService.useProjectVariable()._id).subscribe({
           next: (response) => {
             // Call the presentToast function
             const toastOptions: ToastOptions = {
@@ -236,7 +253,7 @@ export class FilesContainerComponent implements OnInit {
             this.toastService.presentToast(toastOptions);
 
             this.loadFiles();
-            this.updateGlobalVariable();
+            this.sharedService.updateFilesVariable(this.fileList);
           },
           error: (error) => {
             // Handle error
@@ -255,10 +272,6 @@ export class FilesContainerComponent implements OnInit {
     }
   }
 
-  removeFile(): void {
-    this.file = null;
-  }
-
   openFileInNewTab(file: any): void {
     this.mongoDBService.getFileContent(file._id).subscribe(
       (fileContent) => {
@@ -275,28 +288,7 @@ export class FilesContainerComponent implements OnInit {
     );
   }
 
-  // filesTest = [
-  //   { name: 'a', type: '3ds', lastModified: this.getRandomDate() },
-  //   { name: 'b', type: 'pdf', lastModified: this.getRandomDate() },
-  //   { name: 'c', type: 'ai', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  //   { name: 'd', type: 'css', lastModified: this.getRandomDate() },
-  // ];
-  // //test
-  // getRandomDate(): Date {
-  //   const startDate = new Date(2023, 0, 1); // January 1, 2022
-  //   const endDate = new Date(); // Current date
-
-  //   const randomTimestamp =
-  //     startDate.getTime() +
-  //     Math.random() * (endDate.getTime() - startDate.getTime());
-  //   return new Date(randomTimestamp);
-  // }
+  getProjectName(): string {
+    return this.sharedService.useProjectVariable().title
+  }
 }
