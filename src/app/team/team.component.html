@@ -5,10 +5,11 @@
         show-clear-button="focus"
         class="main-search"
       ></ion-searchbar>
-      <ion-button id="open-modal">Add Member</ion-button>
+      <!-- <ion-button (click)="setOpen(true)">Add Member</ion-button> -->
+      <ion-button (click)="testGetMember()">Add Member</ion-button>
     </div>
 
-    <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
       <ng-template>
         <ion-header>
           <ion-toolbar>
@@ -24,18 +25,10 @@
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-          <ion-searchbar show-clear-button="focus"></ion-searchbar>
-          <!-- <form [formGroup]="form">
-            <ion-item>
-              <ion-input
-                label="Enter your name"
-                labelPlacement="stacked"
-                type="text"
-                placeholder="Your name"
-                formControlName="input1"
-              ></ion-input>
-            </ion-item>
-          </form> -->
+          <ion-searchbar
+            show-clear-button="focus"
+            [(ngModel)]="searchInput"
+          ></ion-searchbar>
         </ion-content>
       </ng-template>
     </ion-modal>

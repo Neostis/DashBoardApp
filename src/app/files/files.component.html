@@ -28,7 +28,7 @@
   </ion-toolbar>
 
   <div class="file-list-item">
-    @for (file of filteredFiles; track file) { @if (file.metadata.projectID) {
+    @for (file of filteredFiles; track file) { @if ((file.metadata.projectID).toString() == this.getProjectID()) {
     <ion-card color="light" (click)="openFileInNewTab(file)">
       <ion-card-header class="center-content">
         <ion-img
