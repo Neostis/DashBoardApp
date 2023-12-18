@@ -92,9 +92,11 @@ export class MongoDBService {
       );
   }
 
-  searchMember(searchTerm?: string): Observable<any[]> {
+  searchMember(searchTerm?: string, projectId?: string): Observable<any[]> {
     return this.http
-      .get<any[]>(`${this.baseUrl}/members/search?name=${searchTerm}`)
+      .get<any[]>(
+        `${this.baseUrl}/members/search?name=${searchTerm}&Id=${projectId}`
+      )
       .pipe(
         catchError((error: HttpErrorResponse) => {
           console.error('An error occurred:', error);
