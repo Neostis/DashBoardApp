@@ -57,7 +57,8 @@ export class FilesContainerComponent implements OnInit {
         // Assuming your response has a 'data' property with the files
         this.projectList = response;
 
-        this.sharedService.updateProjectVariable(this.projectList[0]);
+        this.sharedService.updateProjectVariable(this.projectList[1]);
+        
       },
       error: (error) => {
         console.error('Error retrieving files:', error);

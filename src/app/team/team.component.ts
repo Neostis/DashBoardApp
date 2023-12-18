@@ -1,5 +1,5 @@
 import { SharedService } from './../services/shared.service';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { MongoDBService } from '../services/mongoDB.service';
@@ -16,17 +16,49 @@ import { MemberModel } from '../model/member.model';
   imports: [IonicModule, FormsModule, HttpClientModule, MatSelectModule],
   providers: [MongoDBService],
 })
-export class TeamComponent {
+export class TeamComponent implements OnInit{
   newData: any[] = [];
   isModalOpen = false;
   searchInput!: string;
   searchResult: any[] = [];
   members: any[] = [];
+  role: string = '""'
+
+  //Test
+   member: MemberModel[] = [{
+    name: 'testName',
+    role: 'testRole',
+    email: 'testEmail@gmail.com',
+    projects: [
+      {
+        projectID: this.sharedService.useProjectVariable()._id,
+        type: 'testType',
+      },
+    ],
+  }
+  ,{
+    name: 'testName2',
+    role: 'testRole2',
+    email: 'testEmail2@gmail.com',
+    projects: [
+      {
+        projectID: this.sharedService.useProjectVariable()._id,
+        type: 'testType2',
+      },
+    ],
+  },
+];
+  ngOnInit(): void {
+
+    this.getMembers(this.role)
+  }
 
   private searchSubject: Subject<string> = new Subject<string>();
 
-  constructor(private mongoDBService: MongoDBService,
-    private sharedService: SharedService) {
+  constructor(
+    private mongoDBService: MongoDBService,
+    private sharedService: SharedService
+  ) {
     this.searchSubject
       .pipe(
         debounceTime(300), // Adjust debounce time as needed
@@ -48,7 +80,7 @@ export class TeamComponent {
         },
       });
   }
-
+  
   @ViewChild(IonModal) modal!: IonModal;
 
   cancel() {
@@ -57,21 +89,13 @@ export class TeamComponent {
   }
 
   confirm() {
-
-    const member: MemberModel= {
-      projectID:  this.sharedService.useProjectVariable()._id,
-      name: 'testName',
-      role: 'testRole',
-      email: 'testEmail',
-      type: 'testType',
-    }
     // const newItem = {
     //   label: this.searchInput,
     // };
 
     // this.newData.push(newItem);
-    // console.log(member);
-    this.addMember(member)
+    this.addMembers(this.member);
+    // this.updateRole(this.members[3], "Test02")
     this.searchInput = '';
     this.isModalOpen = false;
   }
@@ -129,19 +153,57 @@ export class TeamComponent {
     this.members.push(selectItem);
   }
 
-  addMember(member: any) {    
-    this.mongoDBService.addMember(member).subscribe({
-      next: (response) => {
-        // Call the presentToast function
-        console.log('Member added successfully:', response);
-      },
-      error: (error) => {
-        // Handle error
-        console.error('Error adding member:', error);
-      },
-      complete: () => {
-        // Handle completion if needed
-      },
+  addMembers(members: MemberModel[]) {
+    members.forEach(member => {
+      this.mongoDBService.addMember(member).subscribe({
+        next: (response) => {
+          // Call the presentToast function
+          console.log('Member added successfully:', response);
+        },
+        error: (error) => {
+          // Handle error
+          console.error('Error adding member:', error);
+        },
+        complete: () => {
+          // Handle completion if needed
+        },
+      });
     });
-  }
+ }
+
+ getMembers(role : string){
+  this.mongoDBService.getMembers(role).subscribe({
+    next: (response) => {
+      // Call the presentToast function
+      this.members = response
+      console.log('get Member successfully:', response);
+    },
+    error: (error) => {
+      // Handle error
+      console.error('Error getting member:', error);
+    },
+    complete: () => {
+      // Handle completion if needed
+    },
+  });
+ }
+
+ updateRole(member: any, newRole: string): void {
+  
+  this.mongoDBService.updateMemberRole(member._id, newRole)
+  .subscribe({
+    next: (response) => {
+      // Call the presentToast function
+      console.log('Member role updated successfully:', response);
+    },
+    error: (error) => {
+      // Handle error
+      console.error('Failed to update member role:', error);
+    },
+    complete: () => {
+      // Handle completion if needed
+    },
+  });
+}
+
 }

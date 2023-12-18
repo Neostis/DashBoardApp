@@ -36,7 +36,7 @@ export class MongoDBService {
   }
 
   getProjects(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/get-projects`).pipe(
+    return this.http.get<any[]>(`${this.baseUrl}/get-projects/`).pipe(
       catchError((error) => {
         console.error('Error getting projects:', error);
         return throwError(() => error);
@@ -58,17 +58,40 @@ export class MongoDBService {
         })
       );
   }
-  
+
+  getMembers(role: string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/get-members/${role}`).pipe(
+      catchError((error) => {
+        console.error('Error getting projects:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   addMember(memberData: any): Observable<any> {
     const url = `${this.baseUrl}/add-member`; // Assuming your server has an endpoint like /add-member
     return this.http.post<any>(url, memberData).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error('An error occurred:', error);
-        return throwError(() => 'Something went wrong; please try again later.');
+        return throwError(
+          () => 'Something went wrong; please try again later.'
+        );
       })
     );
   }
-  
+
+  updateMemberRole(memberId: string, newRole: string): Observable<any> {
+    
+    return this.http
+      .put<any>(`${this.baseUrl}/update-member/${memberId}`, { role: newRole })
+      .pipe(
+        catchError((error) => {
+          console.error('Error updating member role:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
   searchMember(searchTerm?: string): Observable<any[]> {
     return this.http
       .get<any[]>(`${this.baseUrl}/members/search?name=${searchTerm}`)
