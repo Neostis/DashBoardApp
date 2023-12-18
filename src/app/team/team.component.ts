@@ -74,6 +74,12 @@ export class TeamComponent {
       name: 'testName',
       role: 'testRole',
       email: 'testEmail',
+      projects: [
+        {
+          projectId: '657aa5e1770d840a02e05056',
+          type: 'Owner',
+        },
+      ],
     };
     // const newItem = {
     //   label: this.searchInput,
@@ -138,22 +144,6 @@ export class TeamComponent {
       console.log(selectedMember);
     }
     // this.members.push(selectedMember);
-  }
-
-  addMember(member: any) {
-    this.mongoDBService.addMember(member).subscribe({
-      next: (response) => {
-        // Call the presentToast function
-        console.log('Member added successfully:', response);
-      },
-      error: (error) => {
-        // Handle error
-        console.error('Error adding member:', error);
-      },
-      complete: () => {
-        // Handle completion if needed
-      },
-    });
   }
 
   addMember(member: any) {
