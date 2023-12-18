@@ -1,3 +1,4 @@
+import { SharedService } from './../services/shared.service';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
@@ -5,6 +6,8 @@ import { MongoDBService } from '../services/mongoDB.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject, debounceTime, switchMap } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
+import { MemberModel } from '../model/member.model';
+import { ObjectId } from 'mongodb';
 
 @Component({
   selector: 'app-team',
@@ -23,7 +26,8 @@ export class TeamComponent {
 
   private searchSubject: Subject<string> = new Subject<string>();
 
-  constructor(private mongoDBService: MongoDBService) {
+  constructor(private mongoDBService: MongoDBService,
+    private sharedService: SharedService) {
     this.searchSubject
       .pipe(
         debounceTime(300), // Adjust debounce time as needed
@@ -54,12 +58,21 @@ export class TeamComponent {
   }
 
   confirm() {
+
+    const member: MemberModel= {
+      projectID:  this.sharedService.useProjectVariable()._id,
+      name: 'testName',
+      role: 'testRole',
+      email: 'testEmail',
+      type: 'testType',
+    }
     // const newItem = {
     //   label: this.searchInput,
     // };
 
     // this.newData.push(newItem);
-    console.log(this.members);
+    // console.log(member);
+    this.addMember(member)
     this.searchInput = '';
     this.isModalOpen = false;
   }
@@ -115,5 +128,21 @@ export class TeamComponent {
 
   checkboxChange(selectItem: any) {
     this.members.push(selectItem);
+  }
+
+  addMember(member: any) {    
+    this.mongoDBService.addMember(member).subscribe({
+      next: (response) => {
+        // Call the presentToast function
+        console.log('Member added successfully:', response);
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error adding member:', error);
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
   }
 }

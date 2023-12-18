@@ -59,13 +59,12 @@ export class MongoDBService {
       );
   }
   
-  getAllMember(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/getAllMember`).pipe(
+  addMember(memberData: any): Observable<any> {
+    const url = `${this.baseUrl}/add-member`; // Assuming your server has an endpoint like /add-member
+    return this.http.post<any>(url, memberData).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error('An error occurred:', error);
-        return throwError(
-          () => 'Something went wrong; please try again later.'
-        );
+        return throwError(() => 'Something went wrong; please try again later.');
       })
     );
   }

@@ -62,6 +62,8 @@ export class TasksComponent {
     this.selectedDateTime = '';
     this.form.reset();
     this.modal.dismiss();
+    console.log(newCardData);
+    
   }
 
   onWillDismiss(event: Event) {
