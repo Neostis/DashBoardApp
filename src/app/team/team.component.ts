@@ -17,11 +17,13 @@ import { MemberModel } from '../model/member.model';
   providers: [MongoDBService],
 })
 export class TeamComponent {
+  _ProjectId: string = '657aa5e1770d840a02e05056';
   newData: any[] = [];
   isModalOpen = false;
   searchInput!: string;
   searchResult: any[] = [];
   selectedTypes: string[] = [];
+  checkboxList: boolean[] = [];
   members: any[] = [];
 
   options = [
@@ -32,10 +34,7 @@ export class TeamComponent {
 
   private searchSubject: Subject<string> = new Subject<string>();
 
-  constructor(
-    private mongoDBService: MongoDBService,
-    private sharedService: SharedService
-  ) {
+  constructor(private mongoDBService: MongoDBService) {
     this.searchSubject
       .pipe(
         debounceTime(300), // Adjust debounce time as needed
@@ -51,10 +50,10 @@ export class TeamComponent {
       .subscribe({
         next: (res) => {
           this.searchResult = res;
-          this.selectedTypes = this.searchResult.flatMap(
-            (member: MemberModel) =>
-              member.projects.map((project) => project.type)
+          this.selectedTypes = new Array(this.searchResult.length).fill(
+            'Owner'
           );
+          this.checkboxList = new Array(this.searchResult.length).fill(false);
         },
         error: (err) => {
           console.error('Error fetching members:', err);
@@ -70,23 +69,19 @@ export class TeamComponent {
   }
 
   confirm() {
+    //use from members array instead
     const member: MemberModel = {
       name: 'testName',
       role: 'testRole',
       email: 'testEmail',
       projects: [
         {
-          projectId: '657aa5e1770d840a02e05056',
+          projectId: this._ProjectId,
           type: 'Owner',
         },
       ],
     };
-    // const newItem = {
-    //   label: this.searchInput,
-    // };
 
-    // this.newData.push(newItem);
-    // console.log(member);
     this.addMember(member);
     this.searchInput = '';
     this.searchResult = [];
@@ -101,29 +96,6 @@ export class TeamComponent {
     this.isModalOpen = isOpen;
   }
 
-  // searchMember(): void {
-  //   this.mongoDBService.searchMember(this.searchInput).subscribe({
-  //     next: (res) => {
-  //       this.searchResult = res;
-  //     },
-  //     error: (err) => {
-  //       console.error('Error fetching members:', err);
-  //     },
-  //     complete: () => {
-  //       // console.log(this.searchResult);
-  //     },
-  //   });
-  // }
-
-  // onSearch(event: any) {
-  //   this.searchInput = event.target.value.trim();
-  //   console.log(this.searchInput);
-  //   if (this.searchInput !== '') {
-  //     this.searchMember();
-  //   } else {
-  //     this.searchResult = [];
-  //   }
-  // }
   onSearch(event: any) {
     const query: string = event.target.value.trim();
     this.searchInput = query;
@@ -139,11 +111,25 @@ export class TeamComponent {
 
   checkboxChange(event: any, selectedMember: any, index: number) {
     const checkboxValue = event.detail.checked;
+
+    const project = {
+      projectId: this._ProjectId,
+      type: this.selectedTypes[index],
+    };
+
     if (checkboxValue) {
-      selectedMember.type = this.selectedTypes[index];
-      console.log(selectedMember);
+      this.checkboxList[index] = true;
+      selectedMember.projects.push(project);
+      this.members.push(selectedMember);
+    } else {
+      selectedMember.projects = selectedMember.projects.filter(
+        (project: any) => project.projectId !== this._ProjectId
+      );
+
+      this.members = this.members.filter(
+        (member: any) => member._id !== selectedMember._id
+      );
     }
-    // this.members.push(selectedMember);
   }
 
   addMember(member: any) {

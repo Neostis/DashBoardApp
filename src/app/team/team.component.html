@@ -32,17 +32,18 @@
           ></ion-searchbar>
           <ion-list>
             <!-- Your search result items here -->
-            @for (member of searchResult; track member; let index = $index){
+            @for (member of searchResult; track member; let i = $index){
             <ion-item class="custom-ion-item">
               <div class="search-detail">
                 <ion-checkbox
-                  (ionChange)="checkboxChange($event, member, index)"
+                  (ionChange)="checkboxChange($event, member, i)"
+                  [(ngModel)]="checkboxList[i]"
                   labelPlacement="end"
                   >{{ member.name }}<br />{{ member.email }}</ion-checkbox
                 >
               </div>
               <mat-form-field appearance="outline" class="custom-select">
-                <mat-select [(ngModel)]="selectedTypes[index]">
+                <mat-select [(ngModel)]="selectedTypes[i]">
                   @for (option of options; track option){
                   <mat-option [value]="option.value">{{
                     option.label
