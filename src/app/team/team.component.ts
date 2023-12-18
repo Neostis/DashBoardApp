@@ -1,3 +1,4 @@
+import { SharedService } from './../services/shared.service';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
@@ -31,7 +32,10 @@ export class TeamComponent {
 
   private searchSubject: Subject<string> = new Subject<string>();
 
-  constructor(private mongoDBService: MongoDBService) {
+  constructor(
+    private mongoDBService: MongoDBService,
+    private sharedService: SharedService
+  ) {
     this.searchSubject
       .pipe(
         debounceTime(300), // Adjust debounce time as needed
@@ -66,11 +70,18 @@ export class TeamComponent {
   }
 
   confirm() {
+    const member: MemberModel = {
+      name: 'testName',
+      role: 'testRole',
+      email: 'testEmail',
+    };
     // const newItem = {
     //   label: this.searchInput,
     // };
 
     // this.newData.push(newItem);
+    // console.log(member);
+    this.addMember(member);
     this.searchInput = '';
     this.searchResult = [];
     this.isModalOpen = false;
@@ -127,5 +138,37 @@ export class TeamComponent {
       console.log(selectedMember);
     }
     // this.members.push(selectedMember);
+  }
+
+  addMember(member: any) {
+    this.mongoDBService.addMember(member).subscribe({
+      next: (response) => {
+        // Call the presentToast function
+        console.log('Member added successfully:', response);
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error adding member:', error);
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
+  }
+
+  addMember(member: any) {
+    this.mongoDBService.addMember(member).subscribe({
+      next: (response) => {
+        // Call the presentToast function
+        console.log('Member added successfully:', response);
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error adding member:', error);
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
   }
 }
