@@ -59,6 +59,7 @@ export class MongoDBService {
       );
   }
 
+  //use role = '""' for all data
   getMembers(role: string): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/get-members/${role}`).pipe(
       catchError((error) => {

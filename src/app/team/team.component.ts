@@ -26,32 +26,6 @@ export class TeamComponent implements OnInit {
   selectedTypes: string[] = [];
   checkboxList: boolean[] = [];
   members: any[] = [];
-  role: string = '""'
-
-  //Test
-   member: MemberModel[] = [{
-    name: 'testName',
-    role: 'testRole',
-    email: 'testEmail@gmail.com',
-    projects: [
-      {
-        projectID: this.sharedService.useProjectVariable()._id,
-        type: 'testType',
-      },
-    ],
-  }
-  ,{
-    name: 'testName2',
-    role: 'testRole2',
-    email: 'testEmail2@gmail.com',
-    projects: [
-      {
-        projectID: this.sharedService.useProjectVariable()._id,
-        type: 'testType2',
-      },
-    ],
-  },
-];
   projectList: ProjectModel[] = [];
 
   options = [
@@ -93,7 +67,6 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getMembers(this.role)
     this.loadProject();
     this.searchSubject
       .pipe(
@@ -231,55 +204,22 @@ export class TeamComponent implements OnInit {
     );
   }
 
-  addMember(member: any) {
-    this.mongoDBService.addMember(member).subscribe({
-      next: (response) => {
-        // Call the presentToast function
-        console.log('Member added successfully:', response);
-      },
-      error: (error) => {
-        // Handle error
-        console.error('Error adding member:', error);
-      },
-      complete: () => {
-        // Handle completion if needed
-      },
+  addMember(members: any) {
+    members.forEach((member: any) => {
+      this.mongoDBService.addMember(member).subscribe({
+        next: (response) => {
+          // Call the presentToast function
+          console.log('Member added successfully:', response);
+        },
+        error: (error) => {
+          // Handle error
+          console.error('Error adding member:', error);
+        },
+        complete: () => {
+          // Handle completion if needed
+        },
+      });
     });
- }
-
- getMembers(role : string){
-  this.mongoDBService.getMembers(role).subscribe({
-    next: (response) => {
-      // Call the presentToast function
-      this.members = response
-      console.log('get Member successfully:', response);
-    },
-    error: (error) => {
-      // Handle error
-      console.error('Error getting member:', error);
-    },
-    complete: () => {
-      // Handle completion if needed
-    },
-  });
- }
-
- updateRole(member: any, newRole: string): void {
+  }
+} 
   
-  this.mongoDBService.updateMemberRole(member._id, newRole)
-  .subscribe({
-    next: (response) => {
-      // Call the presentToast function
-      console.log('Member role updated successfully:', response);
-    },
-    error: (error) => {
-      // Handle error
-      console.error('Failed to update member role:', error);
-    },
-    complete: () => {
-      // Handle completion if needed
-    },
-  });
-}
-
-}
