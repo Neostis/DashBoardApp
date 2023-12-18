@@ -58,7 +58,6 @@ export class FilesContainerComponent implements OnInit {
         this.projectList = response;
 
         this.sharedService.updateProjectVariable(this.projectList[0]);
-        
       },
       error: (error) => {
         console.error('Error retrieving files:', error);
@@ -239,6 +238,7 @@ export class FilesContainerComponent implements OnInit {
     // Only add the first file from the list
     if (uploadFile.length > 0) {
       this.file = uploadFile[0];
+      console.log(this.file);
 
       if (this.file) {
         this.mongoDBService
