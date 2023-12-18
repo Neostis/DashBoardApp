@@ -32,20 +32,22 @@
           ></ion-searchbar>
           <ion-list>
             <!-- Your search result items here -->
-            @for (result of searchResult; track result){
+            @for (member of searchResult; track member; let index = $index){
             <ion-item class="custom-ion-item">
               <div class="search-detail">
                 <ion-checkbox
-                  (click)="checkboxChange(result)"
+                  (ionChange)="checkboxChange($event, member, index)"
                   labelPlacement="end"
-                  >{{ result.name }}<br />{{ result.email }}</ion-checkbox
+                  >{{ member.name }}<br />{{ member.email }}</ion-checkbox
                 >
               </div>
               <mat-form-field appearance="outline" class="custom-select">
-                <mat-select value="owner">
-                  <mat-option value="owner">Owner</mat-option>
-                  <mat-option value="guest">Guest</mat-option>
-                  <mat-option value="editor">Can Edit</mat-option>
+                <mat-select [(ngModel)]="selectedTypes[index]">
+                  @for (option of options; track option){
+                  <mat-option [value]="option.value">{{
+                    option.label
+                  }}</mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
             </ion-item>

@@ -5,6 +5,7 @@ import { MongoDBService } from '../services/mongoDB.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject, debounceTime, switchMap } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
+import { MemberModel } from '../model/member.model';
 
 @Component({
   selector: 'app-team',
@@ -19,7 +20,14 @@ export class TeamComponent {
   isModalOpen = false;
   searchInput!: string;
   searchResult: any[] = [];
+  selectedTypes: string[] = [];
   members: any[] = [];
+
+  options = [
+    { value: 'Owner', label: 'Owner' },
+    { value: 'Guest', label: 'Guest' },
+    { value: 'Editor', label: 'Can Edit' },
+  ];
 
   private searchSubject: Subject<string> = new Subject<string>();
 
@@ -39,6 +47,10 @@ export class TeamComponent {
       .subscribe({
         next: (res) => {
           this.searchResult = res;
+          this.selectedTypes = this.searchResult.flatMap(
+            (member: MemberModel) =>
+              member.projects.map((project) => project.type)
+          );
         },
         error: (err) => {
           console.error('Error fetching members:', err);
@@ -59,8 +71,8 @@ export class TeamComponent {
     // };
 
     // this.newData.push(newItem);
-    console.log(this.members);
     this.searchInput = '';
+    this.searchResult = [];
     this.isModalOpen = false;
   }
 
@@ -108,12 +120,12 @@ export class TeamComponent {
     this.searchResult = [];
   }
 
-  handleDivClick(event: Event) {
-    // Prevent the click event from propagating further
-    event.stopPropagation();
-  }
-
-  checkboxChange(selectItem: any) {
-    this.members.push(selectItem);
+  checkboxChange(event: any, selectedMember: any, index: number) {
+    const checkboxValue = event.detail.checked;
+    if (checkboxValue) {
+      selectedMember.type = this.selectedTypes[index];
+      console.log(selectedMember);
+    }
+    // this.members.push(selectedMember);
   }
 }
