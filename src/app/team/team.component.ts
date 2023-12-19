@@ -19,7 +19,7 @@ import { ProjectModel } from '../model/project.model';
 })
 export class TeamComponent implements OnInit {
   _ProjectId!: string;
-  newData: any[] = [];
+  currentMember: any[] = [];
   isModalOpen = false;
   searchInput!: string;
   searchResult: any[] = [];
@@ -84,6 +84,21 @@ export class TeamComponent implements OnInit {
       });
   }
 
+  private loadMember(): void {
+    this.mongoDBService.getProjectMembers(this._ProjectId).subscribe({
+      next: (response) => {
+        // Assuming your response has a 'data' property with the files
+        this.currentMember = response;
+      },
+      error: (error) => {
+        console.error('Error Message:', error);
+      },
+      complete: () => {
+        console.log('Current members:', this.currentMember);
+      },
+    });
+  }
+
   private loadProject(): void {
     this.mongoDBService.getProjects().subscribe({
       next: (response) => {
@@ -97,6 +112,7 @@ export class TeamComponent implements OnInit {
       },
       complete: () => {
         this._ProjectId = this.sharedService.useProjectVariable()?._id;
+        this.loadMember();
       },
     });
   }

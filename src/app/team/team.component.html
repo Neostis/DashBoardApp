@@ -71,27 +71,11 @@
             </ion-card-header>
             <ion-card-content>
               <ion-list>
+                @for (data of currentMember; track data){
                 <ion-item>
-                  <ion-label>Item</ion-label>
+                  <ion-label>{{ data.name }}</ion-label>
                 </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                @for (data of newData; track data){
-                <ion-item>
-                  <ion-label>{{ data.label }}</ion-label>
-                </ion-item>
-                }@empty { }
+                }
               </ion-list>
             </ion-card-content>
           </ion-col>
@@ -102,21 +86,14 @@
             </ion-card-header>
             <ion-card-content>
               <ion-list>
+                @for (data of currentMember; track data){
                 <ion-item>
-                  <ion-label>Item</ion-label>
+                  @for (project of data.projects; track project){ @if
+                  (project.projectId === _ProjectId){
+                  <ion-label>{{ project.type }}</ion-label>
+                  } }
                 </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item lines="none">
-                  <ion-label>Item</ion-label>
-                </ion-item>
+                }
               </ion-list>
             </ion-card-content>
           </ion-col>
@@ -127,21 +104,11 @@
             </ion-card-header>
             <ion-card-content>
               <ion-list>
+                @for (data of currentMember; track data){
                 <ion-item>
-                  <ion-label>Item</ion-label>
+                  <ion-label>{{ data.role }}</ion-label>
                 </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item lines="none">
-                  <ion-label>Item</ion-label>
-                </ion-item>
+                }
               </ion-list>
             </ion-card-content>
           </ion-col>
@@ -151,23 +118,11 @@
               <ion-card-title>Email</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ion-list>
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Item</ion-label>
-                </ion-item>
-
-                <ion-item lines="none">
-                  <ion-label>Item</ion-label>
-                </ion-item>
-              </ion-list>
+              @for (data of currentMember; track data){
+              <ion-item>
+                <ion-label>{{ data.email }}</ion-label>
+              </ion-item>
+              }
             </ion-card-content>
           </ion-col>
         </ion-row>
