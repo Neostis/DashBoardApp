@@ -45,12 +45,12 @@ export class MongoDBService {
   }
 
   // Example endpoint for uploading a file
-  uploadFile(file: File, projectID: string): Observable<any> {
+  uploadFile(file: File, projectId: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
 
     return this.http
-      .post(`${this.baseUrl}/upload-files/${projectID}`, formData)
+      .post(`${this.baseUrl}/upload-files/${projectId}`, formData)
       .pipe(
         catchError((error) => {
           console.error('Error uploading file:', error);

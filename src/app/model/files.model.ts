@@ -11,7 +11,7 @@ export interface FilesModel {
       title: string
       type: string
       lastModified: number
-      projectID: ObjectId
+      projectId: ObjectId
     }
   }
   

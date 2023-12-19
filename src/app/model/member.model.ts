@@ -3,7 +3,7 @@ export interface MemberModel {
     role: string
     email: string
     projects: [{
-      projectID: string;
+      projectId: string;
       type: string;
     }]
   }
