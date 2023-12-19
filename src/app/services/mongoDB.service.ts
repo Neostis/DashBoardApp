@@ -82,7 +82,6 @@ export class MongoDBService {
   }
 
   updateMemberRole(memberId: string, newRole: string): Observable<any> {
-    
     return this.http
       .put<any>(`${this.baseUrl}/update-member/${memberId}`, { role: newRole })
       .pipe(
@@ -98,6 +97,19 @@ export class MongoDBService {
       .get<any[]>(
         `${this.baseUrl}/members/search?name=${searchTerm}&Id=${projectId}`
       )
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('An error occurred:', error);
+          return throwError(
+            () => 'Something went wrong; please try again later.'
+          );
+        })
+      );
+  }
+
+  getProjectMembers(projectId?: string): Observable<any[]> {
+    return this.http
+      .get<any[]>(`${this.baseUrl}/members/getProjectMembers?Id=${projectId}`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           console.error('An error occurred:', error);
