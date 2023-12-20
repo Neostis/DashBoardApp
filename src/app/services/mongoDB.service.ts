@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { TaskModel } from '../model/task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -131,4 +132,15 @@ export class MongoDBService {
   deleteFile(fileId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-file/${fileId}`);
   }
+
+  addTask(task: TaskModel): Observable<any> {
+    const url = `${this.baseUrl}/add-tasks`;
+    return this.http.post<any>(url, task);
+  }
+
+  getTasksByProjectId(projectId: string): Observable<TaskModel[]> {
+    const url = `${this.baseUrl}/get-tasks/${projectId}`;
+    return this.http.get<TaskModel[]>(url);
+  }
+  
 }

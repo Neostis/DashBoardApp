@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
@@ -9,6 +9,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { DatePipe } from '@angular/common';
+import { TaskModel } from '../model/task.model';
+import { MongoDBService } from '../services/mongoDB.service';
+import { SharedService } from '../services/shared.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-tasks',
@@ -24,10 +28,11 @@ import { DatePipe } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
+    HttpClientModule,
   ],
-  providers: [DatePipe],
+  providers: [MongoDBService, DatePipe],
 })
-export class TasksComponent {
+export class TasksComponent implements OnInit{
   form!: FormGroup;
   selected: string = 'Select a team member';
   newData: any[] = [];
@@ -35,7 +40,12 @@ export class TasksComponent {
   selectedDateTime!: string;
   isModalOpen = false;
 
-  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private datePipe: DatePipe,
+    private mongoDBService: MongoDBService,
+    private sharedService: SharedService
+  ) {
     this.form = this.formBuilder.group({
       input1: '',
       input2: '',
@@ -45,18 +55,34 @@ export class TasksComponent {
 
   @ViewChild(IonModal) modal!: IonModal;
 
+  ngOnInit(): void {
+    this.fetchTasksByProjectId(this.sharedService.useProjectVariable()._id);
+  }
+
+
   cancel() {
     this.form.reset();
     this.modal.dismiss();
   }
 
   confirm() {
-    const newCardData = {
+    // const newCardData = {
+    //   title: this.form.get('input1')?.value,
+    //   content: this.form.get('input3')?.value,
+    //   tags: this.tags,
+    // };
+
+    const newCardData: TaskModel = {
       title: this.form.get('input1')?.value,
-      content: this.form.get('input3')?.value,
-      tags: this.tags,
+      date: new Date(),
+      details: this.form.get('input3')?.value,
+      projectId: this.sharedService.useProjectVariable()._id,
+      status: 'YTS',
+      tags: this.tags, //['Tag1', 'Tag2'],
+      members: [], //['Member1', 'Member2', 'Member2'],
     };
-    console.log(newCardData);
+
+    this.addTask(newCardData);
 
     // Push the new card data to newData array
     this.newData.push(newCardData);
@@ -99,5 +125,37 @@ export class TasksComponent {
 
   removeTag(tagToRemove: string): void {
     this.tags = this.tags.filter((tag) => tag !== tagToRemove);
+  }
+
+  addTask(taskData: TaskModel) {
+    this.mongoDBService.addTask(taskData).subscribe({
+      next: (response) => {
+        // Call the presentToast function
+        console.log('Task added successfully:', response);
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error adding task:', error);
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
+  }
+
+  fetchTasksByProjectId(projectId: string): void {
+    this.mongoDBService.getTasksByProjectId(projectId).subscribe({
+      next: (response) => {
+        // Call the presentToast function
+        console.log('Tasks: ', response);
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error fetching tasks:', error);
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
   }
 }
