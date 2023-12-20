@@ -21,8 +21,10 @@ export class TeamComponent implements OnInit {
   _ProjectId!: string;
   currentMember: any[] = [];
   isModalOpen = false;
-  searchInput!: string;
-  searchResult: any[] = [];
+  modalSearchInput!: string;
+  modalSearchResult: any[] = [];
+  mainSearchInput!: string;
+  mainSearchResult: any[] = [];
   selectedTypes: string[] = [];
   checkboxList: boolean[] = [];
   members: any[] = [];
@@ -34,48 +36,23 @@ export class TeamComponent implements OnInit {
     { value: 'Editor', label: 'Can Edit' },
   ];
 
-  private searchSubject: Subject<string> = new Subject<string>();
+  private callSearchMember: Subject<string> = new Subject<string>();
 
   constructor(
     private mongoDBService: MongoDBService,
     private sharedService: SharedService
-  ) {
-    // this.searchSubject
-    //   .pipe(
-    //     debounceTime(300), // Adjust debounce time as needed
-    //     // distinctUntilChanged(), // Avoid triggering for consecutive same values
-    //     switchMap((term: string) => {
-    //       if (term.trim() !== '') {
-    //         return this.mongoDBService.searchMember(term);
-    //       } else {
-    //         return [];
-    //       }
-    //     })
-    //   )
-    //   .subscribe({
-    //     next: (res) => {
-    //       this.searchResult = res;
-    //       this.selectedTypes = new Array(this.searchResult.length).fill(
-    //         'Owner'
-    //       );
-    //       this.checkboxList = new Array(this.searchResult.length).fill(false);
-    //     },
-    //     error: (err) => {
-    //       console.error('Error fetching members:', err);
-    //     },
-    //   });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadProject();
-    this.searchSubject
+    this.callSearchMember
       .pipe(
         debounceTime(300),
         switchMap((term: string) => this.searchMembers(term))
       )
       .subscribe({
         next: (res) => {
-          this.searchResult = res;
+          this.modalSearchResult = res;
           this.updateSelectedTypesAndCheckboxList();
         },
         error: (err) => {
@@ -89,6 +66,7 @@ export class TeamComponent implements OnInit {
       next: (response) => {
         // Assuming your response has a 'data' property with the files
         this.currentMember = response;
+        this.mainSearchResult = response;
       },
       error: (error) => {
         console.error('Error Message:', error);
@@ -126,7 +104,7 @@ export class TeamComponent implements OnInit {
   }
 
   private updateSelectedTypesAndCheckboxList(): void {
-    this.searchResult.forEach((project: any) => {
+    this.modalSearchResult.forEach((project: any) => {
       if (project.projects && project.projects.length > 0) {
         project.projects.forEach((subProject: any) => {
           if (subProject.type) {
@@ -137,7 +115,7 @@ export class TeamComponent implements OnInit {
         this.selectedTypes.push('Owner');
       }
     });
-    this.checkboxList = new Array(this.searchResult.length).fill(false);
+    this.checkboxList = new Array(this.modalSearchResult.length).fill(false);
     console.log(this.selectedTypes);
   }
 
@@ -145,13 +123,20 @@ export class TeamComponent implements OnInit {
 
   cancel() {
     this.isModalOpen = false;
-    this.searchInput = '';
+    this.modalSearchInput = '';
+  }
+
+  refreshMember() {
+    this.mainSearchResult = [];
+    this.currentMember = [];
+    this.loadMember();
   }
 
   confirm() {
     this.addMember(this.members);
-    this.searchInput = '';
-    this.searchResult = [];
+    this.modalSearchInput = '';
+    this.modalSearchResult = [];
+    this.refreshMember();
     this.isModalOpen = false;
   }
 
@@ -163,17 +148,28 @@ export class TeamComponent implements OnInit {
     this.isModalOpen = isOpen;
   }
 
-  onSearch(event: any) {
+  onModalSearch(event: any) {
     const query: string = event.target.value.trim();
-    this.searchInput = query;
-    this.searchSubject.next(query);
+    this.modalSearchInput = query;
+    this.callSearchMember.next(query);
     if (query == '') {
-      this.searchResult = [];
+      this.modalSearchResult = [];
     }
   }
 
-  onClearSearch() {
-    this.searchResult = [];
+  onClearModalSearch() {
+    this.modalSearchResult = [];
+  }
+
+  onMainSearch(event: any) {
+    if (!this.mainSearchInput) {
+      this.refreshMember();
+    } else {
+    }
+  }
+
+  onClearMainSearch() {
+    this.refreshMember();
   }
 
   checkboxChange(event: any, selectedMember: any, index: number) {
