@@ -133,7 +133,9 @@ export class TeamComponent implements OnInit {
   }
 
   confirm() {
-    this.addMember(this.members);
+    // this.addMember(this.members);
+
+    this.updateMemberType(this.members);
     this.modalSearchInput = '';
     this.modalSearchResult = [];
     this.refreshMember();
@@ -231,6 +233,43 @@ export class TeamComponent implements OnInit {
           // Handle completion if needed
         },
       });
+    });
+  }
+
+  updateMemberType(members: any) {
+    let correctProject: { projectId: string; type: string };
+    members.forEach((member: any) => {
+      member.projects.forEach(
+        (project: { projectId: string; type: string }) => {
+          if (
+            project.projectId == this.sharedService.useProjectVariable()._id
+          ) {
+            correctProject = project;
+          }
+        }
+      );
+
+      console.log('new data: ', correctProject);
+
+      this.mongoDBService
+        .updateMemberType(
+          member._id,
+          this.sharedService.useProjectVariable()._id,
+          correctProject.type
+        )
+        .subscribe({
+          next: (response) => {
+            // Call the presentToast function
+            console.log('Member added successfully:', response);
+          },
+          error: (error) => {
+            // Handle error
+            console.error('Error adding member:', error);
+          },
+          complete: () => {
+            // Handle completion if needed
+          },
+        });
     });
   }
 }

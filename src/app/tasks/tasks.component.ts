@@ -56,6 +56,7 @@ export class TasksComponent {
       content: this.form.get('input3')?.value,
       tags: this.tags,
     };
+    console.log(newCardData);
 
     // Push the new card data to newData array
     this.newData.push(newCardData);

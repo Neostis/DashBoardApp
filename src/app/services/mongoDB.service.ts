@@ -81,15 +81,16 @@ export class MongoDBService {
     );
   }
 
-  updateMemberRole(memberId: string, newRole: string): Observable<any> {
-    return this.http
-      .put<any>(`${this.baseUrl}/update-member/${memberId}`, { role: newRole })
-      .pipe(
-        catchError((error) => {
-          console.error('Error updating member role:', error);
-          return throwError(() => error);
-        })
-      );
+  updateMemberType(memberId: string, projectId: string, newType: string): Observable<any> {
+    
+    const url = `${this.baseUrl}/update-member/${memberId}`;
+
+    return this.http.put<any>(url, { projectId, type: newType }).pipe(
+      catchError((error) => {
+        console.error('Error updating member type:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   searchMember(searchTerm?: string, projectId?: string): Observable<any[]> {
