@@ -2,8 +2,12 @@
   <div class="content">
     <div class="search">
       <ion-searchbar
-        show-clear-button="focus"
         class="main-search"
+        show-clear-button="focus"
+        (input)="onMainSearch($event)"
+        [(ngModel)]="mainSearchInput"
+        (ionClear)="onClearMainSearch()"
+        w
       ></ion-searchbar>
       <ion-button (click)="setOpen(true)">Add Member</ion-button>
     </div>
@@ -26,13 +30,13 @@
         <ion-content class="ion-padding">
           <ion-searchbar
             show-clear-button="focus"
-            (input)="onSearch($event)"
-            [(ngModel)]="searchInput"
-            (ionClear)="onClearSearch()"
+            (input)="onModalSearch($event)"
+            [(ngModel)]="modalSearchInput"
+            (ionClear)="onClearModalSearch()"
           ></ion-searchbar>
           <ion-list>
             <!-- Your search result items here -->
-            @for (member of searchResult; track member; let i = $index){
+            @for (member of modalSearchResult; track member; let i = $index){
             <ion-item class="custom-ion-item">
               <div class="search-detail">
                 <ion-checkbox
@@ -71,7 +75,7 @@
             </ion-card-header>
             <ion-card-content>
               <ion-list>
-                @for (data of currentMember; track data){
+                @for (data of mainSearchResult; track data){
                 <ion-item>
                   <ion-label>{{ data.name }}</ion-label>
                 </ion-item>
@@ -86,7 +90,7 @@
             </ion-card-header>
             <ion-card-content>
               <ion-list>
-                @for (data of currentMember; track data){
+                @for (data of mainSearchResult; track data){
                 <ion-item>
                   @for (project of data.projects; track project){ @if
                   (project.projectId === _ProjectId){
@@ -118,7 +122,7 @@
               <ion-card-title>Email</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              @for (data of currentMember; track data){
+              @for (data of mainSearchResult; track data){
               <ion-item>
                 <ion-label>{{ data.email }}</ion-label>
               </ion-item>

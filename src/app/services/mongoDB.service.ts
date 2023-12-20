@@ -82,8 +82,11 @@ export class MongoDBService {
     );
   }
 
-  updateMemberType(memberId: string, projectId: string, newType: string): Observable<any> {
-    
+  updateMemberType(
+    memberId: string,
+    projectId: string,
+    newType: string
+  ): Observable<any> {
     const url = `${this.baseUrl}/update-member/${memberId}`;
 
     return this.http.put<any>(url, { projectId, type: newType }).pipe(
