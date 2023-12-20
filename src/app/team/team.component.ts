@@ -4,8 +4,7 @@ import { IonModal, IonicModule } from '@ionic/angular';
 import { MongoDBService } from '../services/mongoDB.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Observable, Subject, debounceTime, find, of, switchMap } from 'rxjs';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MemberModel } from '../model/member.model';
+import { MatSelectModule } from '@angular/material/select';
 import { SharedService } from '../services/shared.service';
 import { ProjectModel } from '../model/project.model';
 
@@ -64,23 +63,19 @@ export class TeamComponent implements OnInit {
   private loadMember(): void {
     this.mongoDBService.getProjectMembers(this._ProjectId).subscribe({
       next: (response) => {
-        // Assuming your response has a 'data' property with the files
         this.currentMember = response;
         this.mainSearchResult = response;
       },
       error: (error) => {
         console.error('Error Message:', error);
       },
-      complete: () => {
-        console.log('Current members:', this.currentMember);
-      },
+      complete: () => {},
     });
   }
 
   private loadProject(): void {
     this.mongoDBService.getProjects().subscribe({
       next: (response) => {
-        // Assuming your response has a 'data' property with the files
         this.projectList = response;
 
         this.sharedService.updateProjectVariable(this.projectList[0]);
@@ -107,7 +102,7 @@ export class TeamComponent implements OnInit {
     this.modalSearchResult.forEach((project: any) => {
       if (project.projects && project.projects.length > 0) {
         project.projects.forEach((subProject: any) => {
-          if (subProject.type) {
+          if (subProject.projectId === this._ProjectId) {
             this.selectedTypes.push(subProject.type);
           }
         });
@@ -116,29 +111,33 @@ export class TeamComponent implements OnInit {
       }
     });
     this.checkboxList = new Array(this.modalSearchResult.length).fill(false);
-    console.log(this.selectedTypes);
   }
 
   @ViewChild(IonModal) modal!: IonModal;
 
   cancel() {
     this.isModalOpen = false;
-    this.modalSearchInput = '';
+    this.refreshModalData();
   }
 
-  refreshMember() {
+  refreshMainData() {
     this.mainSearchResult = [];
     this.currentMember = [];
+    this.selectedTypes = [];
     this.loadMember();
   }
 
-  confirm() {
-    // this.addMember(this.members);
-
-    this.updateMemberType(this.members);
+  refreshModalData() {
     this.modalSearchInput = '';
     this.modalSearchResult = [];
-    this.refreshMember();
+    this.selectedTypes = [];
+    this.members = [];
+  }
+
+  //unfinish
+  confirm() {
+    // this.addMember(this.members);
+    this.updateMemberType(this.members);
     this.isModalOpen = false;
   }
 
@@ -163,15 +162,16 @@ export class TeamComponent implements OnInit {
     this.modalSearchResult = [];
   }
 
+  //unfinish
   onMainSearch(event: any) {
     if (!this.mainSearchInput) {
-      this.refreshMember();
+      this.refreshMainData();
     } else {
     }
   }
 
   onClearMainSearch() {
-    this.refreshMember();
+    this.refreshMainData();
   }
 
   checkboxChange(event: any, selectedMember: any, index: number) {
@@ -184,22 +184,32 @@ export class TeamComponent implements OnInit {
 
     if (checkboxValue) {
       this.checkboxList[index] = true;
-      this.addMemberToProjects(selectedMember, project);
+
+      const InProject = selectedMember.projects.find(
+        (p: any) => p.projectId === this._ProjectId
+      );
+
+      if (!InProject) {
+        this.addMemberToProjects(selectedMember, project);
+      } else {
+        this.updateMemberProjects(selectedMember, null, false);
+      }
     } else {
       this.removeMemberFromProjects(selectedMember, project);
     }
   }
 
   selectionChange(selectedMember: any, index: number) {
-    const foundMember = this.members.find((m) => {
-      return m._id === selectedMember._id;
-    });
+    const project = selectedMember.projects.find(
+      (p: any) => p.projectId === this._ProjectId
+    );
 
-    if (foundMember) {
-      const selectProject = foundMember.projects.find(
-        (p: any) => p.projectId === this._ProjectId
-      );
-      selectProject.type = this.selectedTypes[index];
+    project.type = this.selectedTypes[index];
+    const alreadyMember = this.members.find(
+      (m) => m._id === selectedMember._id
+    );
+    if (alreadyMember) {
+      this.updateMemberProjects(selectedMember, project, true);
     }
   }
 
@@ -216,6 +226,26 @@ export class TeamComponent implements OnInit {
     this.members = this.members.filter(
       (member: any) => member._id !== selectedMember._id
     );
+  }
+
+  private updateMemberProjects(
+    selectedMember: any,
+    project: any,
+    alreadyMember: boolean
+  ) {
+    if (alreadyMember) {
+      const updateMember = this.members.find(
+        (m) => m._id === selectedMember._id
+      );
+
+      const memberProject = updateMember.projects.find(
+        (p: any) => p.projectId === this._ProjectId
+      );
+
+      memberProject.type = project.type;
+    } else {
+      this.members.push(selectedMember);
+    }
   }
 
   addMember(members: any) {
@@ -237,13 +267,12 @@ export class TeamComponent implements OnInit {
   }
 
   updateMemberType(members: any) {
+    console.log('member before update: ', members);
     let correctProject: { projectId: string; type: string };
     members.forEach((member: any) => {
       member.projects.forEach(
         (project: { projectId: string; type: string }) => {
-          if (
-            project.projectId == this.sharedService.useProjectVariable()._id
-          ) {
+          if (project.projectId == this._ProjectId) {
             correctProject = project;
           }
         }
@@ -252,21 +281,19 @@ export class TeamComponent implements OnInit {
       console.log('new data: ', correctProject);
 
       this.mongoDBService
-        .updateMemberType(
-          member._id,
-          this.sharedService.useProjectVariable()._id,
-          correctProject.type
-        )
+        .updateMemberType(member._id, this._ProjectId, correctProject.type)
         .subscribe({
           next: (response) => {
             // Call the presentToast function
-            console.log('Member added successfully:', response);
+            console.log('Member update successfully:', response);
           },
           error: (error) => {
             // Handle error
-            console.error('Error adding member:', error);
+            console.error('Error update member:', error);
           },
           complete: () => {
+            this.refreshMainData();
+            this.refreshModalData();
             // Handle completion if needed
           },
         });
