@@ -18,7 +18,6 @@ import { ProjectModel } from '../model/project.model';
 })
 export class TeamComponent implements OnInit {
   _ProjectId!: string;
-  currentMember: any[] = [];
   isModalOpen = false;
   modalSearchInput!: string;
   modalSearchResult: any[] = [];
@@ -35,7 +34,8 @@ export class TeamComponent implements OnInit {
     { value: 'Editor', label: 'Can Edit' },
   ];
 
-  private callSearchMember: Subject<string> = new Subject<string>();
+  private modalSearchMember: Subject<string> = new Subject<string>();
+  private mainSearchMember: Subject<string> = new Subject<string>();
 
   constructor(
     private mongoDBService: MongoDBService,
@@ -44,10 +44,10 @@ export class TeamComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProject();
-    this.callSearchMember
+    this.modalSearchMember
       .pipe(
         debounceTime(300),
-        switchMap((term: string) => this.searchMembers(term))
+        switchMap((term: string) => this.searchModalMembers(term))
       )
       .subscribe({
         next: (res) => {
@@ -63,7 +63,6 @@ export class TeamComponent implements OnInit {
   private loadMember(): void {
     this.mongoDBService.getProjectMembers(this._ProjectId).subscribe({
       next: (response) => {
-        this.currentMember = response;
         this.mainSearchResult = response;
       },
       error: (error) => {
@@ -90,11 +89,31 @@ export class TeamComponent implements OnInit {
     });
   }
 
-  private searchMembers(term: string): Observable<any> {
+  private searchModalMembers(term: string): Observable<any> {
     if (term.trim() !== '') {
       return this.mongoDBService.searchMember(term, this._ProjectId);
     } else {
       return of([]);
+    }
+  }
+
+  private searchMainMembers(term: string) {
+    if (term.trim() !== '') {
+      const foundValue = this.mainSearchResult.filter(
+        (data) =>
+          data.name.toLowerCase().includes(term.toLowerCase()) ||
+          data.role.toLowerCase().includes(term.toLowerCase()) ||
+          data.email.toLowerCase().includes(term.toLowerCase()) ||
+          data.projects.some(
+            (p: any) =>
+              p.projectId === this._ProjectId &&
+              p.type.toLowerCase().includes(term.toLowerCase())
+          )
+      );
+
+      if (foundValue) {
+        this.mainSearchResult = foundValue;
+      }
     }
   }
 
@@ -107,7 +126,7 @@ export class TeamComponent implements OnInit {
           }
         });
       } else {
-        this.selectedTypes.push('Owner');
+        this.selectedTypes.push('Guest');
       }
     });
     this.checkboxList = new Array(this.modalSearchResult.length).fill(false);
@@ -121,8 +140,8 @@ export class TeamComponent implements OnInit {
   }
 
   refreshMainData() {
+    this.mainSearchInput = '';
     this.mainSearchResult = [];
-    this.currentMember = [];
     this.selectedTypes = [];
     this.loadMember();
   }
@@ -134,7 +153,6 @@ export class TeamComponent implements OnInit {
     this.members = [];
   }
 
-  //unfinish
   confirm() {
     // this.addMember(this.members);
     this.updateMemberType(this.members);
@@ -152,7 +170,7 @@ export class TeamComponent implements OnInit {
   onModalSearch(event: any) {
     const query: string = event.target.value.trim();
     this.modalSearchInput = query;
-    this.callSearchMember.next(query);
+    this.modalSearchMember.next(query);
     if (query == '') {
       this.modalSearchResult = [];
     }
@@ -162,11 +180,12 @@ export class TeamComponent implements OnInit {
     this.modalSearchResult = [];
   }
 
-  //unfinish
-  onMainSearch(event: any) {
-    if (!this.mainSearchInput) {
-      this.refreshMainData();
+  onMainSearch(event: Event) {
+    const searchValue = (event.target as HTMLInputElement).value;
+    if (searchValue.trim() !== '') {
+      this.searchMainMembers(searchValue);
     } else {
+      this.refreshMainData();
     }
   }
 

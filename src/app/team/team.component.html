@@ -5,7 +5,6 @@
         class="main-search"
         show-clear-button="focus"
         (input)="onMainSearch($event)"
-        [(ngModel)]="mainSearchInput"
         (ionClear)="onClearMainSearch()"
         w
       ></ion-searchbar>
@@ -108,7 +107,7 @@
             </ion-card-header>
             <ion-card-content>
               <ion-list>
-                @for (data of currentMember; track data){
+                @for (data of mainSearchResult; track data){
                 <ion-item>
                   <ion-label>{{ data.role }}</ion-label>
                 </ion-item>
