@@ -70,28 +70,38 @@ export class MongoDBService {
     );
   }
 
-  addMember(memberData: any): Observable<any> {
-    const url = `${this.baseUrl}/add-member`; // Assuming your server has an endpoint like /add-member
-    return this.http.post<any>(url, memberData).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('An error occurred:', error);
-        return throwError(
-          () => 'Something went wrong; please try again later.'
-        );
-      })
-    );
-  }
+  // addMember(memberData: any): Observable<any> {
+  //   const url = `${this.baseUrl}/add-member`; // Assuming your server has an endpoint like /add-member
+  //   return this.http.post<any>(url, memberData).pipe(
+  //     catchError((error: HttpErrorResponse) => {
+  //       console.error('An error occurred:', error);
+  //       return throwError(
+  //         () => 'Something went wrong; please try again later.'
+  //       );
+  //     })
+  //   );
+  // }
 
-  updateMemberType(
-    memberId: string,
-    projectId: string,
-    newType: string
-  ): Observable<any> {
-    const url = `${this.baseUrl}/update-member/${memberId}`;
+  // updateMemberType(
+  //   memberId: string,
+  //   projectId: string,
+  //   newType: string
+  // ): Observable<any> {
+  //   const url = `${this.baseUrl}/update-member/${memberId}`;
 
-    return this.http.put<any>(url, { projectId, type: newType }).pipe(
+  //   return this.http.put<any>(url, { projectId, type: newType }).pipe(
+  //     catchError((error) => {
+  //       console.error('Error updating member type:', error);
+  //       return throwError(() => error);
+  //     })
+  //   );
+  // }
+
+  addOrUpdateMember(member: any): Observable<any> {
+    const url = `${this.baseUrl}/add-update-member`;
+    return this.http.post<any>(url, member).pipe(
       catchError((error) => {
-        console.error('Error updating member type:', error);
+        console.error('Error adding/updating member:', error);
         return throwError(() => error);
       })
     );
@@ -145,5 +155,29 @@ export class MongoDBService {
     const url = `${this.baseUrl}/get-tasks/${projectId}`;
     return this.http.get<TaskModel[]>(url);
   }
-  
+
+  addMemberToTask(taskId: string, memberId: string): Observable<TaskModel> {
+    const url = `${this.baseUrl}/add-member-to-task/${taskId}`;
+    return this.http.put<TaskModel>(url, { memberId });
+  }
+
+  updateTaskTags(taskId: string, tag: string): Observable<any> {
+    const url = `${this.baseUrl}/add-tags/${taskId}`;
+    return this.http.put<any>(url, { tag: tag }).pipe(
+      catchError((error) => {
+        console.error('Error updating task tags:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  removeTaskTags(taskId: string, tag: string): Observable<any> {
+    const url = `${this.baseUrl}/remove-tags/${taskId}`;
+    return this.http.put<any>(url, { tag: tag }).pipe(
+      catchError((error) => {
+        console.error('Error removing task tags:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }
