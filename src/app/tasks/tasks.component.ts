@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,6 +18,7 @@ import { TaskModel } from '../model/task.model';
 import { MongoDBService } from '../services/mongoDB.service';
 import { SharedService } from '../services/shared.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ProjectModel } from '../model/project.model';
 
 @Component({
   selector: 'app-tasks',
@@ -29,16 +35,21 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     MatChipsModule,
     HttpClientModule,
+    FormsModule,
   ],
   providers: [MongoDBService, DatePipe],
 })
-export class TasksComponent implements OnInit{
+export class TasksComponent implements OnInit {
+  [x: string]: any;
   form!: FormGroup;
   selected: string = 'Select a team member';
-  newData: any[] = [];
   tags: string[] = [];
   selectedDateTime!: string;
+  taskList: any[] = [];
   isModalOpen = false;
+  projectList: ProjectModel[] = [];
+  _ProjectId!: string;
+  projectMembers: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,9 +67,40 @@ export class TasksComponent implements OnInit{
   @ViewChild(IonModal) modal!: IonModal;
 
   ngOnInit(): void {
-    this.fetchTasksByProjectId(this.sharedService.useProjectVariable()._id);
+    this.loadProject();
   }
 
+  private loadMember(): void {
+    this.mongoDBService.getProjectMembers(this._ProjectId).subscribe({
+      next: (response) => {
+        this.projectMembers = response;
+      },
+      error: (error) => {
+        console.error('Error Message:', error);
+      },
+      complete: () => {},
+    });
+  }
+
+  private loadProject(): void {
+    this.mongoDBService.getProjects().subscribe({
+      next: (response) => {
+        this.projectList = response;
+
+        this.sharedService.updateProjectVariable(this.projectList[0]);
+      },
+      error: (error) => {
+        console.error('Error retrieving files:', error);
+      },
+      complete: () => {
+        this._ProjectId = this.sharedService.useProjectVariable()?._id;
+        this.loadMember();
+        if (this._ProjectId) {
+          this.fetchTasksByProjectId();
+        }
+      },
+    });
+  }
 
   cancel() {
     this.form.reset();
@@ -74,21 +116,24 @@ export class TasksComponent implements OnInit{
 
     const newCardData: TaskModel = {
       title: this.form.get('input1')?.value,
-      date: new Date(),
+      date: new Date(this.selectedDateTime),
       details: this.form.get('input3')?.value,
-      projectId: this.sharedService.useProjectVariable()._id,
-      status: 'YTS',
+      projectId: this._ProjectId,
+      status: 'Yet To start',
       tags: this.tags, //['Tag1', 'Tag2'],
-      members: [], //['Member1', 'Member2', 'Member2'],
+      members: this.form.value.input2, //['Member1', 'Member2', 'Member2'],
     };
 
     this.addTask(newCardData);
-
-    // Push the new card data to newData array
-    this.newData.push(newCardData);
     this.selectedDateTime = '';
     this.form.reset();
+    this.fetchTasksByProjectId();
     this.modal.dismiss();
+  }
+
+  refreshTaskData() {
+    this.taskList = [];
+    this.fetchTasksByProjectId();
   }
 
   onWillDismiss(event: Event) {
@@ -105,6 +150,7 @@ export class TasksComponent implements OnInit{
 
   onSelectDateTime(event: CustomEvent) {
     this.selectedDateTime = event.detail.value;
+    console.log(this.selectedDateTime);
     console.log(this.formatDate(this.selectedDateTime));
   }
 
@@ -138,24 +184,30 @@ export class TasksComponent implements OnInit{
         console.error('Error adding task:', error);
       },
       complete: () => {
+        this.refreshTaskData();
         // Handle completion if needed
       },
     });
   }
 
-  fetchTasksByProjectId(projectId: string): void {
-    this.mongoDBService.getTasksByProjectId(projectId).subscribe({
+  fetchTasksByProjectId(): void {
+    this.mongoDBService.getTasksByProjectId(this._ProjectId).subscribe({
       next: (response) => {
         // Call the presentToast function
-        console.log('Tasks: ', response);
+        this.taskList = response;
       },
       error: (error) => {
         // Handle error
         console.error('Error fetching tasks:', error);
       },
       complete: () => {
+        console.log('Task List:', this.taskList);
         // Handle completion if needed
       },
     });
+  }
+
+  selectionChange() {
+    console.log(this.form.value.input2);
   }
 }

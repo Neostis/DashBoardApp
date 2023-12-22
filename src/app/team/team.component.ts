@@ -268,58 +268,6 @@ export class TeamComponent implements OnInit {
     }
   }
 
-  // addMember(members: any) {
-  //   members.forEach((member: any) => {
-  //     this.mongoDBService.addMember(member).subscribe({
-  //       next: (response) => {
-  //         // Call the presentToast function
-  //         console.log('Member added successfully:', response);
-  //       },
-  //       error: (error) => {
-  //         // Handle error
-  //         console.error('Error adding member:', error);
-  //       },
-  //       complete: () => {
-  //         // Handle completion if needed
-  //       },
-  //     });
-  //   });
-  // }
-
-  // updateMemberType(members: any) {
-  //   console.log('member before update: ', members);
-  //   let correctProject: { projectId: string; type: string };
-  //   members.forEach((member: any) => {
-  //     member.projects.forEach(
-  //       (project: { projectId: string; type: string }) => {
-  //         if (project.projectId == this._ProjectId) {
-  //           correctProject = project;
-  //         }
-  //       }
-  //     );
-
-  //     console.log('new data: ', correctProject);
-
-  //     this.mongoDBService
-  //       .updateMemberType(member._id, this._ProjectId, correctProject.type)
-  //       .subscribe({
-  //         next: (response) => {
-  //           // Call the presentToast function
-  //           console.log('Member update successfully:', response);
-  //         },
-  //         error: (error) => {
-  //           // Handle error
-  //           console.error('Error update member:', error);
-  //         },
-  //         complete: () => {
-  //           this.refreshMainData();
-  //           this.refreshModalData();
-  //           // Handle completion if needed
-  //         },
-  //       });
-  //   });
-  // }
-
   addOrUpdateMember(members: any) {
     members.forEach((member: any) => {
       this.mongoDBService.addOrUpdateMember(member).subscribe({

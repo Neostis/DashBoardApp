@@ -153,7 +153,14 @@ export class MongoDBService {
 
   getTasksByProjectId(projectId: string): Observable<TaskModel[]> {
     const url = `${this.baseUrl}/get-tasks/${projectId}`;
-    return this.http.get<TaskModel[]>(url);
+    return this.http.get<TaskModel[]>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('An error occurred:', error);
+        return throwError(
+          () => 'Something went wrong; please try again later.'
+        );
+      })
+    );
   }
 
   addMemberToTask(taskId: string, memberId: string): Observable<TaskModel> {

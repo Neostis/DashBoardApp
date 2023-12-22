@@ -9,35 +9,20 @@
       <ion-row>
         <ion-col class="ion-padding column">
           <div class="col-head first-col">Yet To start</div>
-          <ion-card class="ion-padding">
-            <ion-card-header>
-              <ion-badge>Badge</ion-badge>
-            </ion-card-header>
-            <ion-card-title style="padding-inline: 16px">
-              Title
-            </ion-card-title>
-            <ion-card-content>
-              <div>Content</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
-            </ion-card-content>
-          </ion-card>
 
-          @for (data of newData; track data){
+          @for (task of taskList; track task){ @switch (task.status) { @case
+          ('Yet To start'){
           <ion-card class="ion-padding">
             <ion-card-header>
-              @for (tag of data.tags; track tag){
+              @for (tag of task.tags; track tag){
               <ion-badge>{{ tag }}</ion-badge>
               }
             </ion-card-header>
             <ion-card-title style="padding-inline: 16px">
-              {{ data.title }}
+              {{ task.title }}
             </ion-card-title>
             <ion-card-content>
-              <div>{{ data.content }}</div>
+              <div>{{ task.details }}</div>
               <ion-thumbnail>
                 <img
                   src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
@@ -45,20 +30,24 @@
               </ion-thumbnail>
             </ion-card-content>
           </ion-card>
-          }@empty { }
+          } } }
         </ion-col>
 
         <ion-col class="ion-padding">
           <div class="col-head second-col">In Progress</div>
+          @for (task of taskList; track task){ @switch (task.status) { @case
+          ('In Progress'){
           <ion-card class="ion-padding">
             <ion-card-header>
-              <ion-badge>Badge</ion-badge>
+              @for (tag of task.tags; track tag){
+              <ion-badge>{{ tag }}</ion-badge>
+              }
             </ion-card-header>
             <ion-card-title style="padding-inline: 16px">
-              Title
+              {{ task.title }}
             </ion-card-title>
             <ion-card-content>
-              <div>Content</div>
+              <div>{{ task.details }}</div>
               <ion-thumbnail>
                 <img
                   src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
@@ -66,19 +55,24 @@
               </ion-thumbnail>
             </ion-card-content>
           </ion-card>
+          } } }
         </ion-col>
 
         <ion-col class="ion-padding">
           <div class="col-head third-col">Completed</div>
+          @for (task of taskList; track task){ @switch (task.status) { @case
+          ('Completed'){
           <ion-card class="ion-padding">
             <ion-card-header>
-              <ion-badge>Badge</ion-badge>
+              @for (tag of task.tags; track tag){
+              <ion-badge>{{ tag }}</ion-badge>
+              }
             </ion-card-header>
             <ion-card-title style="padding-inline: 16px">
-              Title
+              {{ task.title }}
             </ion-card-title>
             <ion-card-content>
-              <div>Content</div>
+              <div>{{ task.details }}</div>
               <ion-thumbnail>
                 <img
                   src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
@@ -86,6 +80,7 @@
               </ion-thumbnail>
             </ion-card-content>
           </ion-card>
+          } } }
         </ion-col>
 
         <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
@@ -120,11 +115,15 @@
                     <ion-col class="start">
                       <mat-form-field appearance="outline">
                         <mat-label>Select a Team Member</mat-label>
-                        <mat-select formControlName="input2">
-                          <mat-option value="option1">Option 1</mat-option>
-                          <mat-option value="option2">Option 2</mat-option>
-                          <mat-option value="option3">Option 3</mat-option>
-                          <mat-option value="option4">Option 4</mat-option>
+                        <mat-select
+                          formControlName="input2"
+                          (selectionChange)="selectionChange()"
+                        >
+                          @for (member of projectMembers; track member){
+                          <mat-option [value]="member.name">{{
+                            member.name
+                          }}</mat-option>
+                          }
                         </mat-select>
                       </mat-form-field>
                     </ion-col>
