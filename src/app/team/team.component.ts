@@ -332,6 +332,8 @@ export class TeamComponent implements OnInit {
           console.error('Error adding member:', error);
         },
         complete: () => {
+          this.refreshMainData();
+          this.refreshModalData();
           // Handle completion if needed
         },
       });
