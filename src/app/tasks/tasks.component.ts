@@ -119,7 +119,8 @@ export class TasksComponent implements OnInit {
       date: new Date(this.selectedDateTime),
       details: this.form.get('input3')?.value,
       projectId: this._ProjectId,
-      status: 'Yet To start',
+      // status: 'Yet to start',
+      status: 'Yet to start',
       tags: this.tags, //['Tag1', 'Tag2'],
       members: this.form.value.input2, //['Member1', 'Member2', 'Member2'],
     };
