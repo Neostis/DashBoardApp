@@ -45,10 +45,13 @@ ion-checkbox {
   }
 }
 
-mat-form-field {
-  width: 100%;
+.budget-field {
+  width: 40%;
 }
 
+.note-field {
+  width: 100%;
+}
 .last-row {
   ion-button {
     height: fit-content;

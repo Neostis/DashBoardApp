@@ -14,72 +14,80 @@
           </ion-col>
         </ion-row>
 
-        <ion-row>
-          <ion-col class="first-col" size="4">
-            <div>Usage Character</div>
-          </ion-col>
-          <ion-col>
-            <ion-radio-group value="precise">
-              <ion-radio value="precise" labelPlacement="end"
-                >Precise Usage</ion-radio
+        <form [formGroup]="form">
+          <ion-row>
+            <ion-col class="first-col" size="4">
+              <div>Usage Character</div>
+            </ion-col>
+            <ion-col>
+              <ion-radio-group formControlName="input1">
+                <ion-radio value="Precise" labelPlacement="end"
+                  >Precise Usage</ion-radio
+                >
+                <br />
+                <ion-radio value="Normal" labelPlacement="end"
+                  >Normal Usage</ion-radio
+                >
+                <br />
+                <ion-radio value="Extreme" labelPlacement="end"
+                  >Extreme Usage</ion-radio
+                >
+              </ion-radio-group>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="first-col" size="4">
+              <div>Budget Notes</div>
+            </ion-col>
+            <ion-col>
+              <mat-form-field class="note-field">
+                <textarea matInput formControlName="input2"></textarea>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="first-col" size="4">
+              <div>Manage Budget</div>
+            </ion-col>
+            <ion-col>
+              <mat-form-field class="budget-field">
+                <textarea matInput formControlName="input3"></textarea>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="first-col" size="4">
+              <div>Overuse Notifications</div>
+            </ion-col>
+            <ion-col class="check-box">
+              <ion-checkbox labelPlacement="end" formControlName="input4"
+                >Email</ion-checkbox
               >
-              <br />
-              <ion-radio value="normal" labelPlacement="end"
-                >Normal Usage</ion-radio
+              <ion-checkbox labelPlacement="end" formControlName="input5"
+                >Phone</ion-checkbox
               >
-              <br />
-              <ion-radio value="extreme" labelPlacement="end"
-                >Extreme Usage</ion-radio
-              >
-            </ion-radio-group>
-          </ion-col>
-        </ion-row>
+            </ion-col>
+          </ion-row>
 
-        <ion-row>
-          <ion-col class="first-col" size="4">
-            <div>Budget Notes</div>
-          </ion-col>
-          <ion-col>
-            <ion-input fill="outline" placeholder="Enter text"></ion-input>
-          </ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col class="first-col" size="4">
+              <div>Allow Changes</div>
+            </ion-col>
+            <ion-col>
+              <ion-toggle formControlName="input6">Allowed</ion-toggle>
+            </ion-col>
+          </ion-row>
 
-        <ion-row>
-          <ion-col class="first-col" size="4">
-            <div>Manage Budget</div>
-          </ion-col>
-          <ion-col>
-            <mat-form-field>
-              <textarea matInput></textarea>
-            </mat-form-field>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col class="first-col" size="4">
-            <div>Overuse Notifications</div>
-          </ion-col>
-          <ion-col class="check-box">
-            <ion-checkbox labelPlacement="end">Email</ion-checkbox>
-            <ion-checkbox labelPlacement="end">Phone</ion-checkbox>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col class="first-col" size="4">
-            <div>Allow Changes</div>
-          </ion-col>
-          <ion-col>
-            <ion-toggle>Allowed</ion-toggle>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="last-row">
-          <ion-button color="light" style="margin-right: 10px"
-            >Discard</ion-button
-          >
-          <ion-button>Save Changes</ion-button>
-        </ion-row>
+          <ion-row class="last-row">
+            <ion-button color="light" style="margin-right: 10px"
+              >Discard</ion-button
+            >
+            <ion-button (click)="saveChanged()">Save Changes</ion-button>
+          </ion-row>
+        </form>
       </ion-grid>
     </ion-card-content>
   </ion-card>
