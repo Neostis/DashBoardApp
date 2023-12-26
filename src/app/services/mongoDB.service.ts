@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { TaskModel } from '../model/task.model';
+import { PaymentModel } from '../model/payment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -187,4 +188,27 @@ export class MongoDBService {
       })
     );
   }
+
+  getPayments(projectId: string): Observable<any[]> {
+    const url = `${this.baseUrl}/get-payments/${projectId}`;
+    return this.http.get<any[]>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('An error occurred:', error);
+        return throwError(
+          () => 'Something went wrong; please try again later.'
+        );
+      })
+    );
+  }
+
+  updatePayment(payment: PaymentModel): Observable<PaymentModel> {
+    const url = `${this.baseUrl}/update-payment`;
+    return this.http.post<PaymentModel>(url, payment).pipe(
+      catchError((error: any) => {
+        console.error('An error occurred:', error);
+        return throwError('Something went wrong; please try again later.');
+      })
+    );
+  }
+
 }
