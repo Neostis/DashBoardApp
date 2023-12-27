@@ -45,6 +45,30 @@ ion-checkbox {
   }
 }
 
+.budget-input {
+  width: 50%;
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.custom-input {
+  font-size: 18px;
+  line-height: 30px;
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-family: Arial, sans-serif;
+  cursor: default;
+  user-select: none;
+  outline: 2px solid transparent; /* Outline border */
+  transition: outline 0.3s ease; /* Smooth transition */
+}
+
 .budget-field {
   width: 40%;
 }

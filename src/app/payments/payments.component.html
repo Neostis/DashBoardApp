@@ -52,9 +52,18 @@
               <div>Manage Budget</div>
             </ion-col>
             <ion-col>
-              <mat-form-field class="budget-field">
+              <div class="budget-input">
+                <ion-button (click)="incBudget()">+</ion-button>
+                <div class="custom-input">
+                  <input formControlName="input3" [hidden]="isHidden" />
+                  {{ form.value.input3 }}
+                </div>
+
+                <ion-button (click)="dcBudget()">-</ion-button>
+              </div>
+              <!-- <mat-form-field class="budget-field">
                 <textarea matInput formControlName="input3"></textarea>
-              </mat-form-field>
+              </mat-form-field> -->
             </ion-col>
           </ion-row>
 
