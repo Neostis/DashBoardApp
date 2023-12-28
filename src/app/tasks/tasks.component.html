@@ -14,9 +14,34 @@
           ('Yet To start'){
           <ion-card class="ion-padding">
             <ion-card-header>
-              @for (tag of task.tags; track tag){
-              <ion-badge>{{ tag }}</ion-badge>
-              }
+              <div class="badge-list">
+                @for (tag of task.tags; track tag){
+                <ion-badge>{{ tag }}</ion-badge>
+                }
+              </div>
+
+              <ion-select
+                label="Change Status"
+                label-placement="fixed"
+                placeholder="{{ task.status }}"
+                okText="Save"
+                cancelText="Cancel"
+                justify="end"
+                value="{{ task.status }}"
+                (ionChange)="handleStatusChange($event, task)"
+                (ionCancel)="handleStatusCancel()"
+                (ionDismiss)="handleStatusDismiss()"
+              >
+                <ion-select-option value="Yet To start"
+                  >Yet to start</ion-select-option
+                >
+                <ion-select-option value="In Progress"
+                  >In Progress</ion-select-option
+                >
+                <ion-select-option value="Completed"
+                  >Completed</ion-select-option
+                >
+              </ion-select>
             </ion-card-header>
             <ion-card-title style="padding-inline: 16px">
               {{ task.title }}
@@ -39,9 +64,34 @@
           ('In Progress'){
           <ion-card class="ion-padding">
             <ion-card-header>
-              @for (tag of task.tags; track tag){
-              <ion-badge>{{ tag }}</ion-badge>
-              }
+              <div class="badge-list">
+                @for (tag of task.tags; track tag){
+                <ion-badge>{{ tag }}</ion-badge>
+                }
+              </div>
+
+              <ion-select
+                label="Change Status"
+                label-placement="fixed"
+                placeholder="{{ task.status }}"
+                okText="Save"
+                cancelText="Cancel"
+                justify="end"
+                value="{{ task.status }}"
+                (ionChange)="handleStatusChange($event, task)"
+                (ionCancel)="handleStatusCancel()"
+                (ionDismiss)="handleStatusDismiss()"
+              >
+                <ion-select-option value="Yet To start"
+                  >Yet to start</ion-select-option
+                >
+                <ion-select-option value="In Progress"
+                  >In Progress</ion-select-option
+                >
+                <ion-select-option value="Completed"
+                  >Completed</ion-select-option
+                >
+              </ion-select>
             </ion-card-header>
             <ion-card-title style="padding-inline: 16px">
               {{ task.title }}
@@ -64,10 +114,36 @@
           ('Completed'){
           <ion-card class="ion-padding">
             <ion-card-header>
-              @for (tag of task.tags; track tag){
-              <ion-badge>{{ tag }}</ion-badge>
-              }
+              <div class="badge-list">
+                @for (tag of task.tags; track tag){
+                <ion-badge>{{ tag }}</ion-badge>
+                }
+              </div>
+
+              <ion-select
+                label="Change Status"
+                label-placement="fixed"
+                placeholder="{{ task.status }}"
+                okText="Save"
+                cancelText="Cancel"
+                justify="end"
+                value="{{ task.status }}"
+                (ionChange)="handleStatusChange($event, task)"
+                (ionCancel)="handleStatusCancel()"
+                (ionDismiss)="handleStatusDismiss()"
+              >
+                <ion-select-option value="Yet To start"
+                  >Yet to start</ion-select-option
+                >
+                <ion-select-option value="In Progress"
+                  >In Progress</ion-select-option
+                >
+                <ion-select-option value="Completed"
+                  >Completed</ion-select-option
+                >
+              </ion-select>
             </ion-card-header>
+
             <ion-card-title style="padding-inline: 16px">
               {{ task.title }}
             </ion-card-title>

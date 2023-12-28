@@ -10,11 +10,23 @@ ion-card {
   flex-direction: column;
   width: 100%;
   ion-card-header {
-    align-self: flex-start;
     display: flex;
     flex-direction: row;
-    ion-badge {
-      margin-right: 10px;
+    justify-content: space-between;
+    width: 100%;
+    .badge-list {
+      display: flex;
+      flex-direction: row;
+      ion-badge {
+        height: fit-content;
+        margin-right: 10px;
+        align-self: center;
+      }
+    }
+
+    ion-select {
+      height: fit-content;
+      width: fit-content;
     }
   }
 }
