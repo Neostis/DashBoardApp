@@ -50,7 +50,6 @@ export class TasksComponent implements OnInit {
   projectList: ProjectModel[] = [];
   _ProjectId!: string;
   projectMembers: any[] = [];
-  newStatus!: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -212,15 +211,13 @@ export class TasksComponent implements OnInit {
   updateTaskStatus(taskId: string, newStatus: string): void {
     this.mongoDBService.updateTaskStatus(taskId, newStatus).subscribe({
       next: (response) => {
-        // Call the presentToast function
         console.log('Task status updated successfully:', response);
       },
       error: (error) => {
-        // Handle error
         console.error('Error updating task status:', error);
       },
       complete: () => {
-        // Handle completion if needed
+        this.refreshTaskData();
       },
     });
   }
@@ -229,13 +226,11 @@ export class TasksComponent implements OnInit {
     console.log(this.form.value.input2);
   }
 
-  handleStatusChange(newStatus: any, task: TaskModel) {}
-
-  handleStatusCancel() {
-    this.newStatus = '';
+  handleStatusChange(newStatus: any, taskId: any) {
+    this.updateTaskStatus(taskId, newStatus.detail.value);
   }
 
-  handleStatusDismiss() {
-    this.newStatus = '';
-  }
+  handleStatusCancel() {}
+
+  handleStatusDismiss() {}
 }

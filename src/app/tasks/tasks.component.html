@@ -21,14 +21,13 @@
               </div>
 
               <ion-select
-                label="Change Status"
-                label-placement="fixed"
-                placeholder="{{ task.status }}"
+                label="Change Status to"
+                label-placement="stacked"
+                placeholder="status"
                 okText="Save"
                 cancelText="Cancel"
                 justify="end"
-                value="{{ task.status }}"
-                (ionChange)="handleStatusChange($event, task)"
+                (ionChange)="handleStatusChange($event, task._id)"
                 (ionCancel)="handleStatusCancel()"
                 (ionDismiss)="handleStatusDismiss()"
               >
@@ -71,14 +70,13 @@
               </div>
 
               <ion-select
-                label="Change Status"
-                label-placement="fixed"
-                placeholder="{{ task.status }}"
+                label="Change Status to"
+                label-placement="stacked"
+                placeholder="status"
                 okText="Save"
                 cancelText="Cancel"
                 justify="end"
-                value="{{ task.status }}"
-                (ionChange)="handleStatusChange($event, task)"
+                (ionChange)="handleStatusChange($event, task._id)"
                 (ionCancel)="handleStatusCancel()"
                 (ionDismiss)="handleStatusDismiss()"
               >
@@ -121,14 +119,13 @@
               </div>
 
               <ion-select
-                label="Change Status"
-                label-placement="fixed"
-                placeholder="{{ task.status }}"
+                label="Change Status to"
+                label-placement="stacked"
+                placeholder="status"
                 okText="Save"
                 cancelText="Cancel"
                 justify="end"
-                value="{{ task.status }}"
-                (ionChange)="handleStatusChange($event, task)"
+                (ionChange)="handleStatusChange($event, task._id)"
                 (ionCancel)="handleStatusCancel()"
                 (ionDismiss)="handleStatusDismiss()"
               >
