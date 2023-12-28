@@ -50,6 +50,7 @@ export class TasksComponent implements OnInit {
   projectList: ProjectModel[] = [];
   _ProjectId!: string;
   projectMembers: any[] = [];
+  newStatus!: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -227,5 +228,14 @@ export class TasksComponent implements OnInit {
   selectionChange() {
     console.log(this.form.value.input2);
   }
-  
+
+  handleStatusChange(newStatus: any, task: TaskModel) {}
+
+  handleStatusCancel() {
+    this.newStatus = '';
+  }
+
+  handleStatusDismiss() {
+    this.newStatus = '';
+  }
 }
