@@ -179,6 +179,16 @@ export class MongoDBService {
     );
   }
 
+  updateTaskStatus(taskId: string, status: string): Observable<any> {
+    const url = `${this.baseUrl}/update-task-status/${taskId}`;
+    return this.http.put<any>(url, { status: status }).pipe(
+      catchError((error) => {
+        console.error('Error updating task Status:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   removeTaskTags(taskId: string, tag: string): Observable<any> {
     const url = `${this.baseUrl}/remove-tags/${taskId}`;
     return this.http.put<any>(url, { tag: tag }).pipe(
@@ -210,5 +220,4 @@ export class MongoDBService {
       })
     );
   }
-
 }

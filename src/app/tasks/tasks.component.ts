@@ -208,7 +208,24 @@ export class TasksComponent implements OnInit {
     });
   }
 
+  updateTaskStatus(taskId: string, newStatus: string): void {
+    this.mongoDBService.updateTaskStatus(taskId, newStatus).subscribe({
+      next: (response) => {
+        // Call the presentToast function
+        console.log('Task status updated successfully:', response);
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error updating task status:', error);
+      },
+      complete: () => {
+        // Handle completion if needed
+      },
+    });
+  }
+
   selectionChange() {
     console.log(this.form.value.input2);
   }
+  
 }
