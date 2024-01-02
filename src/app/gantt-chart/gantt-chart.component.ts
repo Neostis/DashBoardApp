@@ -1,33 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GanttChartTaskColumn } from 'smart-webcomponents-angular/ganttchart';
 
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-gantt-chart',
   templateUrl: './gantt-chart.component.html',
   styleUrls: ['./gantt-chart.component.scss'],
   standalone: true,
-  imports: [CommonModule, GanttChartModule, RouterOutlet],
+  imports: [CommonModule, GanttChartModule, RouterOutlet, IonicModule],
 })
-export class GanttChartComponent {
+export class GanttChartComponent implements OnInit {
+  ganttchart: any;
   constructor() {}
 
-  durationUnit = 'hour';
+  ngOnInit(): void {
+    this.ganttchart = document.querySelector('smart-gantt-chart');
+  }
+
   taskColumns: GanttChartTaskColumn[] = [
     {
       label: 'Tasks',
       value: 'label',
-      size: '60%',
+      size: '100%',
     },
-    {
-      label: 'Duration (hours)',
-      value: 'duration',
-      formatFunction: (date: string) => parseInt(date),
-    },
+    // {
+    //   label: 'Duration (hours)',
+    //   value: 'duration',
+    //   formatFunction: (date: string) => parseInt(date),
+    // },
   ];
+
   dataSource = [
     {
       label: 'PRD & User-Stories',
@@ -100,4 +106,17 @@ export class GanttChartComponent {
       type: 'task',
     },
   ];
+
+  addTask() {
+    const newTask = {
+      label: 'New',
+      dateStart: '2024-11-01',
+      dateEnd: '2024-12-31',
+      class: 'new',
+      type: 'task',
+    };
+
+    this.ganttchart?.insertTask(newTask);
+    console.log(this.ganttchart?.tasks);
+  }
 }
