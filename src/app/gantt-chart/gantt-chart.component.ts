@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GanttChartTaskColumn } from 'smart-webcomponents-angular/ganttchart';
 
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
 import { IonicModule } from '@ionic/angular';
+import { DropDownList } from 'smart-webcomponents-angular';
 
 @Component({
   selector: 'app-gantt-chart',
@@ -25,13 +26,43 @@ export class GanttChartComponent implements OnInit {
     {
       label: 'Tasks',
       value: 'label',
-      size: '100%',
+      size: '50%',
     },
-    // {
-    //   label: 'Duration (hours)',
-    //   value: 'duration',
-    //   formatFunction: (date: string) => parseInt(date),
-    // },
+    {
+      label: 'Date Start',
+      value: 'dateStart',
+      size: '35%',
+      formatFunction: function (dateString: string) {
+        const date = new Date(dateString),
+          formatNumber = (number: number) => ('0' + number).slice(-2);
+
+        return (
+          date.getFullYear() +
+          '-' +
+          formatNumber(date.getMonth() + 1) +
+          '-' +
+          formatNumber(date.getDate())
+        );
+      },
+      //Custom format function
+    },
+    {
+      label: 'Date End',
+      value: 'dateEnd',
+      size: '25 %',
+      formatFunction: function (dateString: string) {
+        const date = new Date(dateString),
+          formatNumber = (number: number) => ('0' + number).slice(-2);
+
+        return (
+          date.getFullYear() +
+          '-' +
+          formatNumber(date.getMonth() + 1) +
+          '-' +
+          formatNumber(date.getDate())
+        );
+      },
+    },
   ];
 
   dataSource = [
@@ -107,16 +138,41 @@ export class GanttChartComponent implements OnInit {
     },
   ];
 
-  addTask() {
-    const newTask = {
-      label: 'New',
-      dateStart: '2024-11-01',
-      dateEnd: '2024-12-31',
-      class: 'new',
-      type: 'task',
-    };
+  getFirstAndLastDayOfMonth(): { firstDay: string; lastDay: string } {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
 
-    this.ganttchart?.insertTask(newTask);
+    // First day of the month
+    const firstDay = new Date(year, month, 1);
+    const formattedFirstDay = this.formatDate(firstDay);
+
+    // Last day of the month
+    const lastDay = new Date(year, month + 1, 0);
+    const formattedLastDay = this.formatDate(lastDay);
+
+    return { firstDay: formattedFirstDay, lastDay: formattedLastDay };
+  }
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
+  addTask() {
+    // const date = this.getFirstAndLastDayOfMonth();
+    // const firstDay = date.firstDay;
+    // const lastDay = date.lastDay;
+    // const newTask = {
+    //   label: 'New Task',
+    //   dateStart: firstDay,
+    //   dateEnd: lastDay,
+    //   type: 'task',
+    // };
+
+    // this.ganttchart?.insertTask(newTask);
     console.log(this.ganttchart?.tasks);
   }
 }

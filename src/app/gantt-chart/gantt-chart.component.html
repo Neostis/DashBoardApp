@@ -2,8 +2,11 @@
   #ganttchart
   [dataSource]="dataSource"
   [taskColumns]="taskColumns"
+  [currentTimeIndicator]="true"
+  [currentTimeIndicatorInterval]="60"
+  [treeSize]="400"
 >
 </smart-gantt-chart>
 <ion-content>
-  <ion-button (click)="addTask()">TEST</ion-button>
+  <ion-button (click)="addTask()">Create Task</ion-button>
 </ion-content>
