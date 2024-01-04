@@ -91,7 +91,10 @@
           </ion-row>
 
           <ion-row class="last-row">
-            <ion-button color="light" style="margin-right: 10px"
+            <ion-button
+              color="light"
+              style="margin-right: 10px"
+              (click)="discardChanged()"
               >Discard</ion-button
             >
             <ion-button (click)="saveChanged()">Save Changes</ion-button>

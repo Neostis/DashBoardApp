@@ -117,7 +117,9 @@ export class TasksComponent implements OnInit {
     const newCardData: TaskModel = {
       title: this.form.get('input1')?.value,
       startDate: new Date(),
-      endDate: new Date(this.selectedDateTime),
+      endDate: this.selectedDateTime
+        ? new Date(this.selectedDateTime)
+        : new Date(),
       details: this.form.get('input3')?.value,
       projectId: this._ProjectId,
       status: 'Yet to start',
@@ -146,18 +148,16 @@ export class TasksComponent implements OnInit {
 
   onSelectDateTime(event: CustomEvent) {
     this.selectedDateTime = event.detail.value;
-    console.log(this.selectedDateTime);
-    console.log(this.formatDate(this.selectedDateTime));
   }
 
   //for testing
-  formatDate(dateString: string): string {
-    const formattedDate = this.datePipe.transform(
-      dateString,
-      'dd/MM/yyyy h:mm a'
-    );
-    return formattedDate || '';
-  }
+  // formatDate(dateString: string): string {
+  //   const formattedDate = this.datePipe.transform(
+  //     dateString,
+  //     'dd/MM/yyyy h:mm a'
+  //   );
+  //   return formattedDate || '';
+  // }
 
   addTag(tagValue: string): void {
     if (tagValue.trim() !== '') {
@@ -172,16 +172,13 @@ export class TasksComponent implements OnInit {
   addTask(taskData: TaskModel) {
     this.mongoDBService.addTask(taskData).subscribe({
       next: (response) => {
-        // Call the presentToast function
-        console.log('Task added successfully:', response);
+        console.log('Task added successfully');
       },
       error: (error) => {
-        // Handle error
-        console.error('Error adding task:', error);
+        console.error('Error adding task');
       },
       complete: () => {
         this.refreshTaskData();
-        // Handle completion if needed
       },
     });
   }
@@ -189,27 +186,22 @@ export class TasksComponent implements OnInit {
   fetchTasksByProjectId() {
     this.mongoDBService.getTasksByProjectId(this._ProjectId).subscribe({
       next: (response) => {
-        // Call the presentToast function
         this.taskList = response;
       },
       error: (error) => {
-        // Handle error
-        console.error('Error fetching tasks:', error);
+        console.error('Error fetching tasks');
       },
-      complete: () => {
-        console.log('Task List:', this.taskList);
-        // Handle completion if needed
-      },
+      complete: () => {},
     });
   }
 
   updateTaskStatus(taskId: string, newStatus: string): void {
     this.mongoDBService.updateTaskStatus(taskId, newStatus).subscribe({
       next: (response) => {
-        console.log('Task status updated successfully:', response);
+        console.log('Task status updated successfully');
       },
       error: (error) => {
-        console.error('Error updating task status:', error);
+        console.error('Error updating task status');
       },
       complete: () => {
         this.refreshTaskData();
@@ -217,9 +209,7 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  selectionChange() {
-    console.log(this.form.value.input2);
-  }
+  selectionChange() {}
 
   handleStatusChange(newStatus: any, taskId: any) {
     this.updateTaskStatus(taskId, newStatus.detail.value);

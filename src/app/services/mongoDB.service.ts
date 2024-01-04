@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { TaskModel } from '../model/task.model';
 import { PaymentModel } from '../model/payment.model';
+import { TimelineModel } from '../model/timeline.model';
 
 @Injectable({
   providedIn: 'root',
@@ -214,6 +215,28 @@ export class MongoDBService {
   updatePayment(payment: PaymentModel): Observable<PaymentModel> {
     const url = `${this.baseUrl}/update-payment`;
     return this.http.post<PaymentModel>(url, payment).pipe(
+      catchError((error: any) => {
+        console.error('An error occurred:', error);
+        return throwError('Something went wrong; please try again later.');
+      })
+    );
+  }
+
+  getTimelineByProjectId(projectId: string): Observable<TimelineModel[]> {
+    const url = `${this.baseUrl}/get-timelines/${projectId}`;
+    return this.http.get<TimelineModel[]>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('An error occurred:', error);
+        return throwError(
+          () => 'Something went wrong; please try again later.'
+        );
+      })
+    );
+  }
+
+  updateTimeline(timeline: TimelineModel): Observable<TimelineModel> {
+    const url = `${this.baseUrl}/update-timelines`;
+    return this.http.post<TimelineModel>(url, timeline).pipe(
       catchError((error: any) => {
         console.error('An error occurred:', error);
         return throwError('Something went wrong; please try again later.');

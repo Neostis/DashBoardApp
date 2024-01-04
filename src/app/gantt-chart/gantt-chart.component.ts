@@ -5,26 +5,33 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
 import { IonicModule } from '@ionic/angular';
+import { MongoDBService } from '../services/mongoDB.service';
+import { SharedService } from '../services/shared.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-gantt-chart',
   templateUrl: './gantt-chart.component.html',
   styleUrls: ['./gantt-chart.component.scss'],
   standalone: true,
-  imports: [CommonModule, GanttChartModule, RouterOutlet, IonicModule],
+  imports: [
+    CommonModule,
+    GanttChartModule,
+    RouterOutlet,
+    IonicModule,
+    HttpClientModule,
+  ],
+  providers: [MongoDBService],
 })
 export class GanttChartComponent implements OnInit {
   ganttchart: any;
+
+  projectList: any[] = [];
   taskList: any[] = [];
-  constructor() {}
 
-  ngOnInit(): void {
-    this.ganttchart = document.querySelector('smart-gantt-chart');
+  _ProjectId!: string;
 
-    this.ganttchart.addEventListener('connectionEnd', (event: any) => {
-      console.log(this.ganttchart.getState().tasks);
-    });
-  }
+  dataSource: any[] = [];
 
   taskColumns: GanttChartTaskColumn[] = [
     {
@@ -69,94 +76,63 @@ export class GanttChartComponent implements OnInit {
     },
   ];
 
-  dataSource = [
-    {
-      label: 'PRD & User-Stories',
-      dateStart: '2024-01-10',
-      dateEnd: '2024-02-10',
-      class: 'product-team',
-      type: 'task',
-    },
-    {
-      label: 'Persona & Journey',
-      dateStart: '2024-02-11',
-      dateEnd: '2024-03-10',
-      class: 'marketing-team',
-      type: 'task',
-    },
-    {
-      label: 'Architecture',
-      dateStart: '2024-03-11',
-      dateEnd: '2024-04-1',
-      class: 'product-team',
-      type: 'task',
-    },
-    {
-      label: 'Prototyping',
-      dateStart: '2024-04-02',
-      dateEnd: '2024-05-01',
-      class: 'dev-team',
-      type: 'task',
-    },
-    {
-      label: 'Design',
-      dateStart: '2024-05-02',
-      dateEnd: '2024-06-31',
-      class: 'design-team',
-      type: 'task',
-    },
-    {
-      label: 'Development',
-      dateStart: '2024-07-01',
-      dateEnd: '2024-08-10',
-      class: 'dev-team',
-      type: 'task',
-    },
-    {
-      label: 'Testing & QA',
-      dateStart: '2024-08-11',
-      dateEnd: '2024-09-10',
-      class: 'qa-team',
-      type: 'task',
-    },
-    {
-      label: 'UAT Test',
-      dateStart: '2024-09-12',
-      dateEnd: '2024-10-01',
-      class: 'product-team',
-      type: 'task',
-    },
-    {
-      label: 'Handover & Documentation',
-      dateStart: '2024-10-02',
-      dateEnd: '2024-11-01',
-      class: 'marketing-team',
-      type: 'task',
-    },
-    {
-      label: 'Release',
-      dateStart: '2024-11-01',
-      dateEnd: '2024-12-31',
-      class: 'release-team',
-      type: 'task',
-    },
-  ];
+  constructor(
+    private mongoDBService: MongoDBService,
+    private sharedService: SharedService
+  ) {}
 
-  getFirstAndLastDayOfMonth(): { firstDay: string; lastDay: string } {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
+  ngOnInit(): void {
+    this.ganttchart = document.querySelector('smart-gantt-chart');
+    this.ganttchart.addEventListener('itemUpdate', (event: any) => {
+      const thisItem = this.ganttchart.getState().tasks[event.detail.id];
+      const data = {
+        label: thisItem.label,
+        taskId: thisItem.taskId,
+        projectId: thisItem.projectId,
+        connections: thisItem.connections ? thisItem.connections : [],
+        dateStart: thisItem.dateStart,
+        dateEnd: thisItem.dateEnd,
+        type: thisItem.type,
+        _id: thisItem._id,
+      };
+      console.log(data);
+      // console.log(this.ganttchart.getState().tasks[event.detail.id]);
+    });
 
-    // First day of the month
-    const firstDay = new Date(year, month, 1);
-    const formattedFirstDay = this.formatDate(firstDay);
+    this.ganttchart.addEventListener('resizeEnd', (event: any) => {
+      const thisItem = this.ganttchart.getState().tasks[event.detail.id];
+      const data = {
+        label: thisItem.label,
+        taskId: thisItem.taskId,
+        projectId: thisItem.projectId,
+        connections: thisItem.connections ? thisItem.connections : [],
+        dateStart: thisItem.dateStart,
+        dateEnd: thisItem.dateEnd,
+        type: thisItem.type,
+        _id: thisItem._id,
+      };
+      console.log(data);
+      // console.log(this.ganttchart.getState().tasks[event.detail.id]);
+    });
 
-    // Last day of the month
-    const lastDay = new Date(year, month + 1, 0);
-    const formattedLastDay = this.formatDate(lastDay);
-
-    return { firstDay: formattedFirstDay, lastDay: formattedLastDay };
+    this.loadProject();
   }
+
+  // getFirstAndLastDayOfMonth(): { firstDay: string; lastDay: string } {
+  //   const today = new Date();
+  //   const year = today.getFullYear();
+  //   const month = today.getMonth();
+
+  //   // First day of the month
+  //   const firstDay = new Date(year, month, 1);
+  //   const formattedFirstDay = this.formatDate(firstDay);
+
+  //   // Last day of the month
+  //   const lastDay = new Date(year, month + 1, 0);
+  //   const formattedLastDay = this.formatDate(lastDay);
+
+  //   return { firstDay: formattedFirstDay, lastDay: formattedLastDay };
+  // }
 
   formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -167,5 +143,40 @@ export class GanttChartComponent implements OnInit {
 
   test() {
     console.log(this.ganttchart.getState().tasks);
+  }
+
+  updateTimeline() {}
+
+  fetchTimelineByProjectId() {
+    this.mongoDBService.getTimelineByProjectId(this._ProjectId).subscribe({
+      next: (response) => {
+        this.dataSource = response;
+      },
+      error: (error) => {
+        console.error('Error fetching tasks:', error);
+      },
+      complete: () => {
+        console.log('Data:', this.dataSource);
+      },
+    });
+  }
+
+  private loadProject(): void {
+    this.mongoDBService.getProjects().subscribe({
+      next: (response) => {
+        this.projectList = response;
+
+        this.sharedService.updateProjectVariable(this.projectList[0]);
+      },
+      error: (error) => {
+        console.error('Error retrieving files:', error);
+      },
+      complete: () => {
+        this._ProjectId = this.sharedService.useProjectVariable()?._id;
+        if (this._ProjectId) {
+          this.fetchTimelineByProjectId();
+        }
+      },
+    });
   }
 }

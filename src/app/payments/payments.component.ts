@@ -69,7 +69,7 @@ export class PaymentsComponent implements OnInit {
         this.sharedService.updateProjectVariable(this.projectList[0]);
       },
       error: (error) => {
-        console.error('Error retrieving files:', error);
+        console.error('Error retrieving files');
       },
       complete: () => {
         this._ProjectId = this.sharedService.useProjectVariable()?._id;
@@ -87,10 +87,9 @@ export class PaymentsComponent implements OnInit {
       },
       error: (error) => {
         // Handle error
-        console.error('Error fetching payments:', error);
+        console.error('Error fetching payments');
       },
       complete: () => {
-        console.log(this.testPayment);
         this.form.get('input1')?.setValue(this.testPayment.usage);
         this.form.get('input2')?.setValue(this.testPayment.note);
         this.form.get('input3')?.setValue(parseInt(this.testPayment.budget));
@@ -109,17 +108,23 @@ export class PaymentsComponent implements OnInit {
     this.mongoDBService.updatePayment(data).subscribe({
       next: (response: any) => {
         // Call the presentToast function
-        console.log('Payment updated successfully:', response);
+        console.log('Payment updated successfully');
       },
       error: (error) => {
         // Handle error
-        console.error('Error fetching payments:', error);
+        console.error('Error fetching payments');
       },
       complete: () => {
         this.getPayment();
         // Handle completion if needed
       },
     });
+  }
+
+  discardChanged() {
+    this.notificationList = [];
+    this.form.reset();
+    this.getPayment();
   }
 
   saveChanged() {
@@ -140,22 +145,18 @@ export class PaymentsComponent implements OnInit {
     };
 
     this.updatePayment(testData);
-    console.log(testData);
+
     this.notificationList = [];
     this.form.reset();
   }
 
   incBudget() {
     this.form.get('input3')?.setValue(this.form.get('input3')?.value + 1000);
-
-    console.log(this.form.value.input3);
   }
 
   dcBudget() {
     if (this.form.value.input3 - 1000 >= 0) {
       this.form.get('input3')?.setValue(this.form.get('input3')?.value - 1000);
     }
-
-    console.log(this.form.value.input3);
   }
 }
