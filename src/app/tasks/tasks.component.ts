@@ -103,32 +103,31 @@ export class TasksComponent implements OnInit {
   }
 
   cancel() {
-    this.form.reset();
+    this.clearInputData();
     this.modal.dismiss();
   }
 
-  confirm() {
-    // const newCardData = {
-    //   title: this.form.get('input1')?.value,
-    //   content: this.form.get('input3')?.value,
-    //   tags: this.tags,
-    // };
+  clearInputData() {
+    this.selectedDateTime = '';
+    this.tags = [];
+    this.form.reset();
+  }
 
+  confirm() {
     const newCardData: TaskModel = {
       title: this.form.get('input1')?.value,
-      date: new Date(this.selectedDateTime),
+      startDate: new Date(),
+      endDate: new Date(this.selectedDateTime),
       details: this.form.get('input3')?.value,
       projectId: this._ProjectId,
-      // status: 'Yet to start',
       status: 'Yet to start',
-      tags: this.tags, //['Tag1', 'Tag2'],
-      members: this.form.value.input2, //['Member1', 'Member2', 'Member2'],
+      tags: this.tags,
+      members: this.form.value.input2,
     };
 
     this.addTask(newCardData);
-    this.selectedDateTime = '';
-    this.form.reset();
     this.fetchTasksByProjectId();
+    this.clearInputData();
     this.modal.dismiss();
   }
 
@@ -138,10 +137,6 @@ export class TasksComponent implements OnInit {
   }
 
   onWillDismiss(event: Event) {
-    // const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    // if (ev.detail.role === 'confirm') {
-    //   this.message = `Hello, ${ev.detail.data}!`;
-    // }
     this.isModalOpen = false;
   }
 
@@ -191,7 +186,7 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  fetchTasksByProjectId(): void {
+  fetchTasksByProjectId() {
     this.mongoDBService.getTasksByProjectId(this._ProjectId).subscribe({
       next: (response) => {
         // Call the presentToast function

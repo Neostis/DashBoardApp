@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
 import { IonicModule } from '@ionic/angular';
-import { DropDownList } from 'smart-webcomponents-angular';
 
 @Component({
   selector: 'app-gantt-chart',
@@ -16,10 +15,15 @@ import { DropDownList } from 'smart-webcomponents-angular';
 })
 export class GanttChartComponent implements OnInit {
   ganttchart: any;
+  taskList: any[] = [];
   constructor() {}
 
   ngOnInit(): void {
     this.ganttchart = document.querySelector('smart-gantt-chart');
+
+    this.ganttchart.addEventListener('connectionEnd', (event: any) => {
+      console.log(this.ganttchart.getState().tasks);
+    });
   }
 
   taskColumns: GanttChartTaskColumn[] = [
@@ -32,7 +36,7 @@ export class GanttChartComponent implements OnInit {
       label: 'Date Start',
       value: 'dateStart',
       size: '35%',
-      formatFunction: function (dateString: string) {
+      formatFunction: (dateString: string) => {
         const date = new Date(dateString),
           formatNumber = (number: number) => ('0' + number).slice(-2);
 
@@ -50,7 +54,7 @@ export class GanttChartComponent implements OnInit {
       label: 'Date End',
       value: 'dateEnd',
       size: '25 %',
-      formatFunction: function (dateString: string) {
+      formatFunction: (dateString: string) => {
         const date = new Date(dateString),
           formatNumber = (number: number) => ('0' + number).slice(-2);
 
@@ -161,18 +165,7 @@ export class GanttChartComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  addTask() {
-    // const date = this.getFirstAndLastDayOfMonth();
-    // const firstDay = date.firstDay;
-    // const lastDay = date.lastDay;
-    // const newTask = {
-    //   label: 'New Task',
-    //   dateStart: firstDay,
-    //   dateEnd: lastDay,
-    //   type: 'task',
-    // };
-
-    // this.ganttchart?.insertTask(newTask);
-    console.log(this.ganttchart?.tasks);
+  test() {
+    console.log(this.ganttchart.getState().tasks);
   }
 }

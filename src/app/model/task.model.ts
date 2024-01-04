@@ -1,10 +1,10 @@
 export interface TaskModel {
-    title: String,
-    date: Date,
-    details: String,
-    projectId: String,
-    status: String,
-    tags: string[],
-    members: string[],
-  }
-  
+  title: String;
+  startDate: Date;
+  endDate: Date;
+  details: String;
+  projectId: String;
+  status: String;
+  tags: string[];
+  members: string[];
+}
