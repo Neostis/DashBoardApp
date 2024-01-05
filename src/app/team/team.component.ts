@@ -272,17 +272,14 @@ export class TeamComponent implements OnInit {
     members.forEach((member: any) => {
       this.mongoDBService.addOrUpdateMember(member).subscribe({
         next: (response) => {
-          // Call the presentToast function
           console.log('Member added successfully:', response);
         },
         error: (error) => {
-          // Handle error
           console.error('Error adding member:', error);
         },
         complete: () => {
           this.refreshMainData();
           this.refreshModalData();
-          // Handle completion if needed
         },
       });
     });

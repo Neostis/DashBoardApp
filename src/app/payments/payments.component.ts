@@ -38,7 +38,7 @@ export class PaymentsComponent implements OnInit {
 
   isHidden: boolean = true;
 
-  testPayment: any;
+  payment: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -81,25 +81,22 @@ export class PaymentsComponent implements OnInit {
   private getPayment(): void {
     this.mongoDBService.getPayments(this._ProjectId).subscribe({
       next: (response: any) => {
-        // Call the presentToast function
-        this.testPayment = response.payments[0];
-        // console.log('Payments:', response.payments[0]);
+        this.payment = response.payments[0];
       },
       error: (error) => {
-        // Handle error
         console.error('Error fetching payments');
       },
       complete: () => {
-        this.form.get('input1')?.setValue(this.testPayment.usage);
-        this.form.get('input2')?.setValue(this.testPayment.note);
-        this.form.get('input3')?.setValue(parseInt(this.testPayment.budget));
-        if (this.testPayment.notification.includes('Email')) {
+        this.form.get('input1')?.setValue(this.payment.usage);
+        this.form.get('input2')?.setValue(this.payment.note);
+        this.form.get('input3')?.setValue(parseInt(this.payment.budget));
+        if (this.payment.notification.includes('Email')) {
           this.form.get('input4')?.setValue(true);
         }
-        if (this.testPayment.notification.includes('Phone')) {
+        if (this.payment.notification.includes('Phone')) {
           this.form.get('input5')?.setValue(true);
         }
-        this.form.get('input6')?.setValue(this.testPayment.change);
+        this.form.get('input6')?.setValue(this.payment.change);
       },
     });
   }
@@ -107,16 +104,13 @@ export class PaymentsComponent implements OnInit {
   private updatePayment(data: PaymentModel): void {
     this.mongoDBService.updatePayment(data).subscribe({
       next: (response: any) => {
-        // Call the presentToast function
         console.log('Payment updated successfully');
       },
       error: (error) => {
-        // Handle error
         console.error('Error fetching payments');
       },
       complete: () => {
         this.getPayment();
-        // Handle completion if needed
       },
     });
   }

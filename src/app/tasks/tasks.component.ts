@@ -150,15 +150,6 @@ export class TasksComponent implements OnInit {
     this.selectedDateTime = event.detail.value;
   }
 
-  //for testing
-  // formatDate(dateString: string): string {
-  //   const formattedDate = this.datePipe.transform(
-  //     dateString,
-  //     'dd/MM/yyyy h:mm a'
-  //   );
-  //   return formattedDate || '';
-  // }
-
   addTag(tagValue: string): void {
     if (tagValue.trim() !== '') {
       this.tags.push(tagValue.trim());
