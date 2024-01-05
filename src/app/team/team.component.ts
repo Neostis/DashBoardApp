@@ -43,7 +43,11 @@ export class TeamComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadProject();
+    this._ProjectId = this.sharedService.getProjectId();
+    if (this._ProjectId) {
+      this.loadMember();
+    }
+
     this.modalSearchMember
       .pipe(
         debounceTime(300),
@@ -69,23 +73,6 @@ export class TeamComponent implements OnInit {
         console.error('Error Message:', error);
       },
       complete: () => {},
-    });
-  }
-
-  private loadProject(): void {
-    this.mongoDBService.getProjects().subscribe({
-      next: (response) => {
-        this.projectList = response;
-
-        this.sharedService.updateProjectVariable(this.projectList[0]);
-      },
-      error: (error) => {
-        console.error('Error retrieving files:', error);
-      },
-      complete: () => {
-        this._ProjectId = this.sharedService.useProjectVariable()?._id;
-        this.loadMember();
-      },
     });
   }
 

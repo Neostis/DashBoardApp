@@ -55,27 +55,10 @@ export class PaymentsComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.loadProject();
-    // this.form.valueChanges.subscribe((f) => {
-    //   console.log(f);
-    // });
-  }
-
-  private loadProject(): void {
-    this.mongoDBService.getProjects().subscribe({
-      next: (response) => {
-        this.projectList = response;
-
-        this.sharedService.updateProjectVariable(this.projectList[0]);
-      },
-      error: (error) => {
-        console.error('Error retrieving files');
-      },
-      complete: () => {
-        this._ProjectId = this.sharedService.useProjectVariable()?._id;
-        this.getPayment();
-      },
-    });
+    this._ProjectId = this.sharedService.getProjectId();
+    if (this._ProjectId) {
+      this.getPayment();
+    }
   }
 
   private getPayment(): void {

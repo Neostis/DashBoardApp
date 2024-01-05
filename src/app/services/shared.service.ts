@@ -5,7 +5,6 @@ import { FilesModel } from '../model/files.model';
 @Injectable({
   providedIn: 'root',
 })
-
 export class SharedService {
   private FilesDatabase!: FilesModel;
   private ProjectDatabase!: ProjectModel;
@@ -17,7 +16,7 @@ export class SharedService {
   }
 
   useFilesVariable(): any {
-    return this.FilesDatabase
+    return this.FilesDatabase;
   }
 
   updateProjectVariable(newValue: ProjectModel): void {
@@ -25,6 +24,12 @@ export class SharedService {
   }
 
   useProjectVariable(): ProjectModel {
-    return this.ProjectDatabase
+    return this.ProjectDatabase;
+  }
+
+  getProjectId(): any {
+    const rawData = localStorage.getItem('currentProject');
+    const parseData = rawData ? JSON.parse(rawData) : null;
+    return parseData ? parseData.value : null;
   }
 }

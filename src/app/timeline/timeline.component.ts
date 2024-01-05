@@ -82,6 +82,11 @@ export class TimelineComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this._ProjectId = this.sharedService.getProjectId();
+    if (this._ProjectId) {
+      this.fetchTimelineByProjectId();
+    }
+
     this.ganttchart = document.querySelector('smart-gantt-chart');
     this.ganttchart.addEventListener('itemUpdate', (event: any) => {
       const thisItem = this.ganttchart.getState().tasks[event.detail.id];
@@ -95,7 +100,6 @@ export class TimelineComponent implements OnInit {
         type: thisItem.type,
         _id: thisItem._id,
       };
-      console.log(data);
     });
 
     this.ganttchart.addEventListener('resizeEnd', (event: any) => {
@@ -111,8 +115,6 @@ export class TimelineComponent implements OnInit {
         _id: thisItem._id,
       };
     });
-
-    this.loadProject();
   }
 
   formatDate(date: Date): string {
@@ -138,25 +140,6 @@ export class TimelineComponent implements OnInit {
       },
       complete: () => {
         console.log('Data:', this.dataSource);
-      },
-    });
-  }
-
-  private loadProject(): void {
-    this.mongoDBService.getProjects().subscribe({
-      next: (response) => {
-        this.projectList = response;
-
-        this.sharedService.updateProjectVariable(this.projectList[0]);
-      },
-      error: (error) => {
-        console.error('Error retrieving files:', error);
-      },
-      complete: () => {
-        this._ProjectId = this.sharedService.useProjectVariable()?._id;
-        if (this._ProjectId) {
-          this.fetchTimelineByProjectId();
-        }
       },
     });
   }
