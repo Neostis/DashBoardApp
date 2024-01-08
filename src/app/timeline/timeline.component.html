@@ -1,1 +1,12 @@
-<app-gantt-chart></app-gantt-chart>
+<smart-gantt-chart
+  #ganttchart
+  [dataSource]="dataSource"
+  [taskColumns]="taskColumns"
+  [currentTimeIndicator]="true"
+  [currentTimeIndicatorInterval]="60"
+  [treeSize]="400"
+>
+</smart-gantt-chart>
+<ion-content>
+  <ion-button (click)="test()">Check Data</ion-button>
+</ion-content>

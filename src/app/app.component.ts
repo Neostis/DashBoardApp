@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
   imports: [IonicModule, IonRouterOutlet, RouterLink],
 })
 export class AppComponent implements OnInit {
-  route: string = '';
+  route: string = 'home';
 
   constructor() {}
 
@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
     const storedRoute = localStorage.getItem('currentRoute');
     if (storedRoute) {
       this.route = storedRoute;
+    } else {
+      localStorage.setItem('currentRoute', this.route.toLowerCase());
     }
   }
 

@@ -11,7 +11,7 @@
           <div class="col-head first-col">Yet To start</div>
 
           @for (task of taskList; track task){ @switch (task.status) { @case
-          ('Yet To start'){
+          ('Yet to start'){
           <ion-card class="ion-padding">
             <ion-card-header>
               <div class="badge-list">
@@ -31,7 +31,7 @@
                 (ionCancel)="handleStatusCancel()"
                 (ionDismiss)="handleStatusDismiss()"
               >
-                <ion-select-option value="Yet To start"
+                <ion-select-option value="Yet to start"
                   >Yet to start</ion-select-option
                 >
                 <ion-select-option value="In Progress"
@@ -80,7 +80,7 @@
                 (ionCancel)="handleStatusCancel()"
                 (ionDismiss)="handleStatusDismiss()"
               >
-                <ion-select-option value="Yet To start"
+                <ion-select-option value="Yet to start"
                   >Yet to start</ion-select-option
                 >
                 <ion-select-option value="In Progress"
@@ -129,7 +129,7 @@
                 (ionCancel)="handleStatusCancel()"
                 (ionDismiss)="handleStatusDismiss()"
               >
-                <ion-select-option value="Yet To start"
+                <ion-select-option value="Yet to start"
                   >Yet to start</ion-select-option
                 >
                 <ion-select-option value="In Progress"

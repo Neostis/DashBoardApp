@@ -38,7 +38,7 @@ export class PaymentsComponent implements OnInit {
 
   isHidden: boolean = true;
 
-  testPayment: any;
+  payment: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,52 +55,31 @@ export class PaymentsComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.loadProject();
-    // this.form.valueChanges.subscribe((f) => {
-    //   console.log(f);
-    // });
-  }
-
-  private loadProject(): void {
-    this.mongoDBService.getProjects().subscribe({
-      next: (response) => {
-        this.projectList = response;
-
-        this.sharedService.updateProjectVariable(this.projectList[0]);
-      },
-      error: (error) => {
-        console.error('Error retrieving files:', error);
-      },
-      complete: () => {
-        this._ProjectId = this.sharedService.useProjectVariable()?._id;
-        this.getPayment();
-      },
-    });
+    this._ProjectId = this.sharedService.getProjectId();
+    if (this._ProjectId) {
+      this.getPayment();
+    }
   }
 
   private getPayment(): void {
     this.mongoDBService.getPayments(this._ProjectId).subscribe({
       next: (response: any) => {
-        // Call the presentToast function
-        this.testPayment = response.payments[0];
-        // console.log('Payments:', response.payments[0]);
+        this.payment = response.payments[0];
       },
       error: (error) => {
-        // Handle error
-        console.error('Error fetching payments:', error);
+        console.error('Error fetching payments');
       },
       complete: () => {
-        console.log(this.testPayment);
-        this.form.get('input1')?.setValue(this.testPayment.usage);
-        this.form.get('input2')?.setValue(this.testPayment.note);
-        this.form.get('input3')?.setValue(parseInt(this.testPayment.budget));
-        if (this.testPayment.notification.includes('Email')) {
+        this.form.get('input1')?.setValue(this.payment.usage);
+        this.form.get('input2')?.setValue(this.payment.note);
+        this.form.get('input3')?.setValue(parseInt(this.payment.budget));
+        if (this.payment.notification.includes('Email')) {
           this.form.get('input4')?.setValue(true);
         }
-        if (this.testPayment.notification.includes('Phone')) {
+        if (this.payment.notification.includes('Phone')) {
           this.form.get('input5')?.setValue(true);
         }
-        this.form.get('input6')?.setValue(this.testPayment.change);
+        this.form.get('input6')?.setValue(this.payment.change);
       },
     });
   }
@@ -108,18 +87,21 @@ export class PaymentsComponent implements OnInit {
   private updatePayment(data: PaymentModel): void {
     this.mongoDBService.updatePayment(data).subscribe({
       next: (response: any) => {
-        // Call the presentToast function
-        console.log('Payment updated successfully:', response);
+        console.log('Payment updated successfully');
       },
       error: (error) => {
-        // Handle error
-        console.error('Error fetching payments:', error);
+        console.error('Error fetching payments');
       },
       complete: () => {
         this.getPayment();
-        // Handle completion if needed
       },
     });
+  }
+
+  discardChanged() {
+    this.notificationList = [];
+    this.form.reset();
+    this.getPayment();
   }
 
   saveChanged() {
@@ -140,22 +122,18 @@ export class PaymentsComponent implements OnInit {
     };
 
     this.updatePayment(testData);
-    console.log(testData);
+
     this.notificationList = [];
     this.form.reset();
   }
 
   incBudget() {
     this.form.get('input3')?.setValue(this.form.get('input3')?.value + 1000);
-
-    console.log(this.form.value.input3);
   }
 
   dcBudget() {
     if (this.form.value.input3 - 1000 >= 0) {
       this.form.get('input3')?.setValue(this.form.get('input3')?.value - 1000);
     }
-
-    console.log(this.form.value.input3);
   }
 }

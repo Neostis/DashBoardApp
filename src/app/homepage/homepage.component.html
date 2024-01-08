@@ -1,0 +1,32 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="custom-card">
+          <ion-card-header
+            >Current Project: <br /><br />{{ currentProject }}</ion-card-header
+          >
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-select
+                  label="Select Project"
+                  placeholder="project"
+                  (ionChange)="onSelection($event)"
+                  (ionCancel)="onCancel()"
+                  (ionDismiss)="onDismiss()"
+                >
+                  @for(option of options; track option){
+                  <ion-select-option value="{{ option.value }}">{{
+                    option.label
+                  }}</ion-select-option>
+                  }
+                </ion-select>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

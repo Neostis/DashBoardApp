@@ -67,7 +67,11 @@ export class TasksComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
   ngOnInit(): void {
-    this.loadProject();
+    this._ProjectId = this.sharedService.getProjectId();
+    if (this._ProjectId) {
+      this.loadMember();
+      this.fetchTasksByProjectId();
+    }
   }
 
   private loadMember(): void {
@@ -82,53 +86,34 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  private loadProject(): void {
-    this.mongoDBService.getProjects().subscribe({
-      next: (response) => {
-        this.projectList = response;
-
-        this.sharedService.updateProjectVariable(this.projectList[0]);
-      },
-      error: (error) => {
-        console.error('Error retrieving files:', error);
-      },
-      complete: () => {
-        this._ProjectId = this.sharedService.useProjectVariable()?._id;
-        this.loadMember();
-        if (this._ProjectId) {
-          this.fetchTasksByProjectId();
-        }
-      },
-    });
-  }
-
   cancel() {
-    this.form.reset();
+    this.clearInputData();
     this.modal.dismiss();
   }
 
-  confirm() {
-    // const newCardData = {
-    //   title: this.form.get('input1')?.value,
-    //   content: this.form.get('input3')?.value,
-    //   tags: this.tags,
-    // };
+  clearInputData() {
+    this.selectedDateTime = '';
+    this.tags = [];
+    this.form.reset();
+  }
 
+  confirm() {
     const newCardData: TaskModel = {
       title: this.form.get('input1')?.value,
-      date: new Date(this.selectedDateTime),
+      startDate: new Date(),
+      endDate: this.selectedDateTime
+        ? new Date(this.selectedDateTime)
+        : new Date(),
       details: this.form.get('input3')?.value,
       projectId: this._ProjectId,
-      // status: 'Yet to start',
       status: 'Yet to start',
-      tags: this.tags, //['Tag1', 'Tag2'],
-      members: this.form.value.input2, //['Member1', 'Member2', 'Member2'],
+      tags: this.tags,
+      members: this.form.value.input2,
     };
 
     this.addTask(newCardData);
-    this.selectedDateTime = '';
-    this.form.reset();
     this.fetchTasksByProjectId();
+    this.clearInputData();
     this.modal.dismiss();
   }
 
@@ -138,10 +123,6 @@ export class TasksComponent implements OnInit {
   }
 
   onWillDismiss(event: Event) {
-    // const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    // if (ev.detail.role === 'confirm') {
-    //   this.message = `Hello, ${ev.detail.data}!`;
-    // }
     this.isModalOpen = false;
   }
 
@@ -151,17 +132,6 @@ export class TasksComponent implements OnInit {
 
   onSelectDateTime(event: CustomEvent) {
     this.selectedDateTime = event.detail.value;
-    console.log(this.selectedDateTime);
-    console.log(this.formatDate(this.selectedDateTime));
-  }
-
-  //for testing
-  formatDate(dateString: string): string {
-    const formattedDate = this.datePipe.transform(
-      dateString,
-      'dd/MM/yyyy h:mm a'
-    );
-    return formattedDate || '';
   }
 
   addTag(tagValue: string): void {
@@ -177,44 +147,36 @@ export class TasksComponent implements OnInit {
   addTask(taskData: TaskModel) {
     this.mongoDBService.addTask(taskData).subscribe({
       next: (response) => {
-        // Call the presentToast function
-        console.log('Task added successfully:', response);
+        console.log('Task added successfully');
       },
       error: (error) => {
-        // Handle error
-        console.error('Error adding task:', error);
+        console.error('Error adding task');
       },
       complete: () => {
         this.refreshTaskData();
-        // Handle completion if needed
       },
     });
   }
 
-  fetchTasksByProjectId(): void {
+  fetchTasksByProjectId() {
     this.mongoDBService.getTasksByProjectId(this._ProjectId).subscribe({
       next: (response) => {
-        // Call the presentToast function
         this.taskList = response;
       },
       error: (error) => {
-        // Handle error
-        console.error('Error fetching tasks:', error);
+        console.error('Error fetching tasks');
       },
-      complete: () => {
-        console.log('Task List:', this.taskList);
-        // Handle completion if needed
-      },
+      complete: () => {},
     });
   }
 
   updateTaskStatus(taskId: string, newStatus: string): void {
     this.mongoDBService.updateTaskStatus(taskId, newStatus).subscribe({
       next: (response) => {
-        console.log('Task status updated successfully:', response);
+        console.log('Task status updated successfully');
       },
       error: (error) => {
-        console.error('Error updating task status:', error);
+        console.error('Error updating task status');
       },
       complete: () => {
         this.refreshTaskData();
@@ -222,9 +184,7 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  selectionChange() {
-    console.log(this.form.value.input2);
-  }
+  selectionChange() {}
 
   handleStatusChange(newStatus: any, taskId: any) {
     this.updateTaskStatus(taskId, newStatus.detail.value);

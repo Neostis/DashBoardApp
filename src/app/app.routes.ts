@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FilesContainerComponent } from './files/files.component';
 import { PaymentsComponent } from './payments/payments.component';
@@ -9,10 +8,6 @@ import { TimelineComponent } from './timeline/timeline.component';
 import { FilesManagerContainerComponent } from './fileManager/filesManager.component';
 
 export const routes: Routes = [
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-  },
   {
     path: 'home',
     component: HomepageComponent,
