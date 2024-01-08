@@ -71,7 +71,8 @@ export class FilesContainerComponent implements OnInit {
     this.mongoDBService.getFiles().subscribe({
       next: (response) => {
         // Assuming your response has a 'data' property with the files
-        this.fileList = response;
+        
+        this.fileList = response        
 
         // Sort fileList by metadata.lastModified (assuming it's in Unix timestamp) in descending order
         this.fileList.sort(
@@ -239,33 +240,31 @@ export class FilesContainerComponent implements OnInit {
     // Only add the first file from the list
     if (uploadFile.length > 0) {
       this.file = uploadFile[0];
-      console.log(this.file);
 
       if (this.file) {
         this.mongoDBService
           .uploadFile(this.file, this.sharedService.useProjectVariable()._id)
           .subscribe({
             next: (response) => {
-              // Call the presentToast function
               const toastOptions: ToastOptions = {
-                message: `File uploaded successfully`,
+                message: `File upload successfully`,
                 duration: 1500,
                 position: 'top',
               };
               this.toastService.presentToast(toastOptions);
-
               this.loadFiles();
               this.sharedService.updateFilesVariable(this.fileList);
             },
             error: (error) => {
-              // Handle error
-              const toastOptions: ToastOptions = {
-                message: `Error uploading file`,
-                duration: 1500,
-                position: 'top',
-              };
-              this.toastService.presentToast(toastOptions);
-            },
+              if (error.status !== 201) {{
+                const toastOptions: ToastOptions = {
+                  message: `Error uploading file`,
+                  duration: 1500,
+                  position: 'top',
+                };
+                this.toastService.presentToast(toastOptions);
+              }
+            }},
             complete: () => {
               // Handle completion if needed
             },

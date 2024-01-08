@@ -26,12 +26,12 @@ export class FilesManagerContainerComponent implements OnInit {
     private toastService: ToastService
   ) {}
   file: File | null = null;
-  fileList: any[] = this.sharedService.useFilesVariable()
+  fileList: any[] = this.sharedService.useFilesVariable();
   protected filteredFiles: any;
 
   ngOnInit(): void {
     // if (this.sharedService.useFilesVariable() == undefined) {
-      this.loadFiles();
+    this.loadFiles();
     // }
   }
 
@@ -120,7 +120,7 @@ export class FilesManagerContainerComponent implements OnInit {
   async confirmDelete(file: any) {
     const fileId = file._id;
     this.mongoDBService.deleteFile(fileId).subscribe({
-      next: () => {
+      next: (response) => {
         const toastOptions: ToastOptions = {
           message: `File deleted successfully`,
           duration: 1500,
@@ -131,55 +131,54 @@ export class FilesManagerContainerComponent implements OnInit {
         this.updateFilesVariable();
       },
       error: (error) => {
-        const toastOptions: ToastOptions = {
-          message: `Error deleting file`,
-          duration: 1500,
-          position: 'top',
-        };
-        this.toastService.presentToast(toastOptions);
+        if (error.status !== 204) {
+          const toastOptions: ToastOptions = {
+            message: `Error deleting file`,
+            duration: 1500,
+            position: 'top',
+          };
+          this.toastService.presentToast(toastOptions);
+        }
       },
     });
   }
 
   handleFileUpload(event: any): void {
-    const uploadFile:FileList  = event.target.files;
-    this.file = null;    
-    console.log();
-    
+    const uploadFile: FileList = event.target.files;
+    this.file = null;
+
     if (uploadFile.length > 0) {
       this.file = uploadFile[0];
-      
-      if (this.file) {        
-        this.mongoDBService.uploadFile(this.file, this.sharedService.useProjectVariable()._id).subscribe({
-          next: (response) => {
-            
-            // Call the presentToast function
-            const toastOptions: ToastOptions = {
-              message: `File uploaded successfully`,
-              duration: 1500,
-              position: 'top',
-            };
-            this.toastService.presentToast(toastOptions);
 
-            this.loadFiles();
-            this.updateFilesVariable();
-          },
-          error: (error) => {
-            
-            // Handle error
-            const toastOptions: ToastOptions = {
-              message: `Error uploading file`,
-              duration: 1500,
-              position: 'top',
-            };
-            this.toastService.presentToast(toastOptions);
-          },
-          complete: () => {
-            // Handle completion if needed
-          },
-        });
+      if (this.file) {
+        this.mongoDBService
+          .uploadFile(this.file, this.sharedService.useProjectVariable()._id)
+          .subscribe({
+            next: (response) => {},
+            error: (error) => {
+              if (error.status == 201) {
+                const toastOptions: ToastOptions = {
+                  message: `File upload successfully`,
+                  duration: 1500,
+                  position: 'top',
+                };
+                this.toastService.presentToast(toastOptions);
+                this.loadFiles();
+                this.sharedService.updateFilesVariable(this.fileList);
+              } else {
+                const toastOptions: ToastOptions = {
+                  message: `Error uploading file`,
+                  duration: 1500,
+                  position: 'top',
+                };
+                this.toastService.presentToast(toastOptions);
+              }
+            },
+            complete: () => {
+              // Handle completion if needed
+            },
+          });
       }
-
     }
   }
 }
