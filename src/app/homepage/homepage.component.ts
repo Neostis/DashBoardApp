@@ -47,8 +47,10 @@ export class HomepageComponent implements OnInit {
   }
 
   onSelection(e: any) {
-    const project = this.options.find((o) => o.value === e.detail.value);
-    localStorage.setItem('currentProject', JSON.stringify(project));
+    if (e.detail.value) {
+      const project = this.options.find((o) => o.value === e.detail.value);
+      localStorage.setItem('currentProject', JSON.stringify(project));
+    }
     window.location.reload();
   }
   onCancel() {}
