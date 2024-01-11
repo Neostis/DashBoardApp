@@ -9,15 +9,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
-import { PaymentModel } from '../model/payment.model';
-import { MongoDBService } from '../services/mongoDB.service';
-import { SharedService } from '../services/shared.service';
-import { ProjectModel } from '../model/project.model';
+import { PaymentModel } from '../../model/payment.model';
+import { MongoDBService } from '../../services/mongoDB.service';
+import { SharedService } from '../../services/shared.service';
+import { ProjectModel } from '../../model/project.model';
 
 @Component({
   selector: 'app-payments',
-  templateUrl: './payments.component.html',
-  styleUrls: ['./payments.component.scss'],
+  templateUrl: './payments.page.html',
+  styleUrls: ['./payments.page.scss'],
   standalone: true,
   imports: [
     IonicModule,
@@ -29,7 +29,7 @@ import { ProjectModel } from '../model/project.model';
   ],
   providers: [MongoDBService],
 })
-export class PaymentsComponent implements OnInit {
+export class PaymentsPage implements OnInit {
   form!: FormGroup;
   notificationList: string[] = [];
 

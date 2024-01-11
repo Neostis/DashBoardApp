@@ -2,8 +2,8 @@
   <ion-toolbar>
     <ion-item class="search-bar-button-container" lines="none">
       <ion-title class="bold-text">
-        {{getProjectName()}} Project Files @if (filteredFiles != undefined && filteredFiles.length >
-        0) {
+        {{ getProjectName() }} Project Files @if (filteredFiles != undefined &&
+        filteredFiles.length > 0) {
         <span class="file-count">+{{ filteredFiles.length }}</span>
 
         } @else {
@@ -19,8 +19,7 @@
       <ion-button
         color="primary"
         size="Default"
-        [routerLink]="'/filesManager'"
-        (click)="setRoute('filesManager')"
+        [routerLink]="'/files/filesManager'"
       >
         File Manager
       </ion-button>
@@ -28,7 +27,8 @@
   </ion-toolbar>
 
   <div class="file-list-item">
-    @for (file of filteredFiles; track file) { @if ((file.metadata.projectId).toString() == this.getProjectID()) {
+    @for (file of filteredFiles; track file) { @if
+    ((file.metadata.projectId).toString() == this.getProjectID()) {
     <ion-card color="light" (click)="openFileInNewTab(file)">
       <ion-card-header class="center-content">
         <ion-img
@@ -36,12 +36,12 @@
           [src]="getFileIcon(file.metadata.type)"
           alt="{{ file.metadata.type }} Icon"
         ></ion-img>
-        <ion-card-title>{{
-          getOriginalName(file.metadata.title)
-        }}</ion-card-title>
-        <ion-card-subtitle>{{
-          getTimeAgo(file.metadata.lastModified)
-        }}</ion-card-subtitle>
+        <ion-card-title
+          >{{ getOriginalName(file.metadata.title) }}</ion-card-title
+        >
+        <ion-card-subtitle
+          >{{ getTimeAgo(file.metadata.lastModified) }}</ion-card-subtitle
+        >
       </ion-card-header>
     </ion-card>
 

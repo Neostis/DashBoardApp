@@ -1,20 +1,20 @@
-import { ProjectModel } from './../model/project.model';
+import { ProjectModel } from '../../model/project.model';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { MongoDBService } from '../services/mongoDB.service';
+import { MongoDBService } from '../../services/mongoDB.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { ToastOptions } from '../interface/toast-options.interface';
-import { ToastService } from '../services/toast.service';
-import { SharedService } from '../services/shared.service';
-import { FilesModel } from '../model/files.model';
+import { ToastOptions } from '../../interface/toast-options.interface';
+import { ToastService } from '../../services/toast.service';
+import { SharedService } from '../../services/shared.service';
+import { FilesModel } from '../../model/files.model';
 
 @Component({
-  selector: 'app-files-container',
-  templateUrl: './files.component.html',
-  styleUrls: ['./files.component.scss'],
+  selector: 'app-files',
+  templateUrl: './files.page.html',
+  styleUrls: ['./files.page.scss'],
   // styleUrl: './files.component.scss',
   standalone: true,
   imports: [
@@ -26,7 +26,7 @@ import { FilesModel } from '../model/files.model';
   ],
   providers: [MongoDBService],
 })
-export class FilesContainerComponent implements OnInit {
+export class FilesPage implements OnInit {
   constructor(
     private mongoDBService: MongoDBService,
     private toastService: ToastService,
@@ -45,11 +45,6 @@ export class FilesContainerComponent implements OnInit {
     // }
   }
 
-  setRoute(value: string) {
-    localStorage.setItem('currentRoute', value.toLowerCase());
-    this.route = value.toLowerCase();
-  }
-
   //set Test Project
   private loadProject(): void {
     this.mongoDBService.getProjects().subscribe({
@@ -58,7 +53,6 @@ export class FilesContainerComponent implements OnInit {
         this.projectList = response;
 
         this.sharedService.updateProjectVariable(this.projectList[1]);
-        
       },
       error: (error) => {
         console.error('Error retrieving files:', error);
@@ -71,8 +65,8 @@ export class FilesContainerComponent implements OnInit {
     this.mongoDBService.getFiles().subscribe({
       next: (response) => {
         // Assuming your response has a 'data' property with the files
-        
-        this.fileList = response        
+
+        this.fileList = response;
 
         // Sort fileList by metadata.lastModified (assuming it's in Unix timestamp) in descending order
         this.fileList.sort(
@@ -256,15 +250,17 @@ export class FilesContainerComponent implements OnInit {
               this.sharedService.updateFilesVariable(this.fileList);
             },
             error: (error) => {
-              if (error.status !== 201) {{
-                const toastOptions: ToastOptions = {
-                  message: `Error uploading file`,
-                  duration: 1500,
-                  position: 'top',
-                };
-                this.toastService.presentToast(toastOptions);
+              if (error.status !== 201) {
+                {
+                  const toastOptions: ToastOptions = {
+                    message: `Error uploading file`,
+                    duration: 1500,
+                    position: 'top',
+                  };
+                  this.toastService.presentToast(toastOptions);
+                }
               }
-            }},
+            },
             complete: () => {
               // Handle completion if needed
             },

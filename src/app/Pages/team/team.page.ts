@@ -1,22 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
-import { MongoDBService } from '../services/mongoDB.service';
+import { MongoDBService } from '../../services/mongoDB.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Observable, Subject, debounceTime, find, of, switchMap } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-import { SharedService } from '../services/shared.service';
-import { ProjectModel } from '../model/project.model';
+import { SharedService } from '../../services/shared.service';
+import { ProjectModel } from '../../model/project.model';
 
 @Component({
   selector: 'app-team',
-  templateUrl: './team.component.html',
-  styleUrls: ['./team.component.scss'],
+  templateUrl: './team.page.html',
+  styleUrls: ['./team.page.scss'],
   standalone: true,
   imports: [IonicModule, FormsModule, HttpClientModule, MatSelectModule],
   providers: [MongoDBService],
 })
-export class TeamComponent implements OnInit {
+export class TeamPage implements OnInit {
   _ProjectId!: string;
   isModalOpen = false;
   modalSearchInput!: string;
@@ -35,7 +35,6 @@ export class TeamComponent implements OnInit {
   ];
 
   private modalSearchMember: Subject<string> = new Subject<string>();
-  private mainSearchMember: Subject<string> = new Subject<string>();
 
   constructor(
     private mongoDBService: MongoDBService,
@@ -67,7 +66,6 @@ export class TeamComponent implements OnInit {
   private loadMember(): void {
     this.mongoDBService.getProjectMembers(this._ProjectId).subscribe({
       next: (response) => {
-        
         this.mainSearchResult = response;
       },
       error: (error) => {

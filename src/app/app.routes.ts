@@ -1,42 +1,54 @@
 import { Routes } from '@angular/router';
-import { HomepageComponent } from './homepage/homepage.component';
-import { FilesContainerComponent } from './files/files.component';
-import { PaymentsComponent } from './payments/payments.component';
-import { TeamComponent } from './team/team.component';
-import { TasksComponent } from './tasks/tasks.component';
-import { TimelineComponent } from './timeline/timeline.component';
-import { FilesManagerContainerComponent } from './fileManager/filesManager.component';
 
 export const routes: Routes = [
   {
     path: 'home',
-    component: HomepageComponent,
+    loadComponent: () =>
+      import('./Pages/home/home.page').then((m) => m.HomePage),
   },
   {
     path: 'timeline',
-    component: TimelineComponent,
+    loadComponent: () =>
+      import('./Pages/timeline/timeline.page').then((m) => m.TimelinePage),
   },
   {
     path: 'files',
-    component: FilesContainerComponent,
+    loadComponent: () =>
+      import('./Pages/files/files.page').then((m) => m.FilesPage),
+  },
+  {
+    path: 'files/filesManager',
+    loadComponent: () =>
+      import('./Pages/filesManager/filesManager.page').then(
+        (m) => m.FilesManagerPage
+      ),
   },
   {
     path: 'tasks',
-    component: TasksComponent,
+    loadComponent: () =>
+      import('./Pages/tasks/tasks.page').then((m) => m.TasksPage),
   },
   {
     path: 'team',
-    component: TeamComponent,
+    loadComponent: () =>
+      import('./Pages/team/team.page').then((m) => m.TeamPage),
   },
   {
     path: 'payments',
-    component: PaymentsComponent,
-  },
-  {
-    path: 'filesManager',
-    component: FilesManagerContainerComponent,
+    loadComponent: () =>
+      import('./Pages/payments/payments.page').then((m) => m.PaymentsPage),
   },
 
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./Auth/login/login.page').then((m) => m.LoginPage),
+  },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./Auth/register/register.page').then((m) => m.RegisterPage),
+  },
 ];

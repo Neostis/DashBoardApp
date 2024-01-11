@@ -1,25 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { ProjectModel } from '../model/project.model';
 import { HttpClientModule } from '@angular/common/http';
-import { MongoDBService } from '../services/mongoDB.service';
-import { SharedService } from '../services/shared.service';
+import { MongoDBService } from '../../services/mongoDB.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-homepage',
-  templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.scss'],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
   standalone: true,
   imports: [IonicModule, HttpClientModule],
   providers: [MongoDBService],
 })
-export class HomepageComponent implements OnInit {
+export class HomePage implements OnInit {
   options: any[] = [];
   currentProject: any;
-  constructor(
-    private mongoDBService: MongoDBService,
-    private sharedService: SharedService
-  ) {}
+  constructor(private mongoDBService: MongoDBService) {}
 
   ngOnInit(): void {
     const rawData = localStorage.getItem('currentProject');

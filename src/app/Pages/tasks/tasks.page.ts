@@ -14,16 +14,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { DatePipe } from '@angular/common';
-import { TaskModel } from '../model/task.model';
-import { MongoDBService } from '../services/mongoDB.service';
-import { SharedService } from '../services/shared.service';
+import { TaskModel } from '../../model/task.model';
+import { MongoDBService } from '../../services/mongoDB.service';
+import { SharedService } from '../../services/shared.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ProjectModel } from '../model/project.model';
+import { ProjectModel } from '../../model/project.model';
 
 @Component({
   selector: 'app-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.scss'],
+  templateUrl: './tasks.page.html',
+  styleUrls: ['./tasks.page.scss'],
   standalone: true,
   imports: [
     IonicModule,
@@ -39,7 +39,7 @@ import { ProjectModel } from '../model/project.model';
   ],
   providers: [MongoDBService, DatePipe],
 })
-export class TasksComponent implements OnInit {
+export class TasksPage implements OnInit {
   [x: string]: any;
   form!: FormGroup;
   selected: string = 'Select a team member';
@@ -53,7 +53,6 @@ export class TasksComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private datePipe: DatePipe,
     private mongoDBService: MongoDBService,
     private sharedService: SharedService
   ) {

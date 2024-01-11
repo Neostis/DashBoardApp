@@ -5,14 +5,14 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
 import { IonicModule } from '@ionic/angular';
-import { MongoDBService } from '../services/mongoDB.service';
-import { SharedService } from '../services/shared.service';
+import { MongoDBService } from '../../services/mongoDB.service';
+import { SharedService } from '../../services/shared.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-timeline',
-  templateUrl: './timeline.component.html',
-  styleUrls: ['./timeline.component.scss'],
+  templateUrl: './timeline.page.html',
+  styleUrls: ['./timeline.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -23,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [MongoDBService],
 })
-export class TimelineComponent implements OnInit {
+export class TimelinePage implements OnInit {
   ganttchart: any;
 
   projectList: any[] = [];
