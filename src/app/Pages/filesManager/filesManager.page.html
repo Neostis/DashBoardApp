@@ -1,12 +1,20 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <ion-toolbar>
     <ion-item class="search-bar-button-container" lines="none">
       <ion-title class="bold-text"> </ion-title>
-      <ion-searchbar [debounce]="100" (ionInput)="handleInput($event)" placeholder="Search"
-        class="small-search-bar"></ion-searchbar>
+      <ion-searchbar
+        [debounce]="100"
+        (ionInput)="handleInput($event)"
+        placeholder="Search"
+        class="small-search-bar"
+      ></ion-searchbar>
       <label for="fileInput" class="button-upload">Upload File</label>
-      <input type="file" id="fileInput" style="display: none;" (change)="handleFileUpload($event)" />
-      
+      <input
+        type="file"
+        id="fileInput"
+        style="display: none"
+        (change)="handleFileUpload($event)"
+      />
     </ion-item>
   </ion-toolbar>
 
@@ -21,7 +29,9 @@
     @for (file of filteredFiles; track file) {
 
     <ion-row class="data-row">
-      <ion-col class="ion-col-data">{{ getOriginalName(file.metadata.title) }}</ion-col>
+      <ion-col class="ion-col-data"
+        >{{ getOriginalName(file.metadata.title) }}</ion-col
+      >
       <ion-col>{{ formatBytes(file.length) }}</ion-col>
       <ion-col>{{ file.metadata.lastModified | date : "medium" }}</ion-col>
       <ion-col>
@@ -31,10 +41,9 @@
 
     } @empty {
     <ion-label>
-      <br>
+      <br />
       <span>Empty list of files</span>
     </ion-label>
     }
   </ion-grid>
-
 </ion-content>

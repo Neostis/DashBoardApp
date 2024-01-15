@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
       <ion-col size="6">
@@ -17,9 +17,9 @@
                   (ionDismiss)="onDismiss()"
                 >
                   @for(option of options; track option){
-                  <ion-select-option value="{{ option.value }}">{{
-                    option.label
-                  }}</ion-select-option>
+                  <ion-select-option value="{{ option.value }}"
+                    >{{ option.label }}</ion-select-option
+                  >
                   }
                 </ion-select>
               </ion-item>

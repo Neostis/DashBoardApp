@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="content">
     <ion-grid class="ion-padding">
       <ion-row>
@@ -12,6 +12,7 @@
 
           @for (task of taskList; track task){ @switch (task.status) { @case
           ('Yet to start'){
+
           <ion-card class="ion-padding">
             <ion-card-header>
               <div class="badge-list">
@@ -193,9 +194,9 @@
                           (selectionChange)="selectionChange()"
                         >
                           @for (member of projectMembers; track member){
-                          <mat-option [value]="member.name">{{
-                            member.name
-                          }}</mat-option>
+                          <mat-option [value]="member.name"
+                            >{{ member.name }}</mat-option
+                          >
                           }
                         </mat-select>
                       </mat-form-field>

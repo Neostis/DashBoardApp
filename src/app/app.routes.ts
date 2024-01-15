@@ -44,11 +44,16 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Auth/login/login.page').then((m) => m.LoginPage),
   },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'home' },
   {
     path: 'register',
     loadComponent: () =>
       import('./Auth/register/register.page').then((m) => m.RegisterPage),
   },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./Pages/profile/profile.page').then((m) => m.ProfilePage),
+  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];

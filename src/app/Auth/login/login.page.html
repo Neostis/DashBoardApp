@@ -1,0 +1,38 @@
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+    <ion-card class="ion-padding">
+      <ion-card-header>
+        <p>Login</p>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-input
+              label="Username"
+              label-placement="floating"
+              fill="outline"
+              placeholder="username"
+              formControlName="username"
+            ></ion-input>
+          </ion-row>
+          <ion-row>
+            <ion-input
+              label="Password"
+              label-placement="floating"
+              fill="outline"
+              type="{{ hidePassword ? 'password' : 'text' }}"
+              placeholder="password"
+              formControlName="password"
+            ></ion-input>
+          </ion-row>
+          <ion-row class="action">
+            <ion-checkbox labelPlacement="end">REMEMBER ME</ion-checkbox>
+            <ion-label class="resetpwd">FORGET PASSWORD?</ion-label>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+
+      <ion-button>Login</ion-button>
+    </ion-card>
+  </form>
+</ion-content>
