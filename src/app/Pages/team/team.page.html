@@ -1,15 +1,23 @@
 <ion-content [fullscreen]="true">
   <div class="content">
-    <div class="search">
-      <ion-searchbar
-        class="main-search"
-        show-clear-button="focus"
-        (input)="onMainSearch($event)"
-        (ionClear)="onClearMainSearch()"
-        w
-      ></ion-searchbar>
-      <ion-button (click)="setOpen(true)">Add Member</ion-button>
-    </div>
+    <ion-grid>
+      <ion-row class="action-row">
+        <ion-col>
+          <ion-searchbar
+            class="main-search"
+            show-clear-button="focus"
+            (input)="onMainSearch($event)"
+            (ionClear)="onClearMainSearch()"
+            w
+          ></ion-searchbar>
+        </ion-col>
+        <ion-col>
+          <ion-button class="addMemberBtn" (click)="setOpen(true)"
+            >Add Member</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
     <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
       <ng-template>

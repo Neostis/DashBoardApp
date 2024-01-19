@@ -37,10 +37,7 @@ ion-thumbnail {
   overflow: hidden;
 }
 
-.content {
-  top: 50%;
-  left: 50%;
-  width: 100%;
+ion-content {
   ion-col {
     min-width: 300px;
     flex: auto;
@@ -50,13 +47,16 @@ ion-thumbnail {
   }
 
   ion-grid {
-    margin-block: 60px;
-    margin-inline: 200px;
+    width: 50vw;
+    margin-top: 50px;
+    // margin-block: 60px;
+    // margin-inline: 200px;
     border-radius: 8px; /* Curved border with 8px radius */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Simulating card shadow */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: fit-content;
   }
 
   ion-row {

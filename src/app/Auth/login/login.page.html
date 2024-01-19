@@ -7,32 +7,62 @@
       <ion-card-content>
         <ion-grid>
           <ion-row>
-            <ion-input
-              label="Username"
-              label-placement="floating"
-              fill="outline"
-              placeholder="username"
-              formControlName="username"
-            ></ion-input>
+            <ion-item lines="none">
+              <ion-input
+                placeholder="please enter your username or email"
+                formControlName="username"
+                ><ion-icon
+                  name="person"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+              </ion-input>
+            </ion-item>
           </ion-row>
           <ion-row>
-            <ion-input
-              label="Password"
-              label-placement="floating"
-              fill="outline"
-              type="{{ hidePassword ? 'password' : 'text' }}"
-              placeholder="password"
-              formControlName="password"
-            ></ion-input>
+            <ion-item lines="none">
+              <ion-input
+                type="{{ hidePassword ? 'password' : 'text' }}"
+                placeholder="please enter your password"
+                formControlName="password"
+                ><ion-icon
+                  name="lock-closed"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+                <ion-button
+                  fill="clear"
+                  slot="end"
+                  aria-label="Show/hide"
+                  color="dark"
+                  (click)="togglePasswordVisibility()"
+                >
+                  <ion-icon
+                    name="{{hidePassword ? 'eye' : 'eye-off'}}"
+                    slot="icon-only"
+                    aria-hidden="true"
+                  ></ion-icon>
+                </ion-button>
+              </ion-input>
+            </ion-item>
           </ion-row>
           <ion-row class="action">
             <ion-checkbox labelPlacement="end">REMEMBER ME</ion-checkbox>
-            <ion-label class="resetpwd">FORGET PASSWORD?</ion-label>
+            <ion-button fill="clear">
+              <ion-label>FORGET PASSWORD?</ion-label>
+            </ion-button>
+          </ion-row>
+          <ion-row>
+            <ion-button (click)="login()">Login</ion-button>
+          </ion-row>
+
+          <ion-row>
+            <ion-button fill="clear" (click)="toRegister()">
+              <ion-label>DON'T HAVE AN ACCOUNT YET?</ion-label>
+            </ion-button>
           </ion-row>
         </ion-grid>
       </ion-card-content>
-
-      <ion-button>Login</ion-button>
     </ion-card>
   </form>
 </ion-content>

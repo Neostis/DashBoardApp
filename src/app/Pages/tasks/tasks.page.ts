@@ -16,7 +16,6 @@ import { DatePipe } from '@angular/common';
 import { TaskModel } from '../../model/task.model';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
-import { HttpClientModule } from '@angular/common/http';
 import { ProjectModel } from '../../model/project.model';
 
 @Component({
@@ -33,10 +32,8 @@ import { ProjectModel } from '../../model/project.model';
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
-    HttpClientModule,
     FormsModule,
   ],
-  providers: [MongoDBService, DatePipe],
 })
 export class TasksPage implements OnInit {
   [x: string]: any;

@@ -1,270 +1,262 @@
 <ion-content [fullscreen]="true">
-  <div class="content">
-    <ion-grid class="ion-padding">
-      <ion-row>
-        <ion-button class="ion-padding" (click)="setOpen(true)">
-          Add New Card
-        </ion-button>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-padding column">
-          <div class="col-head first-col">Yet To start</div>
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-button class="ion-padding" (click)="setOpen(true)">
+        Add New Card
+      </ion-button>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding column">
+        <div class="col-head first-col">Yet To start</div>
 
-          @for (task of taskList; track task){ @switch (task.status) { @case
-          ('Yet to start'){
+        @for (task of taskList; track task){ @switch (task.status) { @case ('Yet
+        to start'){
 
-          <ion-card class="ion-padding">
-            <ion-card-header>
-              <div class="badge-list">
-                @for (tag of task.tags; track tag){
-                <ion-badge>{{ tag }}</ion-badge>
-                }
-              </div>
+        <ion-card class="ion-padding">
+          <ion-card-header>
+            <div class="badge-list">
+              @for (tag of task.tags; track tag){
+              <ion-badge>{{ tag }}</ion-badge>
+              }
+            </div>
 
-              <ion-select
-                label="Change Status to"
-                label-placement="stacked"
-                placeholder="status"
-                okText="Save"
-                cancelText="Cancel"
-                justify="end"
-                (ionChange)="handleStatusChange($event, task._id)"
-                (ionCancel)="handleStatusCancel()"
-                (ionDismiss)="handleStatusDismiss()"
+            <ion-select
+              label="Change Status to"
+              label-placement="stacked"
+              placeholder="status"
+              okText="Save"
+              cancelText="Cancel"
+              justify="end"
+              (ionChange)="handleStatusChange($event, task._id)"
+              (ionCancel)="handleStatusCancel()"
+              (ionDismiss)="handleStatusDismiss()"
+            >
+              <ion-select-option value="Yet to start"
+                >Yet to start</ion-select-option
               >
-                <ion-select-option value="Yet to start"
-                  >Yet to start</ion-select-option
-                >
-                <ion-select-option value="In Progress"
-                  >In Progress</ion-select-option
-                >
-                <ion-select-option value="Completed"
-                  >Completed</ion-select-option
-                >
-              </ion-select>
-            </ion-card-header>
-            <ion-card-title style="padding-inline: 16px">
-              {{ task.title }}
-            </ion-card-title>
-            <ion-card-content>
-              <div>{{ task.details }}</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
-            </ion-card-content>
-          </ion-card>
-          } } }
-        </ion-col>
-
-        <ion-col class="ion-padding">
-          <div class="col-head second-col">In Progress</div>
-          @for (task of taskList; track task){ @switch (task.status) { @case
-          ('In Progress'){
-          <ion-card class="ion-padding">
-            <ion-card-header>
-              <div class="badge-list">
-                @for (tag of task.tags; track tag){
-                <ion-badge>{{ tag }}</ion-badge>
-                }
-              </div>
-
-              <ion-select
-                label="Change Status to"
-                label-placement="stacked"
-                placeholder="status"
-                okText="Save"
-                cancelText="Cancel"
-                justify="end"
-                (ionChange)="handleStatusChange($event, task._id)"
-                (ionCancel)="handleStatusCancel()"
-                (ionDismiss)="handleStatusDismiss()"
+              <ion-select-option value="In Progress"
+                >In Progress</ion-select-option
               >
-                <ion-select-option value="Yet to start"
-                  >Yet to start</ion-select-option
-                >
-                <ion-select-option value="In Progress"
-                  >In Progress</ion-select-option
-                >
-                <ion-select-option value="Completed"
-                  >Completed</ion-select-option
-                >
-              </ion-select>
-            </ion-card-header>
-            <ion-card-title style="padding-inline: 16px">
-              {{ task.title }}
-            </ion-card-title>
-            <ion-card-content>
-              <div>{{ task.details }}</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
-            </ion-card-content>
-          </ion-card>
-          } } }
-        </ion-col>
+              <ion-select-option value="Completed">Completed</ion-select-option>
+            </ion-select>
+          </ion-card-header>
+          <ion-card-title style="padding-inline: 16px">
+            {{ task.title }}
+          </ion-card-title>
+          <ion-card-content>
+            <div>{{ task.details }}</div>
+            <ion-thumbnail>
+              <img
+                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+              />
+            </ion-thumbnail>
+          </ion-card-content>
+        </ion-card>
+        } } }
+      </ion-col>
 
-        <ion-col class="ion-padding">
-          <div class="col-head third-col">Completed</div>
-          @for (task of taskList; track task){ @switch (task.status) { @case
-          ('Completed'){
-          <ion-card class="ion-padding">
-            <ion-card-header>
-              <div class="badge-list">
-                @for (tag of task.tags; track tag){
-                <ion-badge>{{ tag }}</ion-badge>
-                }
-              </div>
+      <ion-col class="ion-padding">
+        <div class="col-head second-col">In Progress</div>
+        @for (task of taskList; track task){ @switch (task.status) { @case ('In
+        Progress'){
+        <ion-card class="ion-padding">
+          <ion-card-header>
+            <div class="badge-list">
+              @for (tag of task.tags; track tag){
+              <ion-badge>{{ tag }}</ion-badge>
+              }
+            </div>
 
-              <ion-select
-                label="Change Status to"
-                label-placement="stacked"
-                placeholder="status"
-                okText="Save"
-                cancelText="Cancel"
-                justify="end"
-                (ionChange)="handleStatusChange($event, task._id)"
-                (ionCancel)="handleStatusCancel()"
-                (ionDismiss)="handleStatusDismiss()"
+            <ion-select
+              label="Change Status to"
+              label-placement="stacked"
+              placeholder="status"
+              okText="Save"
+              cancelText="Cancel"
+              justify="end"
+              (ionChange)="handleStatusChange($event, task._id)"
+              (ionCancel)="handleStatusCancel()"
+              (ionDismiss)="handleStatusDismiss()"
+            >
+              <ion-select-option value="Yet to start"
+                >Yet to start</ion-select-option
               >
-                <ion-select-option value="Yet to start"
-                  >Yet to start</ion-select-option
-                >
-                <ion-select-option value="In Progress"
-                  >In Progress</ion-select-option
-                >
-                <ion-select-option value="Completed"
-                  >Completed</ion-select-option
-                >
-              </ion-select>
-            </ion-card-header>
+              <ion-select-option value="In Progress"
+                >In Progress</ion-select-option
+              >
+              <ion-select-option value="Completed">Completed</ion-select-option>
+            </ion-select>
+          </ion-card-header>
+          <ion-card-title style="padding-inline: 16px">
+            {{ task.title }}
+          </ion-card-title>
+          <ion-card-content>
+            <div>{{ task.details }}</div>
+            <ion-thumbnail>
+              <img
+                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+              />
+            </ion-thumbnail>
+          </ion-card-content>
+        </ion-card>
+        } } }
+      </ion-col>
 
-            <ion-card-title style="padding-inline: 16px">
-              {{ task.title }}
-            </ion-card-title>
-            <ion-card-content>
-              <div>{{ task.details }}</div>
-              <ion-thumbnail>
-                <img
-                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                />
-              </ion-thumbnail>
-            </ion-card-content>
-          </ion-card>
-          } } }
-        </ion-col>
+      <ion-col class="ion-padding">
+        <div class="col-head third-col">Completed</div>
+        @for (task of taskList; track task){ @switch (task.status) { @case
+        ('Completed'){
+        <ion-card class="ion-padding">
+          <ion-card-header>
+            <div class="badge-list">
+              @for (tag of task.tags; track tag){
+              <ion-badge>{{ tag }}</ion-badge>
+              }
+            </div>
 
-        <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="start">
-                  <ion-button (click)="cancel()">Cancel</ion-button>
-                </ion-buttons>
-                <ion-title>Add new task</ion-title>
-                <ion-buttons slot="end">
-                  <ion-button (click)="confirm()" [strong]="true"
-                    >Confirm</ion-button
-                  >
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-content class="ion-padding">
-              <form [formGroup]="form">
-                <ion-grid>
-                  <ion-row>
-                    <ion-input
-                      label="Task Title"
-                      label-placement="floating"
-                      fill="outline"
-                      placeholder="Enter text"
-                      formControlName="input1"
-                    ></ion-input>
-                  </ion-row>
-                  <br />
-                  <ion-row class="second-row">
-                    <ion-col class="start">
-                      <mat-form-field appearance="outline">
-                        <mat-label>Select a Team Member</mat-label>
-                        <mat-select
-                          formControlName="input2"
-                          (selectionChange)="selectionChange()"
+            <ion-select
+              label="Change Status to"
+              label-placement="stacked"
+              placeholder="status"
+              okText="Save"
+              cancelText="Cancel"
+              justify="end"
+              (ionChange)="handleStatusChange($event, task._id)"
+              (ionCancel)="handleStatusCancel()"
+              (ionDismiss)="handleStatusDismiss()"
+            >
+              <ion-select-option value="Yet to start"
+                >Yet to start</ion-select-option
+              >
+              <ion-select-option value="In Progress"
+                >In Progress</ion-select-option
+              >
+              <ion-select-option value="Completed">Completed</ion-select-option>
+            </ion-select>
+          </ion-card-header>
+
+          <ion-card-title style="padding-inline: 16px">
+            {{ task.title }}
+          </ion-card-title>
+          <ion-card-content>
+            <div>{{ task.details }}</div>
+            <ion-thumbnail>
+              <img
+                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+              />
+            </ion-thumbnail>
+          </ion-card-content>
+        </ion-card>
+        } } }
+      </ion-col>
+
+      <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button (click)="cancel()">Cancel</ion-button>
+              </ion-buttons>
+              <ion-title>Add new task</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="confirm()" [strong]="true"
+                  >Confirm</ion-button
+                >
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <form [formGroup]="form">
+              <ion-grid>
+                <ion-row>
+                  <ion-input
+                    label="Task Title"
+                    label-placement="floating"
+                    fill="outline"
+                    placeholder="Enter text"
+                    formControlName="input1"
+                  ></ion-input>
+                </ion-row>
+                <br />
+                <ion-row class="second-row">
+                  <ion-col class="start">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Select a Team Member</mat-label>
+                      <mat-select
+                        formControlName="input2"
+                        (selectionChange)="selectionChange()"
+                      >
+                        @for (member of projectMembers; track member){
+                        <mat-option [value]="member.name"
+                          >{{ member.name }}</mat-option
                         >
-                          @for (member of projectMembers; track member){
-                          <mat-option [value]="member.name"
-                            >{{ member.name }}</mat-option
-                          >
-                          }
-                        </mat-select>
-                      </mat-form-field>
-                    </ion-col>
-                    <ion-col class="end">
-                      <ion-label>Select Due Date</ion-label>
-                      <ion-datetime-button
-                        datetime="datetime"
-                      ></ion-datetime-button>
-
-                      <ion-modal [keepContentsMounted]="true">
-                        <ng-template>
-                          <ion-datetime
-                            id="datetime"
-                            (ionChange)="onSelectDateTime($event)"
-                            locale="en-GB"
-                            hourCycle="h12"
-                          ></ion-datetime>
-                        </ng-template>
-                      </ion-modal>
-                      <!-- <mat-form-field appearance="outline" class="date-picker">
-                        <mat-label>Input disabled</mat-label>
-                        <input matInput [matDatepicker]="dp3" disabled />
-                        <mat-hint>MM/DD/YYYY</mat-hint>
-                        <mat-datepicker-toggle
-                          matIconSuffix
-                          [for]="dp3"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
-                      </mat-form-field> -->
-                    </ion-col>
-                  </ion-row>
-                  <ion-row class="third-row">
-                    <mat-form-field>
-                      <mat-label>Task Detail</mat-label>
-                      <textarea matInput formControlName="input3"></textarea>
-                    </mat-form-field>
-                  </ion-row>
-
-                  <ion-row class="fourth-row">
-                    <ion-col>
-                      <mat-form-field appearance="outline">
-                        <mat-label>Tags</mat-label>
-                        <input
-                          matInput
-                          #tagInput
-                          (keyup.enter)="
-                            addTag(tagInput.value); tagInput.value = ''
-                          "
-                        />
-                      </mat-form-field>
-
-                      <mat-chip-listbox>
-                        @for (tag of tags; track tag){
-                        <mat-chip [removable]="true" (removed)="removeTag(tag)">
-                          {{ tag }}
-                          <mat-icon matChipRemove>x</mat-icon>
-                        </mat-chip>
                         }
-                      </mat-chip-listbox>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </form>
-            </ion-content>
-          </ng-template>
-        </ion-modal>
-      </ion-row>
-    </ion-grid>
-  </div>
+                      </mat-select>
+                    </mat-form-field>
+                  </ion-col>
+                  <ion-col class="end">
+                    <ion-label>Select Due Date</ion-label>
+                    <ion-datetime-button
+                      datetime="datetime"
+                    ></ion-datetime-button>
+
+                    <ion-modal [keepContentsMounted]="true">
+                      <ng-template>
+                        <ion-datetime
+                          id="datetime"
+                          (ionChange)="onSelectDateTime($event)"
+                          locale="en-GB"
+                          hourCycle="h12"
+                        ></ion-datetime>
+                      </ng-template>
+                    </ion-modal>
+                    <!-- <mat-form-field appearance="outline" class="date-picker">
+                      <mat-label>Input disabled</mat-label>
+                      <input matInput [matDatepicker]="dp3" disabled />
+                      <mat-hint>MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="dp3"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                    </mat-form-field> -->
+                  </ion-col>
+                </ion-row>
+                <ion-row class="third-row">
+                  <mat-form-field>
+                    <mat-label>Task Detail</mat-label>
+                    <textarea matInput formControlName="input3"></textarea>
+                  </mat-form-field>
+                </ion-row>
+
+                <ion-row class="fourth-row">
+                  <ion-col>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Tags</mat-label>
+                      <input
+                        matInput
+                        #tagInput
+                        (keyup.enter)="
+                          addTag(tagInput.value); tagInput.value = ''
+                        "
+                      />
+                    </mat-form-field>
+
+                    <mat-chip-listbox>
+                      @for (tag of tags; track tag){
+                      <mat-chip [removable]="true" (removed)="removeTag(tag)">
+                        {{ tag }}
+                        <mat-icon matChipRemove>x</mat-icon>
+                      </mat-chip>
+                      }
+                    </mat-chip-listbox>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </form>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </ion-row>
+  </ion-grid>
 </ion-content>

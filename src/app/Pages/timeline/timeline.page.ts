@@ -7,21 +7,13 @@ import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
 import { IonicModule } from '@ionic/angular';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.page.html',
   styleUrls: ['./timeline.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    GanttChartModule,
-    RouterOutlet,
-    IonicModule,
-    HttpClientModule,
-  ],
-  providers: [MongoDBService],
+  imports: [CommonModule, GanttChartModule, RouterOutlet, IonicModule],
 })
 export class TimelinePage implements OnInit {
   ganttchart: any;

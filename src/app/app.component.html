@@ -1,4 +1,18 @@
 <ion-app>
+  <!-- <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-router-outlet></ion-router-outlet>
+    </ion-content>
+  </div> -->
+
   <ion-menu contentId="main-content" type="overlay">
     <ion-header>
       <ion-toolbar>
@@ -34,16 +48,6 @@
         <ion-menu-toggle>
           <ion-item lines="none" [routerLink]="'/files'"> FILES </ion-item>
         </ion-menu-toggle>
-
-        <ion-menu-toggle>
-          <ion-item lines="none" [routerLink]="'/login'"> LOGIN </ion-item>
-        </ion-menu-toggle>
-
-        <ion-menu-toggle>
-          <ion-item lines="none" [routerLink]="'/register'">
-            REGISTER
-          </ion-item>
-        </ion-menu-toggle>
       </ion-list>
     </ion-content>
   </ion-menu>
@@ -51,13 +55,22 @@
   <div class="ion-page" id="main-content">
     <ion-header>
       <ion-toolbar>
+        @if (showMenu == true){
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
+
+        <ion-buttons slot="end" (click)="logout()">
+          <ion-button fill="clear">
+            LOGOUT
+            <ion-icon name="exit" slot="end" aria-hidden="true"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        }
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content>
       <ion-router-outlet></ion-router-outlet>
     </ion-content>
   </div>

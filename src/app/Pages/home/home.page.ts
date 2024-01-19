@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
 
@@ -9,8 +8,7 @@ import { SharedService } from '../../services/shared.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, HttpClientModule],
-  providers: [MongoDBService],
+  imports: [IonicModule],
 })
 export class HomePage implements OnInit {
   options: any[] = [];

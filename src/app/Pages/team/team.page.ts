@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { MongoDBService } from '../../services/mongoDB.service';
-import { HttpClientModule } from '@angular/common/http';
 import { Observable, Subject, debounceTime, find, of, switchMap } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { SharedService } from '../../services/shared.service';
@@ -13,8 +12,7 @@ import { ProjectModel } from '../../model/project.model';
   templateUrl: './team.page.html',
   styleUrls: ['./team.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, HttpClientModule, MatSelectModule],
-  providers: [MongoDBService],
+  imports: [IonicModule, FormsModule, MatSelectModule],
 })
 export class TeamPage implements OnInit {
   _ProjectId!: string;

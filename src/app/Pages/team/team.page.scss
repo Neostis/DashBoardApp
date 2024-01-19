@@ -2,9 +2,11 @@
   width: 20%;
 }
 
-.search {
-  display: flex;
-  flex-direction: row;
+.action-row {
+  width: fit-content;
+  ion-searchbar {
+    width: 100%;
+  }
   ion-button {
     padding: 10px;
     width: fit-content;

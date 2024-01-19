@@ -1,9 +1,9 @@
 ion-card {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 50%;
-  width: 100%;
-  width: 1000px;
+  min-width: fit-content;
+  width: 50vw;
   transform: translate(-50%, -50%);
 }
 
@@ -20,6 +20,21 @@ ion-radio {
 
 ion-checkbox {
   margin-right: 10px;
+}
+
+ion-grid {
+  width: 100%;
+  min-width: fit-content;
+}
+
+ion-row {
+  min-width: fit-content;
+  width: 100%;
+}
+
+ion-col {
+  width: 100%;
+  min-width: fit-content;
 }
 
 .first-col {

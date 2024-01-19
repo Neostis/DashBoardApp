@@ -3,7 +3,6 @@ import { MongoDBService } from '../../services/mongoDB.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
 import { SharedService } from '../../services/shared.service';
 import { AlertController } from '@ionic/angular';
 import { ToastOptions } from '../../interface/toast-options.interface';
@@ -13,10 +12,8 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-filesmanager',
   templateUrl: './filesManager.page.html',
   styleUrls: ['./filesManager.page.scss'],
-  // styleUrl: './files.component.scss',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
-  providers: [MongoDBService],
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class FilesManagerPage implements OnInit {
   constructor(

@@ -4,7 +4,7 @@ import { MongoDBService } from '../../services/mongoDB.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
+
 import { RouterLink } from '@angular/router';
 import { ToastOptions } from '../../interface/toast-options.interface';
 import { ToastService } from '../../services/toast.service';
@@ -15,16 +15,8 @@ import { FilesModel } from '../../model/files.model';
   selector: 'app-files',
   templateUrl: './files.page.html',
   styleUrls: ['./files.page.scss'],
-  // styleUrl: './files.component.scss',
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    RouterLink,
-  ],
-  providers: [MongoDBService],
+  imports: [IonicModule, CommonModule, FormsModule, RouterLink],
 })
 export class FilesPage implements OnInit {
   constructor(

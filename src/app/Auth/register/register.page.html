@@ -6,9 +6,102 @@
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
-          <ion-row> </ion-row>
+          <ion-row>
+            <ion-item>
+              <ion-input
+                placeholder="please enter your full name"
+                formControlName="name"
+              >
+                <ion-icon
+                  name="person"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+              </ion-input>
+            </ion-item>
+          </ion-row>
+          <ion-row>
+            <ion-item>
+              <ion-input
+                placeholder="please enter your username"
+                formControlName="username"
+              >
+                <ion-icon
+                  name="person"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+              </ion-input>
+            </ion-item>
+          </ion-row>
+          <ion-row>
+            <ion-item>
+              <ion-input
+                type="email"
+                placeholder="please enter your email"
+                formControlName="email"
+              >
+                <ion-icon
+                  name="mail"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+              </ion-input>
+            </ion-item>
+          </ion-row>
+          <ion-row>
+            <ion-item>
+              <ion-input
+                type="{{ hidePassword ? 'password' : 'text' }}"
+                placeholder="please enter your password"
+                formControlName="password"
+              >
+                <ion-icon
+                  name="lock-closed"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+                <ion-button
+                  fill="clear"
+                  slot="end"
+                  aria-label="Show/hide"
+                  (click)="togglePasswordVisibility()"
+                  color="dark"
+                >
+                  <ion-icon
+                    name="{{hidePassword ? 'eye' : 'eye-off'}}"
+                    slot="icon-only"
+                    aria-hidden="true"
+                  ></ion-icon>
+                </ion-button>
+              </ion-input>
+            </ion-item>
+          </ion-row>
+
+          <ion-row>
+            <ion-item>
+              <ion-input
+                type="tel"
+                placeholder="please enter your phone number"
+                formControlName="phone"
+              >
+                <ion-icon
+                  name="call"
+                  slot="start"
+                  aria-hidden="true"
+                ></ion-icon>
+              </ion-input>
+            </ion-item>
+          </ion-row>
+          <ion-row class="action">
+            <ion-button fill="clear" (click)="toLogin()">
+              <ion-label>ALREADY HAVE AN ACCOUNT?</ion-label>
+            </ion-button>
+          </ion-row>
         </ion-grid>
       </ion-card-content>
+
+      <ion-button (click)="register()">Register</ion-button>
     </ion-card>
   </form>
 </ion-content>

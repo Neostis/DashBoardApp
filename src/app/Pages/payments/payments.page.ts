@@ -8,7 +8,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
 import { PaymentModel } from '../../model/payment.model';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
@@ -25,9 +24,7 @@ import { ProjectModel } from '../../model/project.model';
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
   ],
-  providers: [MongoDBService],
 })
 export class PaymentsPage implements OnInit {
   form!: FormGroup;
