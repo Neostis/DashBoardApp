@@ -1,0 +1,29 @@
+ion-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-card {
+    top: 10%;
+    margin: auto;
+    width: 50vw;
+    min-width: fit-content;
+    height: fit-content;
+    min-height: 370px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    ion-card-header {
+      width: 100%;
+      text-align: center;
+      p {
+        font-size: 30px;
+        color: black;
+      }
+    }
+
+    ion-card-content {
+      width: 100%;
+    }
+  }
+}

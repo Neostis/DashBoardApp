@@ -11,6 +11,8 @@
               <ion-input
                 placeholder="please enter your username or email"
                 formControlName="username"
+                required
+                [errorText]="getErrorText('username')"
                 ><ion-icon
                   name="person"
                   slot="start"
@@ -25,6 +27,8 @@
                 type="{{ hidePassword ? 'password' : 'text' }}"
                 placeholder="please enter your password"
                 formControlName="password"
+                required
+                [errorText]="getErrorText('password')"
                 ><ion-icon
                   name="lock-closed"
                   slot="start"

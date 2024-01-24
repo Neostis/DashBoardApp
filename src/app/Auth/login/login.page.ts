@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -26,28 +27,30 @@ export class LoginPage {
     private authService: AuthService
   ) {
     this.form = this.formBuilder.group({
-      username: '',
-      password: '',
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
   login() {
-    const account = {
-      username: this.form.get('username')?.value,
-      password: this.form.get('password')?.value,
-    };
+    if (this.form.valid) {
+      const account = {
+        username: this.form.get('username')?.value,
+        password: this.form.get('password')?.value,
+      };
 
-    this.authService.login(account).subscribe({
-      next: (response) => {
-        if (response) {
-          this.router.navigateByUrl('/home');
-        }
-      },
-      error: (error) => {
-        console.error('Error', error);
-      },
-      complete: () => {},
-    });
+      this.authService.login(account).subscribe({
+        next: (response) => {
+          if (response) {
+            this.router.navigateByUrl('/home');
+          }
+        },
+        error: (error) => {
+          console.error('Error', error);
+        },
+        complete: () => {},
+      });
+    }
   }
 
   togglePasswordVisibility() {
@@ -56,5 +59,15 @@ export class LoginPage {
 
   toRegister() {
     this.router.navigateByUrl('/register');
+  }
+
+  getErrorText(controlName: string): string {
+    const control = this.form.get(controlName)!;
+
+    if (control.hasError('required')) {
+      return 'This field is required.';
+    }
+
+    return '';
   }
 }
