@@ -23,8 +23,8 @@ import { AccountModel } from 'src/app/model/account.model';
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class RegisterPage {
-  form!: FormGroup;
-  hidePassword: boolean = true;
+  protected form!: FormGroup;
+  protected hidePassword: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,11 +47,11 @@ export class RegisterPage {
     });
   }
 
-  togglePasswordVisibility() {
+  protected togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
   }
 
-  register() {
+  protected register() {
     if (this.form.valid) {
       const newAccount: AccountModel = {
         name: this.form.get('name')?.value,
@@ -79,11 +79,11 @@ export class RegisterPage {
     }
   }
 
-  toLogin() {
+  protected toLogin() {
     this.router.navigateByUrl('/login');
   }
 
-  passwordValidator(): ValidatorFn {
+  private passwordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value: string = control.value;
 
@@ -105,7 +105,7 @@ export class RegisterPage {
     };
   }
 
-  emailValidator(): ValidatorFn {
+  private emailValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value: string = control.value;
 
@@ -119,7 +119,7 @@ export class RegisterPage {
     };
   }
 
-  getErrorText(controlName: string): string {
+  protected getErrorText(controlName: string): string {
     const control = this.form.get(controlName)!;
 
     if (control.hasError('required')) {

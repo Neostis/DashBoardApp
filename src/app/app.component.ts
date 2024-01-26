@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonRouterOutlet } from '@ionic/angular/standalone';
 import { IonicModule } from '@ionic/angular';
-import {
-  NavigationEnd,
-  NavigationStart,
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -16,7 +11,7 @@ import { AuthService } from './services/auth.service';
   imports: [IonicModule, IonRouterOutlet, RouterLink],
 })
 export class AppComponent implements OnInit {
-  showMenu: boolean = true;
+  protected showMenu: boolean = true;
   constructor(private router: Router, private authService: AuthService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -27,12 +22,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.showMenu = !['/login', '/register', '/'].includes(this.router.url);
+    this.authService.initInactivityTimer();
   }
 
-  logout() {
+  protected logout() {
     this.authService.logout();
-    if (!this.authService.isAuthen()) {
-      this.router.navigateByUrl('/login');
-    }
   }
 }

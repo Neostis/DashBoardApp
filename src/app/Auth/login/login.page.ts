@@ -18,8 +18,8 @@ import { AuthService } from 'src/app/services/auth.service';
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class LoginPage {
-  form!: FormGroup;
-  hidePassword: boolean = true;
+  protected form!: FormGroup;
+  protected hidePassword: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,7 +32,11 @@ export class LoginPage {
     });
   }
 
-  login() {
+  ionViewWillEnter() {
+    this.form.reset();
+  }
+
+  protected login() {
     if (this.form.valid) {
       const account = {
         username: this.form.get('username')?.value,
@@ -40,11 +44,7 @@ export class LoginPage {
       };
 
       this.authService.login(account).subscribe({
-        next: (response) => {
-          if (response) {
-            this.router.navigateByUrl('/home');
-          }
-        },
+        next: async (response) => {},
         error: (error) => {
           console.error('Error', error);
         },
@@ -53,15 +53,15 @@ export class LoginPage {
     }
   }
 
-  togglePasswordVisibility() {
+  protected togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
   }
 
-  toRegister() {
+  protected toRegister() {
     this.router.navigateByUrl('/register');
   }
 
-  getErrorText(controlName: string): string {
+  protected getErrorText(controlName: string): string {
     const control = this.form.get(controlName)!;
 
     if (control.hasError('required')) {

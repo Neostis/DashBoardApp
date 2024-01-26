@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import {
@@ -11,6 +11,7 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
+import { IonicStorageModule, provideStorage } from '@ionic/storage-angular';
 
 if (environment.production) {
   enableProdMode();
@@ -23,5 +24,6 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(),
+    importProvidersFrom(IonicStorageModule.forRoot()),
   ],
 });

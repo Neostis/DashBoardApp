@@ -12,6 +12,7 @@ import { PaymentModel } from '../../model/payment.model';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
 import { ProjectModel } from '../../model/project.model';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-payments',
@@ -27,19 +28,20 @@ import { ProjectModel } from '../../model/project.model';
   ],
 })
 export class PaymentsPage implements OnInit {
-  form!: FormGroup;
-  notificationList: string[] = [];
+  protected form!: FormGroup;
+  private notificationList: string[] = [];
 
-  _ProjectId!: string;
-  projectList: ProjectModel[] = [];
+  private _ProjectId!: string;
+  protected projectList: ProjectModel[] = [];
 
-  isHidden: boolean = true;
+  protected isHidden: boolean = true;
 
-  payment: any;
+  private payment: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private mongoDBService: MongoDBService,
+    private storeService: StorageService,
     private sharedService: SharedService
   ) {
     this.form = this.formBuilder.group({
@@ -51,11 +53,22 @@ export class PaymentsPage implements OnInit {
       input6: false,
     });
   }
+
   ngOnInit(): void {
-    this._ProjectId = this.sharedService.getProjectId();
     if (this._ProjectId) {
       this.getPayment();
     }
+  }
+
+  ionViewWillEnter() {
+    this.storeService.get('currentProject').then((data) => {
+      if (data) {
+        this._ProjectId = data.value;
+        if (this._ProjectId) {
+          this.getPayment();
+        }
+      }
+    });
   }
 
   private getPayment(): void {
@@ -95,13 +108,13 @@ export class PaymentsPage implements OnInit {
     });
   }
 
-  discardChanged() {
+  protected discardChanged() {
     this.notificationList = [];
     this.form.reset();
     this.getPayment();
   }
 
-  saveChanged() {
+  protected saveChanged() {
     if (this.form.value.input4) {
       this.notificationList.push('Email');
     }
@@ -124,11 +137,11 @@ export class PaymentsPage implements OnInit {
     this.form.reset();
   }
 
-  incBudget() {
+  protected incBudget() {
     this.form.get('input3')?.setValue(this.form.get('input3')?.value + 1000);
   }
 
-  dcBudget() {
+  protected dcBudget() {
     if (this.form.value.input3 - 1000 >= 0) {
       this.form.get('input3')?.setValue(this.form.get('input3')?.value - 1000);
     }

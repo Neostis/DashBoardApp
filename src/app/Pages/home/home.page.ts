@@ -1,27 +1,46 @@
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { MongoDBService } from '../../services/mongoDB.service';
-import { SharedService } from '../../services/shared.service';
+import { MongoDBService } from 'src/app/services/mongoDB.service';
+import { SharedService } from 'src/app/services/shared.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, FormsModule],
 })
 export class HomePage implements OnInit {
-  options: any[] = [];
-  currentProject: any;
-  constructor(private mongoDBService: MongoDBService) {}
+  protected options: any[] = [];
+  protected currentProject: any;
+  protected selected: any;
+
+  constructor(
+    private mongoDBService: MongoDBService,
+    private storeService: StorageService,
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit(): void {
-    const rawData = localStorage.getItem('currentProject');
-    const parseData = rawData ? JSON.parse(rawData) : null;
-    if (parseData && parseData.value) {
-      this.currentProject = parseData.label;
-    }
+    // const rawData = localStorage.getItem('currentProject');
+    // const parseData = rawData ? JSON.parse(rawData) : null;
+    // if (parseData && parseData.value) {
+    //   this.currentProject = parseData.label;
+    // }
+
     this.loadProject();
+  }
+
+  ionViewWillEnter() {
+    this.loadProject();
+    this.storeService.get('currentProject').then((data) => {
+      if (data) {
+        this.currentProject = data.label;
+      }
+    });
   }
 
   private loadProject(): void {
@@ -40,14 +59,17 @@ export class HomePage implements OnInit {
     });
   }
 
-  onSelection(e: any) {
+  protected onSelection(e: any) {
     if (e.detail.value) {
       const project = this.options.find((o) => o.value === e.detail.value);
-      localStorage.setItem('currentProject', JSON.stringify(project));
+      this.storeService.set('currentProject', project);
+      window.location.reload();
+      // localStorage.setItem('currentProject', JSON.stringify(project));
     }
-    window.location.reload();
+    // window.location.reload();
   }
-  onCancel() {}
 
-  onDismiss() {}
+  protected onCancel() {}
+
+  protected onDismiss() {}
 }

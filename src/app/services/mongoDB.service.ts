@@ -15,7 +15,7 @@ export class MongoDBService {
   constructor(private http: HttpClient) {}
 
   // Get all files
-  getFiles(): Observable<any[]> {
+  public getFiles(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/get-files`).pipe(
       catchError((error) => {
         console.error('Error getting files:', error);
@@ -25,7 +25,7 @@ export class MongoDBService {
   }
 
   // Get content of a single file
-  getFileContent(fileId: string): Observable<any> {
+  public getFileContent(fileId: string): Observable<any> {
     return this.http
       .get(`${this.baseUrl}/get-file/${fileId}`, {
         responseType: 'arraybuffer',
@@ -38,7 +38,7 @@ export class MongoDBService {
       );
   }
 
-  getProjects(): Observable<any[]> {
+  public getProjects(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/get-projects/`).pipe(
       catchError((error) => {
         console.error('Error getting projects:', error);
@@ -48,7 +48,7 @@ export class MongoDBService {
   }
 
   // Example endpoint for uploading a file
-  uploadFile(file: File, projectId: string): Observable<any> {
+  public uploadFile(file: File, projectId: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -63,7 +63,7 @@ export class MongoDBService {
   }
 
   //use role = '""' for all data
-  getMembers(role: string): Observable<any> {
+  public getMembers(role: string): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/get-members/${role}`).pipe(
       catchError((error) => {
         console.error('Error getting projects:', error);
@@ -99,7 +99,7 @@ export class MongoDBService {
   //   );
   // }
 
-  addOrUpdateMember(member: any): Observable<any> {
+  public addOrUpdateMember(member: any): Observable<any> {
     const url = `${this.baseUrl}/add-update-member`;
     return this.http.post<any>(url, member).pipe(
       catchError((error) => {
@@ -109,7 +109,10 @@ export class MongoDBService {
     );
   }
 
-  searchMember(searchTerm?: string, projectId?: string): Observable<any[]> {
+  public searchMember(
+    searchTerm?: string,
+    projectId?: string
+  ): Observable<any[]> {
     return this.http
       .get<any[]>(
         `${this.baseUrl}/members/search?name=${searchTerm}&Id=${projectId}`
@@ -124,7 +127,7 @@ export class MongoDBService {
       );
   }
 
-  getProjectMembers(projectId?: string): Observable<any[]> {
+  public getProjectMembers(projectId?: string): Observable<any[]> {
     return this.http
       .get<any[]>(`${this.baseUrl}/members/getProjectMembers?Id=${projectId}`)
       .pipe(
@@ -144,16 +147,16 @@ export class MongoDBService {
    * deleted.
    * @returns The deleteFile function returns an Observable<any>.
    */
-  deleteFile(fileId: string): Observable<any> {
+  public deleteFile(fileId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-file/${fileId}`);
   }
 
-  addTask(task: TaskModel): Observable<any> {
+  public addTask(task: TaskModel): Observable<any> {
     const url = `${this.baseUrl}/add-tasks`;
     return this.http.post<any>(url, task);
   }
 
-  getTasksByProjectId(projectId: string): Observable<TaskModel[]> {
+  public getTasksByProjectId(projectId: string): Observable<TaskModel[]> {
     const url = `${this.baseUrl}/get-tasks/${projectId}`;
     return this.http.get<TaskModel[]>(url).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -165,12 +168,15 @@ export class MongoDBService {
     );
   }
 
-  addMemberToTask(taskId: string, memberId: string): Observable<TaskModel> {
+  public addMemberToTask(
+    taskId: string,
+    memberId: string
+  ): Observable<TaskModel> {
     const url = `${this.baseUrl}/add-member-to-task/${taskId}`;
     return this.http.put<TaskModel>(url, { memberId });
   }
 
-  updateTaskTags(taskId: string, tag: string): Observable<any> {
+  public updateTaskTags(taskId: string, tag: string): Observable<any> {
     const url = `${this.baseUrl}/add-tags/${taskId}`;
     return this.http.put<any>(url, { tag: tag }).pipe(
       catchError((error) => {
@@ -180,7 +186,7 @@ export class MongoDBService {
     );
   }
 
-  updateTaskStatus(taskId: string, status: string): Observable<any> {
+  public updateTaskStatus(taskId: string, status: string): Observable<any> {
     const url = `${this.baseUrl}/update-task-status/${taskId}`;
     return this.http.put<any>(url, { status: status }).pipe(
       catchError((error) => {
@@ -190,7 +196,7 @@ export class MongoDBService {
     );
   }
 
-  removeTaskTags(taskId: string, tag: string): Observable<any> {
+  public removeTaskTags(taskId: string, tag: string): Observable<any> {
     const url = `${this.baseUrl}/remove-tags/${taskId}`;
     return this.http.put<any>(url, { tag: tag }).pipe(
       catchError((error) => {
@@ -200,7 +206,7 @@ export class MongoDBService {
     );
   }
 
-  getPayments(projectId: string): Observable<any[]> {
+  public getPayments(projectId: string): Observable<any[]> {
     const url = `${this.baseUrl}/get-payments/${projectId}`;
     return this.http.get<any[]>(url).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -212,7 +218,7 @@ export class MongoDBService {
     );
   }
 
-  updatePayment(payment: PaymentModel): Observable<PaymentModel> {
+  public updatePayment(payment: PaymentModel): Observable<PaymentModel> {
     const url = `${this.baseUrl}/update-payment`;
     return this.http.post<PaymentModel>(url, payment).pipe(
       catchError((error: any) => {
@@ -222,7 +228,9 @@ export class MongoDBService {
     );
   }
 
-  getTimelineByProjectId(projectId: string): Observable<TimelineModel[]> {
+  public getTimelineByProjectId(
+    projectId: string
+  ): Observable<TimelineModel[]> {
     const url = `${this.baseUrl}/get-timelines/${projectId}`;
     return this.http.get<TimelineModel[]>(url).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -234,7 +242,7 @@ export class MongoDBService {
     );
   }
 
-  updateTimeline(timeline: TimelineModel): Observable<TimelineModel> {
+  public updateTimeline(timeline: TimelineModel): Observable<TimelineModel> {
     const url = `${this.baseUrl}/update-timelines`;
     return this.http.post<TimelineModel>(url, timeline).pipe(
       catchError((error: any) => {

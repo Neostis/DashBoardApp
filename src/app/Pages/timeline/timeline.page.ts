@@ -7,6 +7,7 @@ import { GanttChartModule } from 'smart-webcomponents-angular/ganttchart';
 import { IonicModule } from '@ionic/angular';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-timeline',
@@ -70,11 +71,11 @@ export class TimelinePage implements OnInit {
 
   constructor(
     private mongoDBService: MongoDBService,
+    private storeService: StorageService,
     private sharedService: SharedService
   ) {}
 
   ngOnInit(): void {
-    this._ProjectId = this.sharedService.getProjectId();
     if (this._ProjectId) {
       this.fetchTimelineByProjectId();
     }
@@ -106,6 +107,17 @@ export class TimelinePage implements OnInit {
         type: thisItem.type,
         _id: thisItem._id,
       };
+    });
+  }
+
+  ionViewWillEnter() {
+    this.storeService.get('currentProject').then((data) => {
+      if (data) {
+        this._ProjectId = data.value;
+        if (this._ProjectId) {
+          this.fetchTimelineByProjectId();
+        }
+      }
     });
   }
 

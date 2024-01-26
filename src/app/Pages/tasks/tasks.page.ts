@@ -12,11 +12,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
-import { DatePipe } from '@angular/common';
 import { TaskModel } from '../../model/task.model';
 import { MongoDBService } from '../../services/mongoDB.service';
 import { SharedService } from '../../services/shared.service';
 import { ProjectModel } from '../../model/project.model';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-tasks',
@@ -36,20 +36,20 @@ import { ProjectModel } from '../../model/project.model';
   ],
 })
 export class TasksPage implements OnInit {
-  [x: string]: any;
-  form!: FormGroup;
-  selected: string = 'Select a team member';
-  tags: string[] = [];
-  selectedDateTime!: string;
-  taskList: any[] = [];
-  isModalOpen = false;
-  projectList: ProjectModel[] = [];
-  _ProjectId!: string;
-  projectMembers: any[] = [];
+  protected form!: FormGroup;
+  protected selected: string = 'Select a team member';
+  protected tags: string[] = [];
+  private selectedDateTime!: string;
+  protected taskList: any[] = [];
+  protected isModalOpen = false;
+  protected projectList: ProjectModel[] = [];
+  private _ProjectId!: string;
+  protected projectMembers: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private mongoDBService: MongoDBService,
+    private storeService: StorageService,
     private sharedService: SharedService
   ) {
     this.form = this.formBuilder.group({
@@ -59,14 +59,25 @@ export class TasksPage implements OnInit {
     });
   }
 
-  @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild(IonModal) private modal!: IonModal;
 
   ngOnInit(): void {
-    this._ProjectId = this.sharedService.getProjectId();
     if (this._ProjectId) {
       this.loadMember();
       this.fetchTasksByProjectId();
     }
+  }
+
+  ionViewWillEnter() {
+    this.storeService.get('currentProject').then((data) => {
+      if (data) {
+        this._ProjectId = data.value;
+        if (this._ProjectId) {
+          this.loadMember();
+          this.fetchTasksByProjectId();
+        }
+      }
+    });
   }
 
   private loadMember(): void {
@@ -81,18 +92,18 @@ export class TasksPage implements OnInit {
     });
   }
 
-  cancel() {
+  protected cancel() {
     this.clearInputData();
     this.modal.dismiss();
   }
 
-  clearInputData() {
+  private clearInputData() {
     this.selectedDateTime = '';
     this.tags = [];
     this.form.reset();
   }
 
-  confirm() {
+  protected confirm() {
     const newCardData: TaskModel = {
       title: this.form.get('input1')?.value,
       startDate: new Date(),
@@ -112,34 +123,34 @@ export class TasksPage implements OnInit {
     this.modal.dismiss();
   }
 
-  refreshTaskData() {
+  private refreshTaskData() {
     this.taskList = [];
     this.fetchTasksByProjectId();
   }
 
-  onWillDismiss(event: Event) {
+  protected onWillDismiss(event: Event) {
     this.isModalOpen = false;
   }
 
-  setOpen(isOpen: boolean) {
+  protected setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
 
-  onSelectDateTime(event: CustomEvent) {
+  protected onSelectDateTime(event: CustomEvent) {
     this.selectedDateTime = event.detail.value;
   }
 
-  addTag(tagValue: string): void {
+  protected addTag(tagValue: string): void {
     if (tagValue.trim() !== '') {
       this.tags.push(tagValue.trim());
     }
   }
 
-  removeTag(tagToRemove: string): void {
+  protected removeTag(tagToRemove: string): void {
     this.tags = this.tags.filter((tag) => tag !== tagToRemove);
   }
 
-  addTask(taskData: TaskModel) {
+  private addTask(taskData: TaskModel) {
     this.mongoDBService.addTask(taskData).subscribe({
       next: (response) => {
         console.log('Task added successfully');
@@ -153,7 +164,7 @@ export class TasksPage implements OnInit {
     });
   }
 
-  fetchTasksByProjectId() {
+  private fetchTasksByProjectId() {
     this.mongoDBService.getTasksByProjectId(this._ProjectId).subscribe({
       next: (response) => {
         this.taskList = response;
@@ -165,7 +176,7 @@ export class TasksPage implements OnInit {
     });
   }
 
-  updateTaskStatus(taskId: string, newStatus: string): void {
+  private updateTaskStatus(taskId: string, newStatus: string): void {
     this.mongoDBService.updateTaskStatus(taskId, newStatus).subscribe({
       next: (response) => {
         console.log('Task status updated successfully');
@@ -179,13 +190,13 @@ export class TasksPage implements OnInit {
     });
   }
 
-  selectionChange() {}
+  protected selectionChange() {}
 
-  handleStatusChange(newStatus: any, taskId: any) {
+  protected handleStatusChange(newStatus: any, taskId: any) {
     this.updateTaskStatus(taskId, newStatus.detail.value);
   }
 
-  handleStatusCancel() {}
+  protected handleStatusCancel() {}
 
-  handleStatusDismiss() {}
+  protected handleStatusDismiss() {}
 }

@@ -6,6 +6,7 @@ import { Observable, Subject, debounceTime, find, of, switchMap } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { SharedService } from '../../services/shared.service';
 import { ProjectModel } from '../../model/project.model';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-team',
@@ -15,18 +16,18 @@ import { ProjectModel } from '../../model/project.model';
   imports: [IonicModule, FormsModule, MatSelectModule],
 })
 export class TeamPage implements OnInit {
-  _ProjectId!: string;
-  isModalOpen = false;
-  modalSearchInput!: string;
-  modalSearchResult: any[] = [];
-  mainSearchInput!: string;
-  mainSearchResult: any[] = [];
-  selectedTypes: string[] = [];
-  checkboxList: boolean[] = [];
-  members: any[] = [];
-  projectList: ProjectModel[] = [];
+  protected _ProjectId!: string;
+  protected isModalOpen = false;
+  protected modalSearchInput!: string;
+  protected modalSearchResult: any[] = [];
+  protected mainSearchInput!: string;
+  protected mainSearchResult: any[] = [];
+  protected selectedTypes: string[] = [];
+  protected checkboxList: boolean[] = [];
+  private members: any[] = [];
+  protected projectList: ProjectModel[] = [];
 
-  options = [
+  protected options = [
     { value: 'Owner', label: 'Owner' },
     { value: 'Guest', label: 'Guest' },
     { value: 'Editor', label: 'Can Edit' },
@@ -36,11 +37,11 @@ export class TeamPage implements OnInit {
 
   constructor(
     private mongoDBService: MongoDBService,
+    private storeService: StorageService,
     private sharedService: SharedService
   ) {}
 
   ngOnInit(): void {
-    this._ProjectId = this.sharedService.getProjectId();
     if (this._ProjectId) {
       this.loadMember();
     }
@@ -59,6 +60,17 @@ export class TeamPage implements OnInit {
           console.error('Error fetching members:', err);
         },
       });
+  }
+
+  ionViewWillEnter() {
+    this.storeService.get('currentProject').then((data) => {
+      if (data) {
+        this._ProjectId = data.value;
+        if (this._ProjectId) {
+          this.loadMember();
+        }
+      }
+    });
   }
 
   private loadMember(): void {
@@ -118,41 +130,41 @@ export class TeamPage implements OnInit {
 
   @ViewChild(IonModal) modal!: IonModal;
 
-  cancel() {
+  protected cancel() {
     this.isModalOpen = false;
     this.refreshModalData();
   }
 
-  refreshMainData() {
+  private refreshMainData() {
     this.mainSearchInput = '';
     this.mainSearchResult = [];
     this.selectedTypes = [];
     this.loadMember();
   }
 
-  refreshModalData() {
+  private refreshModalData() {
     this.modalSearchInput = '';
     this.modalSearchResult = [];
     this.selectedTypes = [];
     this.members = [];
   }
 
-  confirm() {
+  protected confirm() {
     // this.addMember(this.members);
     // this.updateMemberType(this.members);
     this.addOrUpdateMember(this.members);
     this.isModalOpen = false;
   }
 
-  onWillDismiss(event: Event) {
+  protected onWillDismiss(event: Event) {
     this.isModalOpen = false;
   }
 
-  setOpen(isOpen: boolean) {
+  protected setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
 
-  onModalSearch(event: any) {
+  protected onModalSearch(event: any) {
     const query: string = event.target.value.trim();
     this.modalSearchInput = query;
     this.modalSearchMember.next(query);
@@ -161,11 +173,11 @@ export class TeamPage implements OnInit {
     }
   }
 
-  onClearModalSearch() {
+  protected onClearModalSearch() {
     this.modalSearchResult = [];
   }
 
-  onMainSearch(event: Event) {
+  protected onMainSearch(event: Event) {
     const searchValue = (event.target as HTMLInputElement).value;
     if (searchValue.trim() !== '') {
       this.searchMainMembers(searchValue);
@@ -174,11 +186,11 @@ export class TeamPage implements OnInit {
     }
   }
 
-  onClearMainSearch() {
+  protected onClearMainSearch() {
     this.refreshMainData();
   }
 
-  checkboxChange(event: any, selectedMember: any, index: number) {
+  protected checkboxChange(event: any, selectedMember: any, index: number) {
     const checkboxValue = event.detail.checked;
 
     const project = {
@@ -203,7 +215,7 @@ export class TeamPage implements OnInit {
     }
   }
 
-  selectionChange(selectedMember: any, index: number) {
+  protected selectionChange(selectedMember: any, index: number) {
     const project = selectedMember.projects.find(
       (p: any) => p.projectId === this._ProjectId
     );
@@ -252,7 +264,7 @@ export class TeamPage implements OnInit {
     }
   }
 
-  addOrUpdateMember(members: any) {
+  private addOrUpdateMember(members: any) {
     members.forEach((member: any) => {
       this.mongoDBService.addOrUpdateMember(member).subscribe({
         next: (response) => {
