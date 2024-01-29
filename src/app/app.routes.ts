@@ -46,7 +46,17 @@ export const routes: Routes = [
       import('./Pages/payments/payments.page').then((m) => m.PaymentsPage),
     canActivate: [AuthGuard],
   },
-
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./Pages/profile/profile.page').then((m) => m.ProfilePage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'loading',
+    loadComponent: () =>
+      import('./Pages/loading/loading.page').then((m) => m.LoadingPage),
+  },
   {
     path: 'login',
     loadComponent: () =>
@@ -57,14 +67,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Auth/register/register.page').then((m) => m.RegisterPage),
   },
-  {
-    path: 'profile',
-    loadComponent: () =>
-      import('./Pages/profile/profile.page').then((m) => m.ProfilePage),
-    // canActivate: [AuthGuard],
-  },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' },
-  // { path: '', redirectTo: 'profile', pathMatch: 'full' },
-  // { path: '**', redirectTo: 'profile' },
+
+  { path: '', redirectTo: 'loading', pathMatch: 'full' },
+  { path: '**', redirectTo: 'loading' },
 ];

@@ -6,13 +6,12 @@ import { AuthService } from './services/auth.service';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   async canActivate(): Promise<boolean> {
-    if (await this.authService.isAuthen()) {
+    if (this.authService.isAuthen()) {
       return true;
     } else {
-      this.router.navigate(['/login']);
       return false;
     }
   }

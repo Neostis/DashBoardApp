@@ -10,7 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class AuthService {
-  authen: boolean = false;
+  private authen: boolean = false;
 
   private jwtHelper: JwtHelperService = new JwtHelperService();
   private tokenExpirationCheckInterval: any;
@@ -35,6 +35,17 @@ export class AuthService {
     document.addEventListener('click', this.resetInactivityTimer.bind(this));
     document.addEventListener('keydown', this.resetInactivityTimer.bind(this));
     this.resetInactivityTimer();
+  }
+
+  public async initToken(): Promise<void> {
+    if (await this.checkToken()) {
+      this.authen = true;
+      if (this.isAuthen()) {
+        this.router.navigateByUrl('/home');
+      }
+    } else {
+      this.router.navigateByUrl('/login');
+    }
   }
 
   private resetInactivityTimer(): void {
@@ -93,15 +104,30 @@ export class AuthService {
     );
   }
 
-  public async logout() {
+  public logout() {
     this.storeService.remove('token');
     this.authen = false;
-    if (!this.authen) {
-      this.router.navigateByUrl('/login');
-    }
+    this.checkToken().then((bool) => {
+      if (!this.authen && !bool) {
+        this.router.navigateByUrl('/login');
+      }
+    });
+  }
+
+  public setAuthen(value: boolean) {
+    this.authen = value;
   }
 
   public isAuthen() {
     return this.authen;
+  }
+
+  private async checkToken(): Promise<boolean> {
+    const token = await this.storeService.get('token');
+    if (token) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

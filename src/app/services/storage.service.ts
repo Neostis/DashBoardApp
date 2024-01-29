@@ -12,20 +12,27 @@ export class StorageService {
   }
 
   async init() {
-    const storage = await this.storage.create();
-    this._storage = storage;
+    this._storage = await this.storage.create();
   }
 
-  public set(key: string, value: any) {
-    this._storage?.set(key, value);
+  public async set(key: string, value: any) {
+    if (!this._storage) {
+      await this.init();
+    }
+    await this._storage?.set(key, value);
   }
 
   public async get(key: string) {
-    const data = await this._storage?.get(key);
-    return data;
+    if (!this._storage) {
+      await this.init();
+    }
+    return await this._storage?.get(key);
   }
 
   public async remove(key: string) {
+    if (!this._storage) {
+      await this.init();
+    }
     await this._storage?.remove(key);
   }
 }

@@ -12,6 +12,7 @@ import { environment } from './environments/environment';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { IonicStorageModule, provideStorage } from '@ionic/storage-angular';
+import { IonicModule } from '@ionic/angular';
 
 if (environment.production) {
   enableProdMode();

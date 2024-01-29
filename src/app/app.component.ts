@@ -3,6 +3,7 @@ import { IonRouterOutlet } from '@ionic/angular/standalone';
 import { IonicModule } from '@ionic/angular';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.showMenu = !['/login', '/register', '/'].includes(this.router.url);
+    this.authService.initToken();
     this.authService.initInactivityTimer();
+    this.showMenu = !['/login', '/register', '/'].includes(this.router.url);
   }
 
   protected logout() {
