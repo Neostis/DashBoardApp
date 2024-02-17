@@ -36,14 +36,14 @@ export class LoginPage {
     this.form.reset();
   }
 
-  protected login() {
+  protected async login() {
     if (this.form.valid) {
       const account = {
         username: this.form.get('username')?.value,
         password: this.form.get('password')?.value,
       };
 
-      this.authService.login(account).subscribe({
+      (await this.authService.login(account)).subscribe({
         next: async (response) => {},
         error: (error) => {
           console.error('Error', error);

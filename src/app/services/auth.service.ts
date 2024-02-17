@@ -11,12 +11,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthService {
   private authen: boolean = false;
-
+  private afk: boolean = false;
   private jwtHelper: JwtHelperService = new JwtHelperService();
   private tokenExpirationCheckInterval: any;
   private inactivityTimeout: any;
-  private inactivityDuration = 15 * 60 * 1000; // 30 minutes;
+  private inactivityDuration = 30 * 60 * 1000; // 30 minutes;
 
+  private currentUser: any;
   private baseUrl = 'http://localhost:5000';
 
   constructor(
@@ -51,7 +52,7 @@ export class AuthService {
   private resetInactivityTimer(): void {
     clearTimeout(this.inactivityTimeout);
     this.inactivityTimeout = setTimeout(() => {
-      this.logout();
+      this.afk = true;
     }, this.inactivityDuration);
   }
 
@@ -62,13 +63,14 @@ export class AuthService {
   }
 
   private async checkTokenExpiration(): Promise<void> {
-    console.log('checking');
     try {
       const token = await this.storeService.get('token');
 
-      if (token && this.jwtHelper.isTokenExpired(token)) {
-        // Token has expired, initiate logout
+      if (token && this.jwtHelper.isTokenExpired(token) && this.afk) {
         this.logout();
+        this.afk = false;
+      } else if (token && this.jwtHelper.isTokenExpired(token) && !this.afk) {
+        this.refreshToken();
       }
     } catch (error) {
       console.error('Error checking token expiration:', error);
@@ -76,8 +78,12 @@ export class AuthService {
   }
 
   public register(account: AccountModel): Observable<AccountModel> {
+    const dataToSend = {
+      ...account,
+      password: account.password,
+    };
     const url = `${this.baseUrl}/register`;
-    return this.http.post<AccountModel>(url, account).pipe(
+    return this.http.post<AccountModel>(url, dataToSend).pipe(
       catchError((error: any) => {
         console.error('An error occurred:', error);
         return throwError(() => error);
@@ -85,9 +91,16 @@ export class AuthService {
     );
   }
 
-  public login(account: any): Observable<any> {
+  public async login(account: any): Promise<Observable<any>> {
+    const dataToSend = {
+      username: account.username,
+      password: account.password,
+    };
+
+    this.currentUser = dataToSend;
+
     const url = `${this.baseUrl}/login`;
-    return this.http.post<any>(url, account).pipe(
+    return this.http.post<any>(url, dataToSend).pipe(
       tap((res) => {
         if (res.token) {
           this.storeService.set('token', res.token);
@@ -112,6 +125,21 @@ export class AuthService {
         this.router.navigateByUrl('/login');
       }
     });
+  }
+
+  private refreshToken() {
+    const url = `${this.baseUrl}/login`;
+    return this.http.post<any>(url, this.currentUser).pipe(
+      tap((res) => {
+        if (res.token) {
+          this.storeService.set('token', res.token);
+        }
+      }),
+      catchError((error: any) => {
+        console.error('An error occurred:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   public setAuthen(value: boolean) {
